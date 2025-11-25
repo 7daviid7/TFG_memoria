@@ -1,0 +1,48 @@
+# Core LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.dvi
+*.xdv
+
+# Bibliography auxiliary files
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*-SAVE-ERROR
+
+# Index and Glossary auxiliary files
+*.idx
+*.ind
+*.ilg
+*.glg
+*.glo
+*.gls
+*.ist
+
+# Beamer (Presentation) auxiliary files
+*.nav
+*.snm
+*.vrb
+
+# Output files
+*.pdf
+
+# Python/Minted (if used for code highlighting)
+_minted-*
+*.pyg
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
