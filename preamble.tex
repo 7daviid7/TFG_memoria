@@ -11,6 +11,7 @@
 % Set main fonts
 % Fonts catalogue: https://tug.org/FontCatalogue/
 \usepackage{mathpazo}          % Use the Palatino font by default
+\usepackage{amsmath}           % Required for math environments (cases, text, etc.)
 \usepackage{beramono}          % Override the monospace/typewriter font
 
 % UdG title font
@@ -33,11 +34,15 @@
 
 \usepackage{caption}           % Customized caption
 \usepackage{subcaption}        % Subfigure captions
+\usepackage{float}             % Required for [H] figure placement
 \usepackage{makecell}          % Per-cell formatting in tables (\makecell)
 \usepackage{pdfpages}          % Required to include PDF files/graphics (\includepdf)
 
 \usepackage{todonotes}         % Introduces the command \todo
 \setlength{\marginparwidth}{2.5cm} % Adjust this if the todo notes are out of margins
+
+\usepackage{pgfgantt}          % For Gantt charts
+\usepackage{tikz}              % Required for creating graphics (timeline)
 
 % Create boxes as follows:
 % \begin{colorbox}{red}{2}
@@ -52,12 +57,26 @@
     colframe=#1!75!black
 }
 
+\newtcolorbox{reflectionbox}{
+    colback=white,
+    colframe=gray!50,
+    boxrule=0pt,
+    leftrule=3pt,
+    arc=0pt,
+    outer arc=0pt,
+    left=10pt,
+    right=10pt,
+    top=5pt,
+    bottom=5pt,
+    fontupper=\itshape\small
+}
+
 %----------------------------
 %   Colors
 %----------------------------
 
 % Set up colors
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 % UdG Blue: Pantone 2945 U / R0 G20 B137
 \definecolor{udgblue}{rgb}{0.00, 0.07, 0.54}
 % Colors related to code listings

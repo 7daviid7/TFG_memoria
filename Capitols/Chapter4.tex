@@ -1,0 +1,204 @@
+% !TEX root = ../main.tex
+
+\chapter{Planificació}
+\label{Chapter4}
+
+\section{Estratègia de Planificació}
+Per tal de gestionar la complexitat del projecte i assegurar el compliment dels objectius establerts, s'ha optat per dividir el desenvolupament en diferents Paquets de Treball (PT). Aquesta estratègia permet focalitzar els esforços en tasques concretes i mesurables, facilitant el seguiment del progrés i la detecció primerenca de possibles desviacions.
+
+La metodologia de treball seguirà un enfocament iteratiu i incremental, especialment en les fases de desenvolupament i validació, permetent incorporar el feedback de manera contínua.
+
+\section{Paquets de Treball}
+A continuació es detallen els paquets de treball definits per al projecte \textbf{NUMEN}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.25\textwidth}|p{0.70\textwidth}|}
+        \hline
+        \rowcolor{gray!20} \textbf{Nom del paquet} & \textbf{PT1: GESTIÓ I DOCUMENTACIÓ} \\ \hline
+        \textbf{Descripció} & Gestió integral del projecte, reunions de seguiment i redacció de la memòria. \\ \hline
+        \textbf{Requisits/Tasques} & 
+        \begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
+            \item Planificació inicial i definició d'objectius.
+            \item Reunions periòdiques amb la tutora.
+            \item Redacció dels capítols de la memòria.
+            \item Revisió i correcció de la documentació.
+        \end{itemize} \\ \hline
+        \textbf{Lliuraments} & Memòria del TFG, Actes de reunió. \\ \hline
+        \textbf{Temps} & Transversal (Tot el projecte) \\ \hline
+    \end{tabular}
+    \caption{Paquet de treball: Gestió i Documentació}
+    \label{tab:pt1}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.25\textwidth}|p{0.70\textwidth}|}
+        \hline
+        \rowcolor{gray!20} \textbf{Nom del paquet} & \textbf{PT2: ANÀLISI I DISSENY} \\ \hline
+        \textbf{Descripció} & Definició dels requisits del sistema i disseny de l'arquitectura i la interfície. \\ \hline
+        \textbf{Requisits/Tasques} & 
+        \begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
+            \item Anàlisi de requisits funcionals i no funcionals.
+            \item Estudi del mètode numerològic de Coquatrix.
+            \item Disseny de la Base de Dades.
+            \item Disseny de la Interfície d'Usuari (UI/UX).
+        \end{itemize} \\ \hline
+        \textbf{Lliuraments} & Diagrames UML, Mockups de la interfície, Esquema de la BD. \\ \hline
+        \textbf{Temps} & 3 setmanes \\ \hline
+    \end{tabular}
+    \caption{Paquet de treball: Anàlisi i Disseny}
+    \label{tab:pt2}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.25\textwidth}|p{0.70\textwidth}|}
+        \hline
+        \rowcolor{gray!20} \textbf{Nom del paquet} & \textbf{PT3: NUCLI NUMEROLÒGIC} \\ \hline
+        \textbf{Descripció} & Implementació dels algoritmes de càlcul segons el mètode de Coquatrix. \\ \hline
+        \textbf{Requisits/Tasques} & 
+        \begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
+            \item Implementació de la conversió lletra-número (Gematria).
+            \item Càlcul de l'Arbre de la Vida personalitzat.
+            \item Implementació de càlculs de cicles i etapes de vida.
+            \item Tests unitaris dels algoritmes matemàtics.
+        \end{itemize} \\ \hline
+        \textbf{Lliuraments} & Mòdul de càlcul numerològic funcional i testejat. \\ \hline
+        \textbf{Temps} & 4 setmanes \\ \hline
+    \end{tabular}
+    \caption{Paquet de treball: Nucli Numerològic}
+    \label{tab:pt3}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.25\textwidth}|p{0.70\textwidth}|}
+        \hline
+        \rowcolor{gray!20} \textbf{Nom del paquet} & \textbf{PT4: DESENVOLUPAMENT DEL SISTEMA} \\ \hline
+        \textbf{Descripció} & Construcció de l'aplicació completa, integrant Frontend, Backend i Base de Dades. \\ \hline
+        \textbf{Requisits/Tasques} & 
+        \begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
+            \item Configuració de l'entorn i repositori.
+            \item Desenvolupament de l'API Backend.
+            \item Implementació del Frontend i visualització gràfica.
+            \item Integració amb la Base de Dades.
+        \end{itemize} \\ \hline
+        \textbf{Lliuraments} & Codi font de l'aplicació, prototip funcional. \\ \hline
+        \textbf{Temps} & 5 setmanes \\ \hline
+    \end{tabular}
+    \caption{Paquet de treball: Desenvolupament del Sistema}
+    \label{tab:pt4}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.25\textwidth}|p{0.70\textwidth}|}
+        \hline
+        \rowcolor{gray!20} \textbf{Nom del paquet} & \textbf{PT5: INTEL·LIGÈNCIA ARTIFICIAL} \\ \hline
+        \textbf{Descripció} & Integració de serveis d'IA per a la interpretació de resultats. \\ \hline
+        \textbf{Requisits/Tasques} & 
+        \begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
+            \item Disseny de \textit{prompts} per a la interpretació numerològica.
+            \item Integració amb l'API d'OpenAI/Gemini.
+            \item Emmagatzematge de respostes per a futur entrenament.
+            \item Refinament de la qualitat de les respostes.
+        \end{itemize} \\ \hline
+        \textbf{Lliuraments} & Mòdul d'interpretació per IA integrat. \\ \hline
+        \textbf{Temps} & 3 setmanes \\ \hline
+    \end{tabular}
+    \caption{Paquet de treball: Intel·ligència Artificial}
+    \label{tab:pt5}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.25\textwidth}|p{0.70\textwidth}|}
+        \hline
+        \rowcolor{gray!20} \textbf{Nom del paquet} & \textbf{PT6: VALIDACIÓ I PROVES} \\ \hline
+        \textbf{Descripció} & Verificació del sistema amb casos reals i correcció d'errors. \\ \hline
+        \textbf{Requisits/Tasques} & 
+        \begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
+            \item Proves d'integració i sistema.
+            \item Validació manual amb la "client" experta (mare).
+            \item Comparació de resultats automàtics vs manuals.
+            \item Correcció de bugs i ajustos finals.
+        \end{itemize} \\ \hline
+        \textbf{Lliuraments} & Informe de proves, Versió final del programari. \\ \hline
+        \textbf{Temps} & 2 setmanes \\ \hline
+    \end{tabular}
+    \caption{Paquet de treball: Validació i Proves}
+    \label{tab:pt6}
+\end{table}
+
+\section{Planificació Temporal}
+El desenvolupament del projecte es divideix en dues fases temporals diferenciades. A continuació es mostren els cronogrames corresponents a la fase inicial (2022) i la fase de finalització com a TFG (2025-2026).
+
+\begin{figure}[H]
+    \centering
+    \caption{Fase 1: Desenvolupament Inicial (2022)}
+    \label{fig:gantt_phase1}
+    \begin{ganttchart}[
+        vgrid={*6{draw=none}, *1{dotted}},
+        hgrid,
+        x unit=0.077cm,
+        y unit chart=0.6cm,
+        time slot format=isodate,
+        time slot unit=day,
+        calendar week text={\currentweek},
+        bar/.append style={fill=udgblue!50},
+        bar height=0.6,
+        group right shift=0,
+        group top shift=0.7,
+        group height=.3,
+        group peaks width={0.2},
+        link/.style={->, thick}
+    ]{2022-10-01}{2023-01-31}
+        \gantttitlecalendar{year, month=name} \\
+        
+        % Phase 1
+        \ganttgroup[name=p1_total]{Fase 1: Desenvolupament}{2022-10-01}{2023-01-31} \\
+        \ganttbar[name=p1_analisi]{Anàlisi i Requisits}{2022-10-01}{2022-10-31} \\
+        \ganttbar[name=p1_disseny]{Disseny}{2022-11-01}{2022-11-15} \\
+        \ganttbar[name=p1_nucli]{Nucli i Algoritmes}{2022-11-15}{2022-12-31} \\
+        \ganttbar[name=p1_front]{Frontend Inicial}{2022-12-15}{2023-01-31} \\
+        
+        \ganttlink{p1_analisi}{p1_disseny}
+        \ganttlink{p1_disseny}{p1_nucli}
+        \ganttlink{p1_nucli}{p1_front}
+    \end{ganttchart}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Fase 2: Finalització TFG (2025-2026)}
+    \label{fig:gantt_phase2}
+    \begin{ganttchart}[
+        vgrid={*6{draw=none}, *1{dotted}},
+        hgrid,
+        x unit=0.077cm,
+        y unit chart=0.6cm,
+        time slot format=isodate,
+        time slot unit=day,
+        calendar week text={\currentweek},
+        bar/.append style={fill=udgblue!50},
+        bar height=0.6,
+        group right shift=0,
+        group top shift=0.7,
+        group height=.3,
+        group peaks width={0.2},
+        link/.style={->, thick}
+    ]{2025-09-01}{2026-01-31}
+        \gantttitlecalendar{year, month=name} \\
+        
+        % Phase 2
+        \ganttgroup[name=p2_total]{Fase 2: TFG}{2025-09-01}{2026-01-31} \\
+        \ganttbar[name=p2_gestio]{Gestió i Memòria}{2025-09-01}{2026-01-20} \\
+        \ganttbar[name=p2_refactor]{Refactorització i BD}{2025-09-15}{2025-10-31} \\
+        \ganttbar[name=p2_ia]{Integració IA}{2025-11-01}{2025-11-30} \\
+        \ganttbar[name=p2_validacio]{Validació i Proves}{2025-12-01}{2025-12-20} \\
+        
+        \ganttlink{p2_refactor}{p2_ia}
+        \ganttlink{p2_ia}{p2_validacio}
+    \end{ganttchart}
+\end{figure}

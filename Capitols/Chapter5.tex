@@ -1,0 +1,92 @@
+% !TEX root = ../main.tex
+
+\chapter{Marc de treball i conceptes previs}
+\label{Chapter5}
+
+\section{Entorn de Treball}
+
+Aquest projecte es defineix com una iniciativa individual, desenvolupada íntegrament des de zero per l'autor. L'origen del programari es remunta a l'any 2022, naixent d'una motivació personal per automatitzar els càlculs numerològics que la meva mare realitzava manualment. Aquesta gènesi particular atorga al projecte una naturalesa híbrida: tot i ser un treball acadèmic, respon a les necessitats reals d'un ``client'' final expert en el domini.
+
+El desenvolupament ha seguit una evolució orgànica. Inicialment, es va concebre com un conjunt d'scripts i eines bàsiques per agilitzar tasques repetitives. Amb la formalització com a Treball Final de Grau, el projecte ha madurat cap a una arquitectura de programari robusta, incorporant estàndards d'enginyeria, patrons de disseny i, finalment, capacitats d'Intel·ligència Artificial.
+
+L'entorn de treball ha estat, per tant, autònom, utilitzant metodologies àgils adaptades a un sol desenvolupador. La comunicació amb l'experta (la client) ha estat constant, permetent un cicle de feedback ràpid per validar la correcció dels complexos algoritmes implementats.
+
+\section{Conceptes Previs: La Numerologia com a Domini}
+
+Per comprendre la lògica de negoci implementada en \textbf{NUMEN}, és imprescindible definir els conceptes fonamentals de la numerologia segons el mètode de Martine Coquatrix. Des d'una perspectiva tècnica, podem considerar la numerologia com un sistema determinista de processament de dades, on les entrades (data de naixement i nom complet) es transformen mitjançant algoritmes específics en un conjunt de mètriques significatives.
+
+A continuació es detallen els algoritmes i estructures de dades principals que conformen el nucli matemàtic de l'aplicació.
+
+\subsection{Gematria i Conversió Alfanumèrica}
+La base de tot càlcul numerològic textual és la conversió de lletres a valors numèrics. El sistema utilitzat assigna a cada lletra de l'alfabet llatí un valor de l'1 al 9, seguint un patró seqüencial.
+
+La taula de conversió implementada és la següent:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} \\ \hline
+        A & B & C & D & E & F & G & H & I \\ \hline
+        J & K & L & M & N, Ñ & O & P & Q & R \\ \hline
+        S & T & U & V & W & X & Y & Z &   \\ \hline
+    \end{tabular}
+    \caption{Taula de conversió Gematria (Sistema Pitagòric)}
+    \label{tab:gematria}
+\end{table}
+
+És important destacar que caràcters com la `Ñ' s'assignen al valor 5 (igual que la `N'), i els accents o diacrítics s'ignoren (per exemple, `À' es tracta com `A').
+
+\subsection{Reducció Teosòfica i Nombres Mestres}
+La majoria de càlculs requereixen reduir qualsevol xifra superior a 9 a un sol dígit (de l'1 al 9). Aquest procés, conegut com a reducció teosòfica, consisteix a sumar els dígits del nombre de manera iterativa fins a obtenir-ne un d'elemental.
+
+Matemàticament, per a un nombre $n$:
+\[
+R(n) = 
+\begin{cases} 
+n & \text{si } n \leq 9 \\
+R(\sum_{d \in digits(n)} d) & \text{si } n > 9
+\end{cases}
+\]
+
+\textbf{Excepció: Els Nombres Mestres}. Existeixen nombres especials que no s'han de reduir en determinats contextos: \textbf{11, 22 i 33}. Aquests es consideren ``Nombres Mestres'' i tenen una vibració superior. L'algoritme de reducció ha de contemplar aquesta excepció, verificant si el nombre resultant és mestre abans de continuar reduint.
+
+\subsection{El Camí de Vida (Life Path)}
+El Camí de Vida és una de les mètriques més rellevants, calculada a partir de la data de naixement. Representa la lliçó principal que l'individu ha vingut a aprendre.
+
+L'algoritme de càlcul és el següent:
+1. Es descompon la data en Dia, Mes i Any.
+2. Es redueix cada component a un dígit (o nombre mestre).
+3. Es sumen els tres components reduïts.
+4. El resultat final es redueix novament si és necessari.
+
+\subsection{La Inclusió (The Inclusion)}
+La Inclusió és una eina complexa d'autoconeixement que analitza la distribució de les lletres del nom complet en nou àrees o ``cases''. Tècnicament, es tracta d'un histograma de freqüències on cada ``casa'' (de l'1 al 9) comptabilitza quantes vegades apareixen les lletres amb aquell valor numèric en el nom de la persona.
+
+Aquest recompte genera el mapa d'\textbf{Habitants}:
+\[ Habitants[i] = \text{count}(lletres \text{ amb valor } i) \quad \forall i \in [1,9] \]
+
+A partir d'aquesta estructura base, es deriven altres vectors de dades mitjançant operacions matricials i lògiques:
+\begin{itemize}
+    \item \textbf{Matisos:} Relacionen els habitants entre si de manera recursiva.
+    \item \textbf{Ponts:} Calculats com la diferència absoluta entre el valor de la casa i el seu habitant: $|Habitant[i] - (i+1)|$.
+    \item \textbf{Evolució:} Indica cap a on tendeix l'energia de la casa.
+    \item \textbf{Inconscient:} Revela patrons ocults basats en la posició de les lletres.
+\end{itemize}
+
+\subsection{Significat Arquetípic dels Nombres}
+Per tal que el sistema, i especialment el mòdul d'Intel·ligència Artificial, pugui interpretar els resultats numèrics, és necessari definir una base de coneixement amb els significats arquetípics de cada nombre. De manera resumida:
+
+\begin{itemize}
+    \item \textbf{1:} Lideratge, independència, inici. (Yang)
+    \item \textbf{2:} Dualitat, col·laboració, sensibilitat. (Yin)
+    \item \textbf{3:} Comunicació, creativitat, expressió.
+    \item \textbf{4:} Estructura, treball, ordre.
+    \item \textbf{5:} Llibertat, canvi, aventura.
+    \item \textbf{6:} Harmonia, responsabilitat, família.
+    \item \textbf{7:} Espiritualitat, anàlisi, introspecció.
+    \item \textbf{8:} Poder, materialisme, organització.
+    \item \textbf{9:} Humanitarisme, saviesa, final de cicle.
+\end{itemize}
+
+Aquests conceptes constitueixen la base teòrica sobre la qual s'ha construït el motor de càlcul de NUMEN.

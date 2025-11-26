@@ -1,0 +1,64 @@
+% !TEX root = ../main.tex
+
+\chapter{Estudi de viabilitat}
+\label{Chapter2}
+
+En aquest capítol s'analitza la viabilitat del projecte NUMEN des de tres perspectives fonamentals: econòmica, tecnològica i legal/ètica. Aquest anàlisi és crucial per determinar la sostenibilitat del projecte i la seva capacitat per assolir els objectius plantejats en un entorn real.
+
+\section{Viabilitat Econòmica}
+
+L'anàlisi econòmica de NUMEN es caracteritza per un model de costos inicials extremadament baixos, la qual cosa facilita la seva posada en marxa i augmenta el seu potencial de rendibilitat.
+
+\subsection{Costos de Desenvolupament i Recursos}
+El desenvolupament d'aquest projecte, en el context d'un Treball Final de Grau, parteix d'una premissa de \textbf{cost zero} en termes de recursos d'infraestructura immediata.
+\begin{itemize}
+    \item \textbf{Infraestructura:} En tractar-se d'una aplicació d'escriptori (\textit{Desktop Application}), no es requereix la contractació de servidors dedicats ni serveis de \textit{hosting} per al processament principal. L'execució del programari recau en la màquina local de l'usuari final.
+    \item \textbf{Base de Dades:} S'utilitzen solucions de bases de dades locals o serveis al núvol amb capes gratuïtes (\textit{Free Tier}) suficients per al volum de dades inicial (per exemple, MongoDB Atlas o SQLite local), eliminant costos recurrents fixos en aquesta fase.
+    \item \textbf{Llicències:} El desenvolupament es basa en tecnologies de codi obert i llicències gratuïtes per a ús acadèmic o de desenvolupament.
+\end{itemize}
+
+Tot i que el cost monetari directe és nul, cal considerar el \textbf{cost teòric de desenvolupament}, calculat en base a les hores d'enginyeria dedicades. Si s'estimés un preu de mercat per hora de desenvolupament júnior (aprox. 8-12€/h) i una dedicació de 300 hores (crèdits ECTS + treball autònom), la inversió teòrica rondaria els 2.400€ - 3.600€. Aquest cost, però, és assumit com a inversió acadèmica i personal.
+
+\subsection{Costos Operatius i Escalabilitat}
+L'únic cost operatiu variable identificat és l'ús de la API d'Intel·ligència Artificial (Google Gemini).
+\begin{itemize}
+    \item \textbf{Fase actual:} S'utilitza la capa gratuïta de l'API, que permet un nombre suficient de peticions per minut per a un ús individual o de petita escala.
+    \item \textbf{Escalabilitat:} En un escenari d'explotació comercial amb alt volum, s'hauria de passar a un model de pagament per ús (\textit{pay-as-you-go}). Tenint en compte que Google Gemini ofereix preus competitius per milió de tokens (entrada/sortida), i que cada estudi numerològic consumeix un nombre limitat de tokens, el cost per unitat (per estudi) es mantindria en l'ordre dels cèntims d'euro.
+\end{itemize}
+
+\subsection{Model d'Ingressos i Rendibilitat}
+El mercat dels estudis numerològics professionals valora aquests serveis entre 50€ i 200€ per informe, depenent de la profunditat i el prestigi del professional.
+Donat que el cost marginal de producció d'un informe amb NUMEN és pràcticament zero (o de pocs cèntims en cas de pagar API), el marge de benefici brut és proper al 100\%. Això indica una \textbf{rendibilitat molt alta}, on la inversió principal és el temps del professional per interpretar i lliurar l'estudi, tasca que l'assistent NUMEN optimitza dràsticament.
+
+\section{Viabilitat Tecnològica}
+
+La viabilitat tecnològica es sustenta en la simplicitat de l'arquitectura i la maduresa de les eines escollides.
+
+\begin{itemize}
+    \item \textbf{Arquitectura Desktop:} L'elecció d'una aplicació d'escriptori elimina la complexitat de mantenir una infraestructura de servidor 24/7. Això simplifica el desplegament: el programari es pot distribuir com un executable, funcionant de manera autònoma en l'ordinador del professional.
+    \item \textbf{Dependències Externes:} La dependència crítica és la connexió a internet per a consultar l'API d'IA. No obstant, el nucli de càlcul matemàtic (algoritmes de Coquatrix) s'executa localment, garantint que la funcionalitat bàsica (càlculs i gràfics) sigui operativa fins i tot sense connexió o en cas de caiguda del servei d'IA (tot i perdre la interpretació automàtica).
+    \item \textbf{Migració Web:} Tot i que actualment no és necessari, l'arquitectura permetria una futura migració a un entorn web. Existeixen proveïdors de \textit{PaaS} (Platform as a Service) que permetrien allotjar el backend amb costos molt reduïts o gratuïts per a trànsit baix, mantenint la viabilitat tècnica en cas d'expansió.
+\end{itemize}
+
+\section{Viabilitat Legal i Ètica}
+
+En tractar dades personals i utilitzar sistemes d'IA generativa, el projecte ha de complir amb rigorosos estàndards ètics i legals.
+
+\subsection{Privacitat i Protecció de Dades (LOPD/RGPD)}
+El sistema està dissenyat seguint el principi de \textbf{minimització de dades}.
+\begin{itemize}
+    \item \textbf{Dades requerides:} Únicament es processen el nom complet, els cognoms i la data de naixement. Aquesta informació és la mínima indispensable per realitzar els càlculs numerològics.
+    \item \textbf{Tractament:} En l'arquitectura d'escriptori actual, les dades resideixen localment a l'ordinador de l'usuari (el professional), sense ser enviades a cap servidor centralitzat propietat de NUMEN. Això redueix dràsticament el risc de bretxes de seguretat massives.
+    \item \textbf{Ciberseguretat:} El risc d'atacs externs és baix al no exposar serveis públics. El vector principal de risc és la comunicació amb l'API d'IA, que es realitza mitjançant protocols segurs (HTTPS/TLS) utilitzant llibreries oficials i robustes.
+\end{itemize}
+
+\subsection{Ètica en la Intel·ligència Artificial}
+L'ús d'IA generativa per interpretar resultats personals planteja reptes ètics.
+\begin{itemize}
+    \item \textbf{Transparència:} L'usuari (el professional) és conscient que les interpretacions textuals són suggeriments generats per una IA i no veritats absolutes.
+    \item \textbf{Human-in-the-loop:} NUMEN està dissenyat com un \textit{assistent}, no com un substitut. La validació final de l'informe i la seva entrega al client sempre passa pel filtre del professional humà, qui aporta el context i la sensibilitat necessària, evitant que la IA prengui decisions autònomes sobre la "personalitat" o "destí" d'un individu.
+    \item \textbf{Privacitat a l'API:} Es configuren les crides a l'API per tal que les dades enviades no siguin utilitzades per l'entrenament dels models públics del proveïdor, garantint la confidencialitat de les dades dels clients finals.
+\end{itemize}
+
+\section{Conclusió}
+Analitzats els factors econòmics (costos mínims i alt marge), tecnològics (arquitectura robusta i senzilla) i legals/ètics (disseny conscient de la privacitat), es pot afirmar categòricament que \textbf{el projecte NUMEN és totalment viable}. La seva implementació no presenta barreres insalvables i ofereix un retorn de valor immediat per a l'usuari objectiu.
