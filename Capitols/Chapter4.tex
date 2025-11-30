@@ -9,6 +9,16 @@ Per tal de gestionar la complexitat del projecte i assegurar el compliment dels 
 La metodologia de treball seguirà un enfocament iteratiu i incremental, especialment en les fases de desenvolupament i validació, permetent incorporar el feedback de manera contínua.
 
 \section{Paquets de Treball}
+% Translations for Gantt Chart
+\languagealias{catalan}{Catalan}
+\deftranslation[to=Catalan]{August}{Agost}
+\deftranslation[to=Catalan]{September}{Setembre}
+\deftranslation[to=Catalan]{October}{Octubre}
+\deftranslation[to=Catalan]{November}{Novembre}
+\deftranslation[to=Catalan]{December}{Desembre}
+\deftranslation[to=Catalan]{January}{Gener}
+\deftranslation[to=Catalan]{February}{Febrer}
+
 A continuació es detallen els paquets de treball definits per al projecte \textbf{NUMEN}.
 
 \begin{table}[H]
@@ -132,17 +142,19 @@ A continuació es detallen els paquets de treball definits per al projecte \text
 \end{table}
 
 \section{Planificació Temporal}
-El desenvolupament del projecte es divideix en dues fases temporals diferenciades. A continuació es mostren els cronogrames corresponents a la fase inicial (2022) i la fase de finalització com a TFG (2025-2026).
+El desenvolupament del projecte es divideix en dues fases temporals diferenciades. A continuació es mostren els cronogrames corresponents a la fase inicial (2024) i la fase de finalització com a TFG (2025-2026).
 
 \begin{figure}[H]
     \centering
-    \caption{Fase 1: Desenvolupament Inicial (2022)}
+    \caption{Fase 1. 
+    Desenvolupament Inicial (2024)}
     \label{fig:gantt_phase1}
+    \makebox[\textwidth][c]{
     \begin{ganttchart}[
         vgrid={*6{draw=none}, *1{dotted}},
         hgrid,
-        x unit=0.077cm,
-        y unit chart=0.6cm,
+        x unit=0.075cm,
+        y unit chart=0.9cm,
         time slot format=isodate,
         time slot unit=day,
         calendar week text={\currentweek},
@@ -153,31 +165,33 @@ El desenvolupament del projecte es divideix en dues fases temporals diferenciade
         group height=.3,
         group peaks width={0.2},
         link/.style={->, thick}
-    ]{2022-10-01}{2023-01-31}
+    ]{2024-08-01}{2024-12-31}
         \gantttitlecalendar{year, month=name} \\
         
         % Phase 1
-        \ganttgroup[name=p1_total]{Fase 1: Desenvolupament}{2022-10-01}{2023-01-31} \\
-        \ganttbar[name=p1_analisi]{Anàlisi i Requisits}{2022-10-01}{2022-10-31} \\
-        \ganttbar[name=p1_disseny]{Disseny}{2022-11-01}{2022-11-15} \\
-        \ganttbar[name=p1_nucli]{Nucli i Algoritmes}{2022-11-15}{2022-12-31} \\
-        \ganttbar[name=p1_front]{Frontend Inicial}{2022-12-15}{2023-01-31} \\
+        \ganttgroup[name=p1_total]{Fase 1: Des.}{2024-08-01}{2024-12-31} \\
+        \ganttbar[name=p1_analisi]{Anàlisi i Requisits}{2024-08-01}{2024-08-31} \\
+        \ganttbar[name=p1_disseny]{Disseny}{2024-09-01}{2024-09-15} \\
+        \ganttbar[name=p1_nucli]{Nucli i Algoritmes}{2024-09-15}{2024-11-30} \\
+        \ganttbar[name=p1_front]{Frontend Inicial}{2024-11-01}{2024-12-31} \\
         
         \ganttlink{p1_analisi}{p1_disseny}
         \ganttlink{p1_disseny}{p1_nucli}
         \ganttlink{p1_nucli}{p1_front}
     \end{ganttchart}
+    }
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \caption{Fase 2: Finalització TFG (2025-2026)}
     \label{fig:gantt_phase2}
+    \makebox[\textwidth][c]{
     \begin{ganttchart}[
         vgrid={*6{draw=none}, *1{dotted}},
         hgrid,
-        x unit=0.077cm,
-        y unit chart=0.6cm,
+        x unit=0.075cm,
+        y unit chart=0.9cm,
         time slot format=isodate,
         time slot unit=day,
         calendar week text={\currentweek},
@@ -201,4 +215,5 @@ El desenvolupament del projecte es divideix en dues fases temporals diferenciade
         \ganttlink{p2_refactor}{p2_ia}
         \ganttlink{p2_ia}{p2_validacio}
     \end{ganttchart}
+    }
 \end{figure}

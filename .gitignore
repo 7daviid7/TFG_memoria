@@ -46,3 +46,5 @@ _minted-*
 *.swp
 .DS_Store
 Thumbs.db
+
+/TDR
