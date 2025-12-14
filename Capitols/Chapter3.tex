@@ -5,9 +5,9 @@
 
 La metodologia aplicada en el desenvolupament de NUMEN ha estat un procés híbrid i evolutiu, adaptant-se a les necessitats canviants del projecte i a la corba d'aprenentatge personal. Aquest capítol detalla l'estratègia seguida des de la concepció inicial fins a la implementació final, així com les eines i recursos utilitzats.
 
-\section{Estratègia de Desenvolupament}
+\section{Estratègia de Desenvolupament: Dos Temps}
 
-El desenvolupament del projecte no ha seguit una línia temporal contínua i lineal, sinó que s'ha estructurat en diferents etapes marcades per la maduresa tècnica i la disponibilitat de temps.
+El desenvolupament del projecte s'ha estructurat en dos grans blocs temporals clarament diferenciats, cadascun amb objectius i metodologies pròpies.
 
 \begin{figure}[h]
     \centering
@@ -17,40 +17,41 @@ El desenvolupament del projecte no ha seguit una línia temporal contínua i lin
         
         % 2022 Node
         \draw (1,0.2) -- (1,-0.2);
-        \node[align=center, below] at (1,-0.3) {\textbf{2024} \\ Inici del Projecte \\ (Agost - Desembre)};
+        \node[align=center, below] at (1,-0.3) {\textbf{2024} \\ Inici del Projecte \\ (Agost - Desembre) \\ \textbf{1r gran bloc.}};
         
         % 2023 Node
         \draw (5,0.2) -- (5,-0.2);
         \node[align=center, below] at (5,-0.3) {\textbf{Gen. 2025 - Oct. 2025} \\ Pausa en el \\ desenvolupament};
-        
+
         % Oct 2025 Node
         \draw (10,0.2) -- (10,-0.2);
-        \node[align=center, below] at (10,-0.3) {\textbf{Oct. 2025} \\ Represa com a TFG \\ (Refactor + IA + DB)};
+        \node[align=center, below] at (10,-0.3) {\textbf{Oct. 2025} \\ Represa com a TFG \\ (Refactor + IA + DB) \\ \textbf{2n gran bloc.}};
     \end{tikzpicture}
     \caption{Línia temporal del desenvolupament del projecte NUMEN.}
     \label{fig:timeline}
 \end{figure}
 
-\subsection{Fase 1: Fonaments i Desenvolupament Inicial (2024)}
-El projecte va néixer l'agost de 2024 amb una visió clara i una forta motivació personal. Durant aquest període, fins al desembre de 2024, el desenvolupament va ser continuat però intermitent, impulsat pel desig de ser productiu i ajudar a l'automatització dels càlculs manuals. En aquesta fase es va construir el nucli funcional de l'aplicació sense l'ús d'Intel·ligència Artificial.
-En aquesta etapa inicial, el desenvolupament va ser purament manual i autodidacta. Sense l'assistència d'eines d'Intel·ligència Artificial, l'aprenentatge es va basar en la consulta de documentació oficial, tutorials en vídeo i l'estudi de patrons de disseny.
+\subsection{Etapa 1: Naixement i Desenvolupament (2024)}
+Aquesta primera etapa, compresa entre l'agost i el desembre de 2024, va néixer d'una forta motivació personal per ajudar a la meva mare, experta en numerologia, a automatitzar els complexos càlculs manuals que requeria la seva feina.
 
-És important destacar que, en finalitzar aquesta etapa l'any 2023, \textbf{l'aplicació ja era completament funcional}. El sistema era capaç de realitzar tots els càlculs complexos, visualitzar les dades gràficament i generar informes imprimibles. Aquesta fita es va assolir exclusivament mitjançant la dedicació personal, a base de prova i error, i sense cap línia de codi generada per IA.
-Aquest esforç manual atorga un valor afegit al projecte: tot i que avui dia eines com la IA Generativa permetrien aixecar un prototip similar en qüestió de dies, la robustesa i el control absolut sobre la lògica del nucli de NUMEN són fruit d'aquelles hores de programació artesanal.
+En aquesta primera etapa es van haver de prendre les decisions més importants del projecte, com ara el disseny de l'aplicació, el llenguatge de programació i les tecnologies a utilitzar. El desenvolupament va ser \textbf{purament manual i autodidacta}, sense l'ús d'Intel·ligència Artificial generativa per al codi. Amb l'ajuda de la meva mare i la referència del llibre de Martine Coquatrix, es va assolir la comprensió dels càlculs necessaris per realitzar les cartes numerològiques, ideant algoritmes simples per dur a terme l'automatització d'aquest coneixement.
+El resultat d'aquesta fase va ser una aplicació \textbf{completament funcional} a nivell de càlcul: el sistema ja era capaç de generar totes les cartes, mapes i gràfics necessaris. La robustesa del nucli matemàtic de NUMEN és fruit d'aquesta dedicació artesanal, on cada línia de codi va ser escrita i validada manualment, creant una base sòlida i lliure de ``caixes negres''.
 
-\subsection{Fase 2: Recerca i Algorísmica}
-Paral·lelament a l'aprenentatge tècnic, es va dur a terme una fase intensiva d'adquisició de coneixement del domini. La numerologia, segons el mètode de Martine Coquatrix, requereix una precisió matemàtica absoluta.
+Aquest esforç manual atorga un valor afegit al projecte: tot i que avui dia eines com la IA Generativa permetrien aixecar un prototip similar en qüestió de dies, la robustesa i el control absolut sobre la lògica del nucli de NUMEN són totes decisions preses per mi, amb tot el procés evolutiu i reflexiu que comporta, ajudant enormament en el meu procés evolutiu i aprenentatge com a enginyer informàtic.
+
+\subsection{Etapa 2: Professionalització Acadèmica (TFG 2025)}
+Amb la represa del projecte com a Treball Final de Grau l'octubre de 2025, l'objectiu va virar de la funcionalitat pura cap a la \textbf{professionalització i l'escalabilitat}. En aquesta fase s'han implementat canvis estructurals crítics per convertir una eina d'ús personal en un producte de programari robust:
+
 \begin{itemize}
-    \item \textbf{Estudi Teòric:} Lectura i anàlisi profunda de l'obra \textit{La numerología a la luz del árbol de vida y las letras hebraicas}.
-    \item \textbf{Consultoria Experta:} Col·laboració directa amb l'experta en la matèria (la meva mare), per validar regles complexes com la reducció de números mestres, el càlcul dels camins de vida o la interpretació dels números karmàtics.
+    \item \textbf{Infraestructura al Núvol:} Integració de \textbf{Google Firestore} com a base de dades per persistir els estudis i \textbf{Google Firebase Hosting} per al desplegament web global.
+    \item \textbf{Refactorització de la Impressió (Native PDF):} S'ha realitzat un canvi tècnic fonamental en el mòdul d'exportació. A la primera etapa, els informes s'imprimien realitzant una "captura de pantalla" del que veia l'usuari, fet que limitava la qualitat. En aquesta etapa, s'ha reescrit el sistema utilitzant llibreries de generació de PDF natiu, codificant plantilles vectorials que repliquen el disseny fidelment però amb qualitat professional, independent de la resolució de la pantalla.
+    \item \textbf{Funcionalitat ``Compartir'' (Link 24h):} S'ha desenvolupat un sistema per generar enllaços temporals d'accés als informes, permetent al professional compartir digitalment l'estudi amb el client final de manera segura durant 24 hores.
+    \item \textbf{Disseny Responsive:} Refactorització de la interfície per garantir la usabilitat en dispositius mòbils i tauletes, adaptant els gràfics complexos a pantalles petites.
+    \item \textbf{Integració d'IA (Gemini):} Finalment, s'ha connectat l'API de Gemini (model Flash) per a la interpretació. És important notar que la IA només s'utilitza per enriquir el resultat amb text natural; no intervé en els càlculs, mantenint la fiabilitat de l'etapa anterior.
 \end{itemize}
-Aquesta fase va culminar amb la implementació dels algoritmes de càlcul, transformant regles esotèriques en funcions lògiques deterministes.
-
-\subsection{Fase 3: Integració Tecnològica i IA (Actualitat)}
-En l'etapa final del projecte, s'han integrat tecnologies modernes per potenciar les funcionalitats existents. És en aquest punt on s'ha incorporat l'ús d'Intel·ligència Artificial Generativa, no per a la generació de codi base (ja consolidat), sinó com a component funcional del sistema (mòdul de \textit{prompting} i interpretació) i com a suport en la gestió de dades.
 
 \section{Metodologia de Treball}
-S'ha seguit una adaptació personalitzada de metodologies àgils. Donat que l'equip de desenvolupament està format per una única persona, s'ha optat per un enfocament iteratiu i incremental:
+S'ha seguit una adaptació personalitzada de metodologies àgils. Les metodologies àgils són un enfocament de gestió de projectes que prioritza l'entrega ràpida i contínua de valor mitjançant cicles de treball curts i iteratius, permetent una adaptació flexible als canvis i una millora constant del producte final. Típicament, aquests cicles (coneguts com a \textit{Sprints} en marcs com Scrum) tenen una durada d'entre una i quatre setmanes. Donat que l'equip de desenvolupament està format per una única persona, s'ha optat per un enfocament iteratiu i incremental:
 \begin{enumerate}
     \item \textbf{Disseny Inicial:} Definició de l'arquitectura i model de dades.
     \item \textbf{Implementació per Prioritats:} Codificació dels mòduls més influents i crítics (motor de càlcul) abans d'abordar la interfície d'usuari o la generació d'informes.

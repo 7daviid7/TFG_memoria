@@ -7,37 +7,60 @@ En aquest capítol s'analitza la viabilitat del projecte NUMEN des de tres persp
 
 \section{Viabilitat Econòmica}
 
-L'anàlisi econòmica de NUMEN es caracteritza per un model de costos inicials extremadament baixos, la qual cosa facilita la seva posada en marxa i augmenta el seu potencial de rendibilitat.
+L'anàlisi econòmica de NUMEN es caracteritza per un model de costos inicials extremadament baixos, la qual cosa facilita la seva posada en marxa i augmenta el seu potencial de rendibilitat. Totes les decisions estratègiques preses durant el desenvolupament s'han orientat prioritàriament a la minimització de costos, sense comprometre en cap moment la qualitat ni la sostenibilitat del projecte. 
 
 \subsection{Costos de Desenvolupament i Recursos}
-El desenvolupament d'aquest projecte, en el context d'un Treball Final de Grau, parteix d'una premissa de \textbf{cost zero} en termes de recursos d'infraestructura immediata.
+El desenvolupament d'aquest projecte, en el context d'un Treball Final de Grau, parteix d'una premissa de \textbf{cost zero} en termes de recursos d'infraestructura immediata, ja que no es compta amb cap inversor extern que aporti recursos inicials per a la seva posada en marxa. 
 \begin{itemize}
-    \item \textbf{Infraestructura:} En tractar-se d'una aplicació d'escriptori (\textit{Desktop Application}), no es requereix la contractació de servidors dedicats ni serveis de \textit{hosting} per al processament principal. L'execució del programari recau en la màquina local de l'usuari final.
-    \item \textbf{Base de Dades:} S'utilitzen solucions de bases de dades locals o serveis al núvol amb capes gratuïtes (\textit{Free Tier}) suficients per al volum de dades inicial (per exemple, MongoDB Atlas o SQLite local), eliminant costos recurrents fixos en aquesta fase.
-    \item \textbf{Llicències:} El desenvolupament es basa en tecnologies de codi obert i llicències gratuïtes per a ús acadèmic o de desenvolupament.
+    \item \textbf{Infraestructura (Híbrida):} El projecte s'ha desplegat en una arquitectura dual (Web i Escriptori). Per a la versió web, s'utilitza \textbf{Google Firebase Hosting}, aprofitant la seva capa gratuïta que inclou certificat SSL, CDN global i domini propi sense cost.
+    \item \textbf{Base de Dades:} S'ha integrat \textbf{Google Cloud Firestore}, una base de dades NoSQL al núvol. El seu pla gratuït (\textit{Spark Plan}) permet fins a 50.000 lectures i 20.000 escriptures diàries, eliminant la necessitat de mantenir servidors de base de dades propis.
+    \item \textbf{Llicències i API:} S'utilitza l'API de \textbf{Google Gemini} (model Flash 2.5) en la seva modalitat gratuïta, optimitzant costos operatius.
 \end{itemize}
 
 Tot i que el cost monetari directe és nul, cal considerar el \textbf{cost teòric de desenvolupament}, calculat en base a les hores d'enginyeria dedicades. Si s'estimés un preu de mercat per hora de desenvolupament júnior (aprox. 8-12€/h) i una dedicació de 300 hores (crèdits ECTS + treball autònom), la inversió teòrica rondaria els 2.400€ - 3.600€. Aquest cost, però, és assumit com a inversió acadèmica i personal.
 
-\subsection{Costos Operatius i Escalabilitat}
-L'únic cost operatiu variable identificat és l'ús de la API d'Intel·ligència Artificial (Google Gemini).
+\subsection{Anàlisi d'Alternatives per a la IA i Costos}
+L'elecció del proveïdor d'IA ha estat una decisió estratègica clau on s'han avaluat tres escenaris:
+
 \begin{itemize}
-    \item \textbf{Fase actual:} S'utilitza la capa gratuïta de l'API, que permet un nombre suficient de peticions per minut per a un ús individual o de petita escala.
-    \item \textbf{Escalabilitat:} En un escenari d'explotació comercial amb alt volum, s'hauria de passar a un model de pagament per ús (\textit{pay-as-you-go}). Tenint en compte que Google Gemini ofereix preus competitius per milió de tokens (entrada/sortida), i que cada estudi numerològic consumeix un nombre limitat de tokens, el cost per unitat (per estudi) es mantindria en l'ordre dels cèntims d'euro.
+    \item \textbf{Opció A - Allotjament Local (Open Source):} Ús de models com Llama o Mistral executats en contenidors Docker. Aquesta opció oferia control absolut de les dades, però es va descartar per la inviabilitat econòmica i tècnica de mantenir una màquina dedicada amb GPU funcionant 24/7 només per a la inferència del model, la qual cosa generaria costos de llum i manteniment de hardware inassumibles.
+    \item \textbf{Opció B - API Enterprise (Privada):} L'ús de versions de pagament (Google Vertex AI) garanteix la privacitat de les dades (no training). Tot i ser viable, afegeix un cost recurrent.
+    \item \textbf{Opció C - API Gratuïta (Google Gemini Free Tier):} S'ha optat finalment per aquesta via. El cost és zero, però té la contrapartida que Google pot utilitzar les dades per a entrenament. Per mitigar totalment aquest risc, s'ha aplicat una estratègia d'anonimització al \textit{prompt} (veure secció \ref{sec:privacitat_ia}).
 \end{itemize}
 
 \subsection{Model d'Ingressos i Rendibilitat}
-El mercat dels estudis numerològics professionals valora aquests serveis entre 50€ i 200€ per informe, depenent de la profunditat i el prestigi del professional.
-Donat que el cost marginal de producció d'un informe amb NUMEN és pràcticament zero (o de pocs cèntims en cas de pagar API), el marge de benefici brut és proper al 100\%. Això indica una \textbf{rendibilitat molt alta}, on la inversió principal és el temps del professional per interpretar i lliurar l'estudi, tasca que l'assistent NUMEN optimitza dràsticament.
+El mercat dels estudis numerològics professionals valora aquests serveis entre 50€ i 100€ per informe, depenent de la profunditat i el prestigi del professional.
+Donat que el cost marginal de producció d'un informe amb NUMEN és pràcticament zero (o de pocs cèntims en cas de pagar API), el marge de benefici brut és proper al 100\%. Per contextualitzar, el preu de mercat actual del model \textit{Gemini 2.5 Flash} és d'aproximadament 0,15\$ per milió de tokens d'entrada i 0,60\$ per milió de tokens de sortida. Això implica que el cost computacional per generar un informe complet seria inferior a 0,002\$, fent que la despesa sigui menyspreable fins i tot en un escenari de pagament per ús. Això indica una \textbf{rendibilitat molt alta}, on la inversió principal és el temps del professional per interpretar i lliurar l'estudi, tasca que l'assistent NUMEN optimitza dràsticament.
+
+\subsection{Anàlisi de Capacitat de la Quota Gratuïta}
+És rellevant quantificar què significa realment la "quota gratuïta" en termes de volum de negoci. Com es pot observar en la captura de la configuració actual (Figura \ref{fig:quota_gemini}), els límits per al model \textbf{Gemini 2.5 Flash} són:
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth, trim={0 0 0 0}, clip]{Imatges/quota_gemini.png}
+    \caption{Límits de freqüència actuals per al model Gemini 2.5 Flash (Font: Google Cloud Console).}
+    \label{fig:quota_gemini}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Límit Diari (RPD):} 20 peticions al dia.
+    \item \textbf{Límit per Minut (RPM):} 5 peticions per minut.
+    \item \textbf{Límit de Tokens (TPM):} 250.000 tokens per minut.
+\end{itemize}
+
+Tot i que el límit de 20 peticions diàries pot semblar restrictiu comparat amb versions anteriors, segueix sent \textbf{totalment viable} per a l'ús individual d'un professional de la numerologia. Tenint en compte que una sessió completa amb un client (incloent l'entrevista, l'anàlisi i l'explicació de l'informe) acostuma a durar entre 45 i 60 minuts, un professional difícilment superarà les 8-10 visites diàries. Per tant, el límit de 20 informes diaris cobreix amb escreix la capacitat productiva humana sense necessitat d'incórrer en costos.
+
+A més, cal destacar que si s'assolís aquest límit, sempre existeix la possibilitat de configurar el sistema per utilitzar altres models amb quotes gratuïtes addicionals (com versions anteriors o alternatives de menor cost computacional). No obstant, s'ha mantingut \textbf{Gemini 2.5 Flash} com a estàndard principal perquè és el que ha ofert, amb diferència, els millors resultats qualitatius en les interpretacions, tot oferint una viabilitat gratuïta considerable.
+
+En conclusió, la barrera del "Free Tier" no suposa un coll d'ampolla real per a l'operativa diària, permetent escalar el negoci fins a un volum considerable abans de necessitar passar a un pla de pagament.
 
 \section{Viabilitat Tecnològica}
 
 La viabilitat tecnològica es sustenta en la simplicitat de l'arquitectura i la maduresa de les eines escollides.
 
 \begin{itemize}
-    \item \textbf{Arquitectura Desktop:} L'elecció d'una aplicació d'escriptori elimina la complexitat de mantenir una infraestructura de servidor 24/7. Això simplifica el desplegament: el programari es pot distribuir com un executable, funcionant de manera autònoma en l'ordinador del professional.
-    \item \textbf{Dependències Externes:} La dependència crítica és la connexió a internet per a consultar l'API d'IA. No obstant, el nucli de càlcul matemàtic (algoritmes de Coquatrix) s'executa localment, garantint que la funcionalitat bàsica (càlculs i gràfics) sigui operativa fins i tot sense connexió o en cas de caiguda del servei d'IA (tot i perdre la interpretació automàtica).
-    \item \textbf{Migració Web:} Tot i que actualment no és necessari, l'arquitectura permetria una futura migració a un entorn web. Existeixen proveïdors de \textit{PaaS} (Platform as a Service) que permetrien allotjar el backend amb costos molt reduïts o gratuïts per a trànsit baix, mantenint la viabilitat tècnica en cas d'expansió.
+    \item \textbf{Arquitectura Multiplataforma (Flutter):} L'ús del framework Dart/Flutter permet una adaptació immediata a dispositius mòbils (iOS i Android) compartint el 100\% del codi. Tot i que el sistema està preparat per a apps natives, en aquesta fase s'ha prioritzat el desplegament Web. Gràcies al disseny \textit{responsive}, la versió web cobreix totalment la necessitat de mobilitat, permetent l'accés des de qualsevol dispositiu sense la complexitat de mantenir publicacions a les App Stores.
+    \item \textbf{Dependències i Resiliència:} La dependència crítica és la connexió per a l'IA. No obstant, el nucli de càlcul de Coquatrix s'executa localment (Client-Side), garantint que la funcionalitat matemàtica i gràfica sigui operativa \textit{offline} o davant caigudes del servei d'IA.
 \end{itemize}
 
 \section{Viabilitat Legal i Ètica}
@@ -48,8 +71,10 @@ En tractar dades personals i utilitzar sistemes d'IA generativa, el projecte ha 
 El sistema està dissenyat seguint el principi de \textbf{minimització de dades}.
 \begin{itemize}
     \item \textbf{Dades requerides:} Únicament es processen el nom complet, els cognoms i la data de naixement. Aquesta informació és la mínima indispensable per realitzar els càlculs numerològics.
-    \item \textbf{Tractament:} En l'arquitectura d'escriptori actual, les dades resideixen localment a l'ordinador de l'usuari (el professional), sense ser enviades a cap servidor centralitzat propietat de NUMEN. Això redueix dràsticament el risc de bretxes de seguretat massives.
-    \item \textbf{Ciberseguretat:} El risc d'atacs externs és baix al no exposar serveis públics. El vector principal de risc és la comunicació amb l'API d'IA, que es realitza mitjançant protocols segurs (HTTPS/TLS) utilitzant llibreries oficials i robustes.
+    \item \textbf{Emmagatzematge Segur:} Les dades es guarden a Google Firestore. Tot i ser un servei al núvol, es beneficia de la infraestructura de seguretat de Google (xifratge en repòs i en trànsit). L'accés està estrictament controlat per regles de seguretat de Firebase i autenticació d'usuari, minimitzant riscos d'exposició.
+\end{itemize}
+\begin{itemize}
+    \item \textbf{Gestió de Secrets i Seguretat API:} S'ha evitat el \textit{hardcoding} de claus al repositori mitjançant la injecció de variables en temps de compilació (\texttt{flutter build web --dart-define=GEMINI\_API\_KEY="..."}). Tot i que aquesta tècnica protegeix el codi font, la clau acaba residint en el codi client del navegador. Per mitigar el risc d'exposició, s'ha implementat una \textbf{restricció estricta d'origen} a la consola de Google Cloud. Això assegura que l'API de Gemini només accepti peticions provinents del domini oficial de l'aplicació, fent que la clau sigui inútil si és sostreta i utilitzada des de qualsevol altre lloc. S'ha valorat l'ús d'un \textit{Backend Proxy} mitjançant Google Cloud Functions per ocultar completament la clau; tot i que aquesta opció disposa d'una capa gratuïta generosa, requereix la vinculació d'una targeta de crèdit (Pla Blaze), requisit que s'ha preferit evitar en aquest context acadèmic en favor de la simplicitat del \textit{Client-Side} amb restriccions.
 \end{itemize}
 
 \subsection{Ètica en la Intel·ligència Artificial}
@@ -57,7 +82,7 @@ L'ús d'IA generativa per interpretar resultats personals planteja reptes ètics
 \begin{itemize}
     \item \textbf{Transparència:} L'usuari (el professional) és conscient que les interpretacions textuals són suggeriments generats per una IA i no veritats absolutes.
     \item \textbf{Human-in-the-loop:} NUMEN està dissenyat com un \textit{assistent}, no com un substitut. La validació final de l'informe i la seva entrega al client sempre passa pel filtre del professional humà, qui aporta el context i la sensibilitat necessària, evitant que la IA prengui decisions autònomes sobre la "personalitat" o "destí" d'un individu.
-    \item \textbf{Privacitat a l'API:} Es configuren les crides a l'API per tal que les dades enviades no siguin utilitzades per l'entrenament dels models públics del proveïdor, garantint la confidencialitat de les dades dels clients finals.
+    \item \textbf{Privacitat i Anonimització (Prompt Engineering):} \label{sec:privacitat_ia} Donat l'ús de la capa gratuïta de Gemini, existeix la possibilitat que les dades s'utilitzin per a entrenament. Per protegir la intimitat del client, s'ha implementat un protocol estricte d'anonimització: \textbf{el prompt enviat a la IA mai conté Dades de Caràcter Personal (PII)} com noms o dates de naixement. Únicament s'envien els resultats matemàtics abstractes (ex: ``Camí de Vida: 7''). Això assegura que la interpretació generada no es pugui vincular a cap persona física identificable, mantenint la integritat privada del client.
 \end{itemize}
 
 \section{Conclusió}

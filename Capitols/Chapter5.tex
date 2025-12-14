@@ -5,11 +5,15 @@
 
 \section{Entorn de Treball}
 
-Aquest projecte es defineix com una iniciativa individual, desenvolupada íntegrament des de zero per l'autor. L'origen del programari es remunta a l'agost de 2024, naixent d'una motivació personal per automatitzar els càlculs numerològics que la meva mare realitzava manualment. Aquesta gènesi particular atorga al projecte una naturalesa híbrida: tot i ser un treball acadèmic, respon a les necessitats reals d'un ``client'' final expert en el domini.
+L'entorn de desenvolupament s'ha configurat per maximitzar la productivitat i la integritat del codi en un context de treball individual. Les eines principals utilitzades han estat:
 
-El desenvolupament ha seguit una evolució orgànica. Inicialment, es va concebre com un conjunt d'scripts i eines bàsiques per agilitzar tasques repetitives. Amb la formalització com a Treball Final de Grau, el projecte ha madurat cap a una arquitectura de programari robusta, incorporant estàndards d'enginyeria, patrons de disseny i, finalment, capacitats d'Intel·ligència Artificial.
-
-L'entorn de treball ha estat, per tant, autònom, utilitzant metodologies àgils adaptades a un sol desenvolupador. La comunicació amb l'experta (la client) ha estat constant, permetent un cicle de feedback ràpid per validar la correcció dels complexos algoritmes implementats.
+\begin{itemize}
+    \item \textbf{Sistema Operatiu:} Desenvolupament realitzat principalment sobre Windows.
+    \item \textbf{IDE:} Visual Studio Code com a entorn de desenvolupament principal, equipat amb extensions per a Dart/Flutter i control de versions.
+    \item \textbf{Control de Versions:} Ús de Git per a la gestió local del codi i GitHub com a repositori remot, seguint un flux de treball basat en \textit{main} i branques per funcionalitat.
+    \item \textbf{Framework:} Flutter SDK (llenguatge Dart) per a la creació de l'aplicació multiplataforma.
+    \item \textbf{Serveis al Núvol:} Gestió centralitzada mitjançant la consola de Firebase (Firestore, Hosting).
+\end{itemize}
 
 \section{Conceptes Previs: La Numerologia com a Domini}
 
@@ -74,19 +78,49 @@ A partir d'aquesta estructura base, es deriven altres vectors de dades mitjança
     \item \textbf{Inconscient:} Revela patrons ocults basats en la posició de les lletres.
 \end{itemize}
 
-\subsection{Significat Arquetípic dels Nombres}
-Per tal que el sistema, i especialment el mòdul d'Intel·ligència Artificial, pugui interpretar els resultats numèrics, és necessari definir una base de coneixement amb els significats arquetípics de cada nombre. De manera resumida:
+\subsection{Algorísmica del Nucli}
+El cor de l'aplicació resideix en una sèrie d'algoritmes deterministes que transformen les dades d'entrada en mètriques significatives. A continuació, es detalla la lògica de negoci implementada per als càlculs més complexos.
 
+\subsubsection{Càlculs Derivats del Nom}
+A partir de la conversió gemàtrica, es calculen tres pilars fonamentals mitjançant la segregació de caràcters segons la seva tipologia fonètica:
 \begin{itemize}
-    \item \textbf{1:} Lideratge, independència, inici. (Yang)
-    \item \textbf{2:} Dualitat, col·laboració, sensibilitat. (Yin)
-    \item \textbf{3:} Comunicació, creativitat, expressió.
-    \item \textbf{4:} Estructura, treball, ordre.
-    \item \textbf{5:} Llibertat, canvi, aventura.
-    \item \textbf{6:} Harmonia, responsabilitat, família.
-    \item \textbf{7:} Espiritualitat, anàlisi, introspecció.
-    \item \textbf{8:} Poder, materialisme, organització.
-    \item \textbf{9:} Humanitarisme, saviesa, final de cicle.
+    \item \textbf{Ànima (Soul):} S'obté sumant exclusivament el valor de les \textbf{vocals} del nom complet. Representa la motivació interna.
+    \item \textbf{Personalitat:} S'obté sumant exclusivament el valor de les \textbf{consonants}. Representa la projecció externa.
+    \item \textbf{Expressió:} És la suma dels valors totals (Ànima + Personalitat) o de totes les lletres.
 \end{itemize}
+
+\subsubsection{Càlculs Derivats de la Data}
+La data de naixement es processa per extreure'n cicles temporals, utilitzant operacions aritmètiques bàsiques però amb significats oposats:
+\begin{itemize}
+    \item \textbf{Desafiaments (Challenges):} Es calculen mitjançant la \textbf{resta} (valor absolut) entre els dígits reduïts del dia, mes i any (ex: $|Dia - Mes|$). Representen obstacles a superar.
+    \item \textbf{Realitzacions (Pinacles):} Es calculen mitjançant la \textbf{suma} dels mateixos components. Representen els moments àlgids o metes.
+\end{itemize}
+
+\subsubsection{Algoritme del Número Llindar (NL)}
+Un dels càlculs més complexos implementats és el del Número Llindar, el qual no segueix una fórmula aritmètica directa sinó una \textbf{lògica de prioritats condicional}. L'algoritme avalua l'histograma d'Habitants (Inclusió) en el següent ordre estricte:
+
+\begin{enumerate}
+    \item \textbf{Prioritat Kàrmica:} Si hi ha ``cases buides'' (habitants = 0), el NL és la suma d'aquestes cases buides.
+    \item \textbf{Prioritat Dominant (Sobresurt):} Si un número apareix molt més que la resta (el seu valor és superior al segon màxim + 2), aquest esdevé el NL.
+    \item \textbf{Prioritat per Repetició:} Si hi ha un empat en els valors màxims (més de 3 vegades repetit el màxim), es calcula una suma ponderada d'aquests.
+    \item \textbf{Default (No Sobresurt):} Si no es compleix cap anterior, el NL és la suma de les dues cases amb major nombre d'habitants.
+\end{enumerate}
+
+\subsubsection{Càlcul d'Herències}
+Les herències es calculen analitzant patrons específics en la distribució de la Inclusió, concretament observant la càrrega de les cases 1 (lideratge/pare) i 6 (família/responsabilitat), i com aquestes interactuen amb el total de lletres del nom.
+
+\subsection{Algoritme de Visualització Dinàmica}
+Una de les innovacions del sistema és la generació dinàmica de la figura representativa (l'home de Vitruvi) mitjançant la manipulació directa de vectors SVG.
+
+\subsubsection{Lògica de Mapeig Vectorial}
+La figura es descompon en regions (Cap, Braços, Cames, Tronc), i cadascuna està vinculada a coordenades numerològiques specífiques. L'algoritme recorre el mapa d'Habitants i la Data de Naixement i, per a cada coincidència, ``activa'' la regió corresponent del gràfic.
+
+\subsubsection{Intensitat Cromàtica (Heatmap)}
+No només es pinta la zona, sinó que es determina el color i la seva intensitat basant-se en la \textbf{freqüència d'aparició} del número:
+\begin{itemize}
+    \item \textbf{Escala de Vermells (Yang):} Utilitzada quan la coincidència prové directament dels dígits de la data de naixement (Dia, Mes, Any). A major repetició del dígit, més fosc i intens és el vermell (de \textit{LightSalmon} a \textit{DarkRed}).
+    \item \textbf{Escala de Blaus (Yin):} Utilitzada quan la coincidència prové dels valors derivats de la Inclusió. Similarment, la intensitat del blau augmenta amb la freqüència (de \textit{PowderBlue} a \textit{Navy}).
+\end{itemize}
+Aquesta tècnica permet generar una representació visual única i immediata de l'energia del subjecte, on les zones fosques indiquen punts de màxima concentració energètica.
 
 Aquests conceptes constitueixen la base teòrica sobre la qual s'ha construït el motor de càlcul de NUMEN.

@@ -49,6 +49,7 @@
 % Create boxes as follows:
 % \begin{colorbox}{red}{2}
 \usepackage{tcolorbox}
+\tcbuselibrary{breakable, skins} % Enable breakable boxes
 \newtcolorbox{textbox}[2]{
     arc=3pt,
     boxrule=#2pt,
@@ -56,7 +57,9 @@
     width=\textwidth,
     halign=left,
     valign=center,
-    colframe=#1!75!black
+    colframe=#1!75!black,
+    breakable, % Allow box to break across pages
+    enhanced   % Required for breakable to work optimally
 }
 
 \newtcolorbox{reflectionbox}{
