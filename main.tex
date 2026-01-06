@@ -36,16 +36,24 @@
 
 % Uncomment the following lines to only include a subset of chapters.
 % This is useful for long documents, as typesetting takes a bit of time
-\includeonly{
-    % Front/Prologue,
-    % Capitols/Chapter1,
-    % Capitols/Chapter2,
-    % Capitols/Chapter3,
-    Capitols/Chapter4,
-    Capitols/Chapter5,
-    Capitols/Chapter6,
-    % Apendix/AppendixA
-  }
+% \includeonly{
+%     % Front/Prologue,
+%     % Capitols/Chapter1,
+%     % Capitols/Chapter2,
+%     % Capitols/Chapter3,
+%     % Capitols/Chapter4,
+%     % Capitols/Chapter5,
+%     % Capitols/Chapter6,
+%     % Capitols/Chapter7,
+%     % Capitols/Chapter8,
+%     % Capitols/Chapter9,
+%     % Capitols/Chapter10,
+%     Capitols/Chapter11,
+%     Capitols/Chapter12,
+%     % Apendix/AppendixA
+%     % Apendix/AppendixB
+%     % Apendix/AppendixC
+%   }
 
 
 %----------------------------------------------------------------------------------------
@@ -78,7 +86,7 @@
                                         % Link to study program               \studyproglink
 
 \supervisorA{Marta Fort i Masdevall}       % Name of supervisor 1,               \supnameA
-\supervisorAmail{e=mc2@udg.edu}         % Email address of supervisor 1,      \supmailA
+\supervisorAmail{marta.fort@udg.edu}         % Email address of supervisor 1,      \supmailA
 \supervisorAweb{https://en.wikipedia.org/wiki/Albert\_Einstein}  %            \supwebA
 \supervisorAinfo{                       % Formatted info about supervisor 1:  \supinfoA
     \supnameA\\
@@ -88,21 +96,19 @@
 }
 
 % Keep empty if there is no supervisor 2: \supervisorB{}
-\supervisorB{Isaac Newton}              % Name of supervisor 2,               \supnameB
-\supervisorBmail{f=am@newton.com}       % Email address of supervisor 2,      \supmailB
-\supervisorBweb{https://ca.wikipedia.org/wiki/Isaac_Newton}                  % \supwebB
+\supervisorB{Maria Jimenez Molina}              % Name of supervisor 2,               \supnameB
+\supervisorBmail{marijimo67@gmail.com}       % Email address of supervisor 2,      \supmailB               % \supwebB
 \supervisorBinfo{                       % Formatted info about supervisor 2:  \supinfoB
     \supnameB\\
-    University of Cambridge\\
     Email: \href{mailto:\supmailB}{\supmailB}\\
-    Web: \href{\supwebB}{Link}
+    Tel.: \href{+34650121367}{+34650121367}
 }
 
 \university{University of Girona}
                                         % University name                     \univname
 \universitycatalan{Universitat de Girona}
                                         % University, in German               \univnameger
-\department{xxxxxxxxxxxxxxx} 
+\department{IMAE} 
                                         % Department,                         \deptname
 
 % % Links
@@ -139,13 +145,13 @@
 %----------------------------------------------------------------------------------------
 % ABSTRACT
 %----------------------------------------------------------------------------------------
-%\include{Front/abstract}
+% \include{Front/abstract}
 
 
 %----------------------------------------------------------------------------------------
 % ACKNOWLEDGEMENTS
 %----------------------------------------------------------------------------------------
-%\include{Front/acknowledgements}
+% \include{Front/acknowledgements}
 
 
 %----------------------------------------------------------------------------------------
@@ -153,8 +159,8 @@
 %----------------------------------------------------------------------------------------
 % Comment out if any of the following is not needed:
 \tableofcontents  % Add main table of contents
-%\listoffigures    % Add list of figures
-%\listoftables     % Add list of tables
+\listoffigures    % Add list of figures
+\listoftables     % Add list of tables
 
 \include{Front/Prologue}
 
@@ -188,7 +194,12 @@
 \include{Capitols/Chapter4} 
 \include{Capitols/Chapter5} 
 \include{Capitols/Chapter6}
-
+\include{Capitols/Chapter7}
+\include{Capitols/Chapter8}
+\include{Capitols/Chapter9}
+\include{Capitols/Chapter10}
+\include{Capitols/Chapter11}
+\include{Capitols/Chapter12}
 
 %----------------------------------------------------------------------------------------
 % THESIS CONTENT - APPENDICES
@@ -198,7 +209,8 @@
 % Include the appendices of the thesis as separate files from the Appendices folder
 % Uncomment the lines as you write the Appendices
 \include{Apendix/AppendixA}
-%\include{Appendices/AppendixB}
+\include{Apendix/AppendixB}
+\include{Apendix/AppendixC}
 %\include{Appendices/AppendixC}
 
 %----------------------------------------------------------------------------------------

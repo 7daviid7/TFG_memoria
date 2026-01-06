@@ -7,11 +7,16 @@
 % Support for special characters
 \usepackage[utf8]{inputenc}    % Specify input encoding
 \usepackage[T1]{fontenc}       % Specify font encoding
+\usepackage{xurl}              % Allow line breaking in URLs at any character
+\usepackage[hidelinks,breaklinks]{hyperref} % Clickable links without borders
+\renewcommand{\_}{\textunderscore\allowbreak} % Allow breaking after underscores in texttt
+\renewcommand{\_}{\textunderscore\allowbreak} % Allow breaking after underscores in texttt
 
 % Set main fonts
 % Fonts catalogue: https://tug.org/FontCatalogue/
 \usepackage{mathpazo}          % Use the Palatino font by default
 \usepackage{amsmath}
+\usepackage[framemethod=TikZ]{mdframed}
 \usepackage{translator}           % Required for math environments (cases, text, etc.)
 \usepackage{beramono}          % Override the monospace/typewriter font
 
@@ -55,7 +60,7 @@
     boxrule=#2pt,
     colback=#1!25!white,
     width=\textwidth,
-    halign=left,
+    halign=justify,
     valign=center,
     colframe=#1!75!black,
     breakable, % Allow box to break across pages
@@ -97,7 +102,6 @@
 % Setup code listings
 \usepackage{listings}
 \lstdefinestyle{mystyle}{
-    backgroundcolor=\color{codebackground},   
     commentstyle=\color{codegreen},
     keywordstyle=\color{magenta},
     numberstyle=\tiny\color{codegray},
@@ -105,16 +109,134 @@
     basicstyle=\ttfamily\footnotesize,
     breakatwhitespace=false,
     breaklines=true,
-%    captionpos=b,
+    columns=fullflexible,
     keepspaces=true,
     numbers=left,
     numbersep=5pt,
     showspaces=false,
     showstringspaces=false,
     showtabs=false,
-    tabsize=4
+    tabsize=4,
+    % Support for Catalan/Spanish accents in code blocks
+    literate={à}{{\`a}}1
+             {è}{{\`e}}1
+             {é}{{\'e}}1
+             {í}{{\'i}}1
+             {ò}{{\`o}}1
+             {ó}{{\'o}}1
+             {ú}{{\'u}}1
+             {ç}{{\c c}}1
+             {·}{{\textperiodcentered}}1
+             {ï}{{\"i}}1
+             {ü}{{\"u}}1
+             {Ñ}{{\~N}}1
+             {ñ}{{\~n}}1
+             {¿}{{?`}}1
+             {¡}{{!`}}1
+             {À}{{\`A}}1
+             {È}{{\`E}}1
+             {É}{{\'E}}1
+             {Í}{{\'I}}1
+             {Ò}{{\`O}}1
+             {Ó}{{\'O}}1
+             {Ú}{{\'U}}1
+             {Ç}{{\c C}}1
+             {á}{{\'a}}1
 }
 \lstset{style=mystyle}
+
+% Envoltar els blocs de codi amb un fons sòlid de mdframed per evitar fissures
+\mdfdefinestyle{codebox}{
+    backgroundcolor=codebackground,
+    linecolor=codebackground,
+    innerleftmargin=5pt,
+    innerrightmargin=5pt,
+    innertopmargin=5pt,
+    innerbottommargin=5pt,
+    skipabove=10pt,
+    skipbelow=10pt,
+    roundcorner=0pt,
+    splitbottomskip=2pt,
+    splittopskip=2pt
+}
+\surroundwithmdframed[style=codebox]{lstlisting}
+
+% Define Dart Language
+\lstdefinelanguage{Dart}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, const, final, class, void, int, double, String, bool, Map, List, dynamic, async, await, Future, Stream},
+  keywordstyle=\color{magenta}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{codegreen}\ttfamily,
+  stringstyle=\color{codepurple}\ttfamily,
+  morestring=[b]',
+  morestring=[b]",
+  morestring=[s]{'''}{'''},
+  morestring=[s]{"""}{"""}
+}
+
+% Define JSON Language
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{à}{{\`a}}1
+      {è}{{\`e}}1
+      {é}{{\'e}}1
+      {í}{{\'i}}1
+      {ò}{{\`o}}1
+      {ó}{{\'o}}1
+      {ú}{{\'u}}1
+      {ç}{{\c c}}1
+      {·}{{\textperiodcentered}}1
+      {ï}{{\"i}}1
+      {ü}{{\"u}}1
+      {Ñ}{{\~N}}1
+      {ñ}{{\~n}}1
+      {¿}{{?`}}1
+      {¡}{{!`}}1
+      {À}{{\`A}}1
+      {È}{{\`E}}1
+      {É}{{\'E}}1
+      {Í}{{\'I}}1
+      {Ò}{{\`O}}1
+      {Ó}{{\'O}}1
+      {Ú}{{\'U}}1
+      {Ç}{{\c C}}1
+      {á}{{\'a}}1
+      {0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
 
 % minted is an alternative code listing package. (See chapter 2)
 % For it to run successfully, ensure the following:
@@ -141,6 +263,11 @@
     style=numeric-comp         % Choose here your preferred citation style
 ]{biblatex}
 \addbibresource{example.bib}   % The filename of the bibliography
+
+% BibLaTeX URL breaking settings
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
+\setcounter{biburlnumpenalty}{8000}
 \usepackage[autostyle=false]{csquotes} 
                                % Required to generate language-dependent quotes 
                                % in the bibliography

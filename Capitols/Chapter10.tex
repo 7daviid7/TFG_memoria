@@ -1,0 +1,139 @@
+\chapter{Implantació i resultats}
+\label{chapter:implantacio_resultats}
+
+En aquest capítol es detalla el procés de posada en marxa del sistema NUMEN en un entorn productiu real, així com els resultats obtinguts després de la implementació. S'analitza l'arquitectura de desplegament, la configuració dels serveis al núvol i es valida el compliment dels objectius i requisits inicials, incloent-hi els aspectes legals de protecció de dades.
+
+\section{Desplegament i Operació}
+
+El sistema s'ha desplegat seguint una arquitectura \emph{serverless} optimitzada per a l'entorn de Google Firebase \cite{firebase_platform}. Per garantir la reproductibilitat i seguretat del procés, s'ha implementat un flux d'automatització mitjançant scripts i gestió de variables d'entorn.
+
+\subsection{Automatització del Desplegament}
+
+El procés de posada en producció s'ha encapsulat en l'script \texttt{tools/deploy\_prod.bat}. Aquest script gestiona de manera seqüencial i segura totes les passes necessàries per publicar una nova versió:
+
+\begin{enumerate}
+    \item \textbf{Càrrega de secrets:} Llegeix el fitxer local \texttt{.env} (no inclòs al control de versions) per obtenir claus sensibles com la \texttt{GEMINI\_API\_KEY}.
+    \item \textbf{Neteja i dependències:} Executa \texttt{flutter clean} i \texttt{flutter pub get} per assegurar un entorn de compilació net.
+    \item \textbf{Compilació segura:} Genera el paquet web optimitzat (\texttt{flutter build web --release}) injectant la clau d'API directament al codi binary mitjançant el flag \texttt{--dart-define}. Això evita haver d'exposar claus al repositori públic.
+    \item \textbf{Publicació:} Utilitza \texttt{firebase deploy} per pujar els fitxers estàtics generats al CDN de Firebase Hosting.
+\end{enumerate}
+
+\begin{lstlisting}[caption={Script \texttt{deploy\_prod.bat}}, label={lst:deploy_script}]
+@echo off
+rem Navigate to project root if script is run from tools folder
+if exist "..\pubspec.yaml" cd ..
+
+echo Loading environment variables...
+if exist .env (
+    for /f "delims=" %%x in (.env) do set %%x
+) else (
+    echo WARNING: .env file not found! API key might be missing.
+)
+
+echo Cleaning project...
+call flutter clean
+
+echo Getting dependencies...
+call flutter pub get
+
+echo Building Flutter Web App for Release...
+call flutter build web --release --dart-define=GEMINI_API_KEY=%GEMINI_API_KEY%
+
+echo.
+echo Deploying to Firebase...
+call firebase deploy
+
+echo.
+echo Deployment Complete!
+pause
+\end{lstlisting}
+
+\subsection{Instal·lació i Configuració (Guia Tècnica)}
+
+Per facilitar la col·laboració i el manteniment futur, s'ha documentat el procés d'instal·lació de l'entorn de desenvolupament local. Un manual detallat pas a pas es pot trobar a l'Annex \ref{appendix:manual_desenvolupador} ("Manual del Desenvolupador").
+
+Els requisits previs essencials són \textbf{Flutter SDK} \cite{flutter_web}, \textbf{Git} i \textbf{Firebase CLI}.
+
+El projecte requereix la creació manual d'un fitxer \texttt{.env} a l'arrel amb la configuració de connexió a Google Gemini:
+
+\begin{lstlisting}[caption={Exemple de fitxer .env necessari}, label={lst:env_file}]
+GEMINI_API_KEY=AIzaSy...LaTevaClauSecreta
+\end{lstlisting}
+
+D'aquesta manera, qualsevol desenvolupador pot clonar el repositori, configurar les seves pròpies credencials i executar l'aplicació localment amb:
+\begin{verbatim}
+flutter pub get
+flutter run -d chrome --dart-define=GEMINI_API_KEY=...
+\end{verbatim}
+
+\subsection{Configuració de Firebase Hosting}
+
+El fitxer \texttt{firebase.json} defineix com el servidor respon a les peticions. S'ha configurat una regla de reescriptura (\emph{rewrite}) per redirigir tot el tràfic a \texttt{index.html}, permetent que el \emph{router} de l'aplicació Flutter gestioni la navegació sense errors 404 en rutes profundes, característica clau en una Single Page Application (SPA).
+
+\begin{lstlisting}[language=json, caption={Configuració de la SPA a Firebase Hosting}, label={lst:firebase_json}]
+"hosting": {
+  "public": "build/web",
+  "rewrites": [
+    {
+      "source": "**",
+      "destination": "/index.html"
+    }
+  ]
+}
+\end{lstlisting}
+
+
+\subsection{Seguretat i Restriccions de l'API}
+
+Un aspecte crític del desplegament en aplicacions client-side (com és el cas d'aquesta SPA en Flutter) és la protecció de les claus d'API. Tot i que la clau s'injecta en temps de compilació, un usuari malintencionat podria extreure-la inspeccionant el codi font o la xarxa.
+
+Per mitigar aquest risc, s'ha configurat una restricció d'origen (\emph{HTTP Referrer}) a la consola de Google Cloud Platform. Aquesta mesura de seguretat garanteix que la \texttt{GEMINI\_API\_KEY} només pugui ser utilitzada per a peticions que s'originin legítimament des del domini de producció. 
+
+Qualsevol intent d'utilitzar aquesta clau des d'un servidor local no autoritzat, eines com Postman, o altres dominis, serà bloquejat directament pels servidors de Google, protegint així la quota d'ús i evitant costos inesperats o abusos del servei.
+
+\section{Resultats}
+
+La implementació del sistema NUMEN ha assolit satisfactòriament els objectius tècnics i funcionals plantejats a l'inici del projecte. A continuació es presenten els resultats més destacats.
+
+\subsection{Demostració del Sistema}
+
+S'ha aconseguit una aplicació plenament funcional accessible via web que permet realitzar el cicle complet d'un estudi numerològic: des de la introducció de dades fins a la generació i compartició de l'informe final.
+
+Es pot veure una demostració completa del funcionament del sistema en el següent vídeo:
+
+\begin{center}
+    \textbf{\href{https://drive.google.com/file/d/1gogjmkYvqlKzE48wGnDwsbhk7Ope8OZH/view?usp=sharing}{Visualitzar Vídeo de Demostració (Google Drive)}}
+\end{center}
+
+L'aplicació es troba actualment desplegada i accessible públicament a:
+\begin{center}
+    \url{https://charged-sum-419213.web.app/}
+\end{center}
+
+\subsection{Assoliment de Funcionalitats Clau}
+
+\begin{itemize}
+    \item \textbf{Càlculs i Automatització:} El motor de càlcul implementa amb precisió els algorismes de la metodologia de Martine Coquatrix. El que abans era un procés manual d'una hora i mitja, ara es realitza en mil·lisegons, eliminant errors humans d'aritmètica.
+    \item \textbf{Generació de PDF:} S'ha implementat amb èxit la generació nativa de documents PDF vectorials directament des del navegador del client. Això garanteix qualitat d'impressió professional i privacitat, ja que el document es crea localment.
+    \item \textbf{Visualització Gràfica:} La representació de la silueta humana amb els centres energètics (xAcre) s'ha resolt mitjançant SVG dinàmics, oferint una experiència visual i interactiva superior als esquemes estàtics en paper.
+    \item \textbf{Integració amb IA:} L'ús de l'API de Google Gemini \cite{gemini_model} permet generar interpretacions textuals coherents i riques, actuant com a suport efectiu per a l'expert, que pot editar i refinar el resultat final.
+\end{itemize}
+
+\section{Legislació i Aspectes Legals}
+
+Donat que l'aplicació tracta dades que podrien considerar-se de caràcter personal i opera com un servei web, s'ha posat especial èmfasi en el compliment de la normativa vigent.
+
+\subsection{Protecció de Dades (LOPD i RGPD)}
+
+Tot i que l'aplicació requereix dades com el nom complet i la data de naixement per realitzar els càlculs numerològics, s'han aplicat principis de \emph{Privacy by Design}:
+
+\begin{enumerate}
+    \item \textbf{Minimització de dades:} Només es sol·liciten les dades estrictament necessàries per als càlculs.
+    \item \textbf{Anonimització en IA:} Com s'ha detallat en l'apartat d'arquitectura, les peticions enviades a l'API de Google Gemini \textbf{mai} contenen informació personal identificable (PII). Només s'envien els valors numèrics resultants dels càlculs i els arquetips corresponents. D'aquesta manera, fins i tot si les dades fossin interceptades o utilitzades per a entrenament, no es podrien vincular a una persona física concreta.
+    \item \textbf{Seguretat en la base de dades:} L'accés a les interpretacions guardades està protegit per regles de seguretat de Firestore (\texttt{firestore.rules}) que requereixen autenticació d'administrador per a qualsevol operació d'escriptura o lectura de dades sensibles.
+\end{enumerate}
+
+\subsection{Llei de Serveis de la Societat de la Informació (LSSICE)}
+
+Com a plataforma web accessible públicament, el projecte, en la seva versió de producció final, inclourà els avisos legals pertinents, política de privacitat i condicions d'ús, identificant clarament el responsable del lloc web i oferint mitjans de contacte directes (com la integració de WhatsApp implementada) per garantir la transparència i els drets dels usuaris.
+

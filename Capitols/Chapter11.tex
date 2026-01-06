@@ -1,0 +1,50 @@
+\chapter{Conclusions}
+\label{chap:conclusions}
+
+Arribar al final d'aquest projecte suposa molt més que el tancament d'un expedient acadèmic; representa la culminació d'un procés evolutiu tècnic i personal. \textbf{NUMEN} no és avui l'aplicació que es va imaginar a l'inici, i aquesta transformació és, potser, el resultat més valuós de tot el treball. La base tecnològica sobre Flutter \cite{flutter_web} i la seva capacitat multiplataforma ha estat fonamental.
+
+\section{Evolució del Projecte: De l'Escriptori al Núvol}
+
+La concepció inicial d'aquesta eina era modesta: una aplicació d'escriptori local (\texttt{.exe}) amb funcionalitat bàsica, pensada simplement perquè l'experta pogués introduir dades, realitzar càlculs i visualitzar-los en pantalla. En aquella primera fase, el programari ni tan sols disposava d'una base de dades senzilla de persistència; el seu propòsit era purament efímer: calcular i mostrar. L'objectiu era digitalitzar una tasca manual, però el paradigma era el del programari local tradicional, limitat a un sol ordinador i difícil de distribuir o actualitzar.
+
+En plantejar aquest desenvolupament com a Projecte Final de Grau, l'abast va canviar radicalment. Es va decidir fer el salt a una arquitectura web moderna, accessible per tothom des de qualsevol dispositiu via URL. Aquest canvi d'enfocament va complicar significativament el desenvolupament de la interfície d'usuari (UI), forçant nombroses iteracions i redissenys per garantir l'adaptabilitat (\textit{responsive}), però ha estat el factor clau per maximitzar la satisfacció final de l'usuari i la utilitat real de l'eina.
+
+Avui, NUMEN no és un executable en un USB, sinó una plataforma viva al núvol.
+
+\section{Decisions Clau i Impacte en el Producte}
+
+Durant el cicle de vida del projecte, s'han pres decisions arquitectòniques i funcionals que han elevat la qualitat del producte final molt per sobre de les expectatives inicials.
+
+\subsection{L'Arquitectura Pública vs. Privada}
+Una de les decisions més encertades, presa cap a la fase final del desenvolupament, va ser la divisió estricta entre la part pública i la privada.
+\begin{itemize}
+    \item \textbf{La part pública:} Actua com a eina de màrqueting (`Engagement`). Captant l'interès de futurs clients mitjançant demos i contingut educatiu.
+    \item \textbf{La part privada:} Està optimitzada exclusivament per a la productivitat de l'expert. Li permet tenir un context històric de tots els treballs realitzats i agilitza enormement el procés de creació de cartes numerològiques.
+\end{itemize}
+Aquesta dualitat converteix el programari en una solució de negoci completa, no només en una calculadora. A més, aquest enfocament garanteix que les dades de l'expert estiguin sempre accessibles i centralitzades, fet que agilitzarà enormement la implementació de qualsevol millora futura, ja que la informació base ja es troba disponible directament al sistema sense necessitat de migracions complexes.
+
+\subsection{Professionalització: IA i Generació Documental}
+La integració de la Intel·ligència Artificial Generativa \cite{gemini_model} ha estat un punt d'inflexió. El que podia haver estat un simple formulari de dades s'ha convertit en un assistent intel·ligent capaç de generar esborranys d'interpretació detallats, agregant un valor professional immens i reduint el temps de redacció.
+
+De la mateixa manera, el canvi en la generació d'informes ha estat dràstic. Inicialment, es plantejava fer simples captures de pantalla de la graella. Finalment, s'ha implementat un motor de generació de PDF dinàmic i vectorial. Aquest canvi tècnic, tot i ser costós d'implementar, ha dotat el servei d'un acabat extremadament professional, permetent lliurar als clients documents perfectes per a la impressió.
+
+\subsection{La Potència de l'Enllaç Compartit}
+La funcionalitat de compartir un enllaç temporal de 24 hores ha resultat ser un "afegit estrella". Permet al client final accedir al seu estudi de forma digital i segura sense necessitat de registre, modernitzant l'experiència de lliurament del servei.
+
+\section{Assoliment d'Objectius}
+
+Malgrat l'evolució i els canvis, el projecte ha mantingut la coherència amb els objectius tècnics definits al Capítol \ref{Chapter1}, assolint-los tots satisfactòriament: la precisió dels algoritmes, la seguretat de les dades, la identitat visual basada en la geometria sagrada i la integració eficient de serveis al núvol.
+
+\section{Aprenentatge i Creixement Personal}
+
+La realització d'aquest projecte ha suposat una oportunitat de creixement única, molt diferent de l'experiència habitual de realitzar un PFG dins d'una empresa.
+
+\subsection{Crear des de Zero vs. Modificar}
+Sovint, en entorns corporatius, la feina es limita a afegir funcionalitats o refactoritzar codi en projectes ja existents, amb arquitectures definides i camins marcats. En aquest cas, el repte ha estat enfrontar-se al "full en blanc". Arriscar-se a prendre decisions estructurals, investigar quines eren les millors tecnologies en cada moment (com l'elecció de Flutter Web o l'estratègia de gestió d'estats) i assumir la responsabilitat dels errors i els encerts. Aquest procés de presa de decisions autònoma és, sens dubte, la lliçó més valuosa.
+
+\subsection{Noves Eines per al Futur}
+Si hagués de tornar a començar un projecte d'aquestes característiques avui, disposaria d'un arsenal d'eines i coneixements que agilitzarien enormement el procés. He après a fons com gestionar la reactivitat en interfícies complexes, especialment en components de dibuix dinàmic que no es redimensionen automàticament com els ginys estàndard, sinó que requereixen d'una lògica matemàtica pròpia per adaptar-se a dispositius mòbils (\textit{responsive}).
+
+A més, el domini assolit sobre \textbf{Google Cloud Console} i l'ecosistema \textbf{Firebase} em proporciona la capacitat de desplegar, monitoritzar i escalar infraestructures al núvol amb confiança, passant de la simple execució local a la gestió professional de serveis en producció.
+
+En definitiva, NUMEN ha estat el pont perfecte entre la teoria acadèmica i la realitat de crear un producte de programari complet, útil i professional.

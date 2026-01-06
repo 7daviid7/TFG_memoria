@@ -1,0 +1,86 @@
+\chapter{Manual del Desenvolupador}
+\label{appendix:manual_desenvolupador}
+
+Aquest annex serveix com a guia tècnica detallada per a configurar l'entorn de desenvolupament local, permetent a futurs col·laboradors executar, depurar i desplegar el projecte NUMEN.
+
+\section{Preparació de l'Entorn}
+
+Abans de clonar el repositori, cal assegurar-se que la màquina de desenvolupament compleix amb els requisits previs.
+
+\subsection{Instal·lació de Flutter SDK}
+El projecte es basa en el framework Flutter. Cal descarregar la versió estable més recent des del lloc oficial (\url{https://flutter.dev}) i afegir el binari al \texttt{PATH} del sistema.
+
+\begin{lstlisting}[language=bash, caption={Verificació de la instal·lació de Flutter}]
+flutter doctor
+\end{lstlisting}
+
+\subsection{Node.js i NPM}
+Les eines de línia de comandes de Firebase (\texttt{firebase-tools}) depenen de Node.js. Cal instal·lar la versió LTS de Node.js, que inclou el gestor de paquets NPM.
+
+\begin{lstlisting}[language=bash, caption={Instal·lació de Firebase CLI via NPM}]
+npm install -g firebase-tools
+firebase login
+\end{lstlisting}
+
+\subsection{Visual Studio Code i Extensions}
+L'entorn recomanat (IDE) és Visual Studio Code (VS Code). Per a una experiència òptima amb Flutter, es recomana instal·lar les extensions oficials:
+\begin{itemize}
+    \item \textbf{Flutter} (Dart-Code.flutter)
+    \item \textbf{Dart} (Dart-Code.dart-code)
+\end{itemize}
+
+\section{Configuració Inicial del Projecte}
+
+Un cop clonat el repositori, cal instal·lar les dependències i configurar els serveis del núvol.
+
+\subsection{Instal·lació de Dependències}
+Des de l'arrel del projecte, executar:
+\begin{lstlisting}[language=bash]
+flutter pub get
+\end{lstlisting}
+
+\subsection{Configuració de Firebase (FlutterFire)}
+Per vincular el projecte local amb el projecte de Firebase al núvol, s'utilitza l'eina \texttt{flutterfire\_cli}. Si és el primer cop que es configura en una màquina nova:
+
+\begin{lstlisting}[language=bash, caption={Activació i configuració de FlutterFire}]
+dart pub global activate flutterfire_cli
+flutterfire configure
+\end{lstlisting}
+
+Aquesta comanda guiarà a l'usuari per seleccionar el projecte de Firebase existent i generarà automàticament el fitxer \texttt{lib/firebase\_options.dart} amb les credencials actualitzades per a cada plataforma (Web, Android, iOS, Windows).
+
+\section{Depuració i Execució}
+
+Per facilitar la depuració en VS Code, el projecte inclou una configuració de llançament predefinida. No obstant això, donat que es requereix la injecció de la clau d'API, es recomana configurar el fitxer \texttt{.vscode/launch.json} o utilitzar arguments.
+
+\subsection{Configuració de launch.json}
+Es recomana configurar el fitxer \texttt{.vscode/launch.json} per utilitzar el paràmetre \texttt{--dart-define-from-file=.env}. Això permet que VS Code llegeixi automàticament totes les variables del fitxer d'entorn sense haver de llistar-les manualment.
+
+\begin{lstlisting}[caption={Exemple de configuració launch.json optimitzada}]
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "numerologia_flutter (Web)",
+            "request": "launch",
+            "type": "dart",
+            "args": [ "-d", "chrome" ],
+            "toolArgs": [
+                "--dart-define-from-file=.env"
+            ]
+        }
+    ]
+}
+\end{lstlisting}
+
+Amb aquesta configuració, el desenvolupador pot senzillament prémer la tecla \textbf{F5} (o fer clic a "Start Debugging") per compilar i executar l'aplicació amb totes les claus configurades correctament, agilitzant significativament el cicle de desenvolupament.
+
+\section{Automatització del Desplegament}
+
+Tal com s'ha descrit al Capítol \ref{chapter:implantacio_resultats}, el desplegament a producció està automatitzat mitjançant l'script \texttt{tools/deploy\_prod.bat}. Aquest script requereix un fitxer \texttt{.env} a l'arrel del projecte amb la clau d'API vàlida.
+
+\begin{lstlisting}[language=bash, caption={Execució del desplegament}]
+./tools/deploy_prod.bat
+\end{lstlisting}
+
+Aquest procés netejarà l'entorn, compilarà l'aplicació en mode \emph{release} (injectant la clau des del \texttt{.env}) i la pujarà a Firebase Hosting.

@@ -1,0 +1,275 @@
+% !TEX root = ../main.tex
+
+\chapter{Estudis i decisions}
+\label{chap:estudis_decisions}
+
+En aquest capítol es detallen i justifiquen les decisions tecnològiques preses durant el desenvolupament del projecte NUMEN. L'elecció de cada component s'ha basat en una anàlisi cost-benefici, tenint en compte els requisits del sistema, les limitacions pressupostàries i l'objectiu de professionalització del producte final.
+
+\section{Hardware utilitzat}
+
+El desenvolupament s'ha dut a terme en un entorn de treball estàndard, sense necessitat de maquinari especialitzat d'alt rendiment, gràcies a l'eficiència de les tecnologies seleccionades.
+
+\begin{itemize}
+    \item \textbf{Ordinador de desenvolupament:} PC amb sistema operatiu Windows 11.
+    \item \textbf{Dispositius de proves:}
+    \begin{itemize}
+        \item Navegadors web (Chrome, Edge), utilitzant les eines de desenvolupador (\textbf{DevTools}) per a la depuració i la simulació de resolucions mòbils.
+        \item Dispositius físics Android per a la validació final, tot i que l'ús de les funcionalitats de simulació responsive de Chrome ha permès agilitzar el cicle de desenvolupament sense dependre constantment d'emuladors pesats. 
+    \end{itemize}
+\end{itemize}
+
+\section{Software i Entorn de Desenvolupament}
+
+\subsection{Visual Studio Code (IDE)}
+Inicialment es va escollir \textbf{Visual Studio Code (VS Code)} com a entorn de desenvolupament principal per la seva lleugeresa, extensibilitat i la familiaritat prèvia amb l'IDE. Un factor determinant va ser la facilitat d'integració amb \textbf{Flutter}: el procés de configuració és extremadament senzill, requerint únicament la descàrrega de l'SDK de Flutter i la instal·lació de l'extensió oficial. Aquest procés està àmpliament documentat en tutorials oficials que guien pas a pas, reduint significativament la barrera d'entrada inicial. Posteriorment, durant l'Etapa 2 (Professionalització), es va migrar a \textbf{Antigravity}, un entorn de desenvolupament basat en VS Code (\textit{fork}) que integra nativament models de llenguatge (LLMs).
+\begin{itemize}
+    \item \textbf{Justificació:} L'ús d'Antigravity ha permès ``exprimir al màxim'' el potencial de la Intel·ligència Artificial Generativa, donant el màxim context possible als models d'IA utilitzats. 
+\end{itemize}
+
+\subsection{Git i GitHub}
+Per al control de versions s'ha utilitzat \textbf{Git}, amb \textbf{GitHub} com a repositori remot. GitLens i Gitgraph han set extencions esencials utilitzades directament des de vsc. 
+\begin{itemize}
+    \item \textbf{Justificació:} Estàndard de la indústria. Permet mantenir un històric de canvis, treballar amb branques (per a funcionalitats experimentals com la integració de PDF natiu) i assegurar una còpia de seguretat al núvol.
+\end{itemize}
+
+\section{Tecnologies i Llibreries del Projecte}
+
+El nucli del projecte s'ha construït sobre el framework \textbf{Flutter} (llenguatge Dart). A continuació es llisten les llibreries clau definides al fitxer \texttt{pubspec.yaml}, agrupades per funcionalitat.
+
+\subsection{Nucli i Interfície (UI)}
+\begin{itemize}
+    \item \textbf{flutter\_svg (\^{}2.0.10):}
+    \textbf{Justificació:} Imprescindible per a la renderització i manipulació dinàmica de la Figura Espiritual. Permet carregar arxius SVG (`siluetaTancada.svg`, etc.) i modificar els seus \textit{paths} i colors en temps d'execució sense pèrdua de qualitat.
+    
+    \item \textbf{provider (\^{}6.0.0):}
+    \textbf{Justificació:} Aquesta llibreria és fonamental per a la gestió d'estat de l'aplicació. Ha permès implementar el patró \textit{State Management} de manera neta, separant la interfície gràfica de la lògica de negoci.
+    
+    Concretament, s'ha creat manualment la classe \texttt{DataModel}, que actua com a ``Font de Veritat'' (\textit{Single Source of Truth}). Utilitzant \texttt{Provider}, aquesta classe s'injecta a l'arbre de widgets, permetent que qualsevol pàgina accedeixi a les dades calculades sense haver de passar variables manualment. Aquesta decisió de disseny millora dràsticament la mantenibilitat i testabilitat del codi respecte a tenir la lògica barrejada dins dels widgets.
+    
+    \item \textbf{flutter\_markdown (\^{}0.7.7+1):}
+    \textbf{Justificació:} Necessari per renderitzar les interpretacions generades per la IA, ja que Gemini retorna text amb format Markdown (negretes, llistes, títols).
+
+    \item \textbf{flutter\_rating\_bar (\^{}4.0.1):}
+    \textbf{Justificació:} Implementa el component visual de valoració amb estrelles (1-5). S'utilitza tant en el llistat històric per a l'administrador com en la vista pública compartida perquè els convidats puguin deixar feedback.
+\end{itemize}
+
+\subsection{Generació de documents (PDF)}
+\begin{itemize}
+    \item \textbf{pdf (\^{}3.11.1) i printing (\^{}5.13.2):}
+    \textbf{Justificació:} Decisió crítica de l'Etapa 2 (PFG). Inicialment es generaven informes mitjançant captures de pantalla, però això provocava problemes de qualitat i talls de text. Aquestes llibreries permeten generar \textbf{PDFs natius vectorials}, paginats automàticament i amb qualitat d'impressió professional, independentment de la mida de la pantalla de l'usuari.
+\end{itemize}
+
+\subsection{Backend i persistència}
+\begin{itemize}
+    \item \textbf{firebase\_core (\^{}3.6.0) i cloud\_firestore (\^{}5.4.0):}
+    \textbf{Justificació:} S'ha escollit Firebase per la seva integració nativa amb Flutter i el seu model \textit{Serverless}. Firestore (NoSQL) és ideal per emmagatzemar documents flexibles com els informes numerològics (JSONs complexos) sense haver de gestionar esquemes SQL rígids ni mantenir un servidor propi.
+
+    \item \textbf{firebase\_auth (\^{}5.1.0):}
+    \textbf{Justificació:} Necessari per implementar el sistema de Login. Permet autenticar l'administrador de manera segura i, en combinació amb les regles de Firestore, protegir les dades privades de l'accés públic no autoritzat.
+\end{itemize}
+
+\subsection{Connexió i utilitats}
+\begin{itemize}
+    \item \textbf{http (\^{}1.6.0):}
+    \textbf{Justificació:} Utilitzada per realitzar peticions REST a l'API de Google Gemini. S'ha optat per una implementació directa via HTTP en lloc de l'SDK oficial en alguns punts per tenir un control més granular de les capçaleres i la gestió d'errors de xarxa personalitzada.
+    
+    \item \textbf{path\_provider (\^{}2.0.8):}
+    \textbf{Justificació:} Necessària per gestionar rutes de fitxers temporals en la generació i compartició de PDFs en dispositius mòbils i escriptori.
+    
+    \item \textbf{intl (\^{}0.19.0) i flutter\_localizations:}
+    \textbf{Justificació:} Tot i que l'idioma principal és el català, aquestes llibreries són essencials per al formatat correcte de dates i números segons la configuració local del dispositiu.
+
+    \item \textbf{url\_launcher (\^{}6.3.1):}
+    \textbf{Justificació:} Permet a l'aplicació obrir enllaços externs i aplicacions de tercers. És la peça clau per a la funcionalitat ``Contactar per WhatsApp'' (obrint l'esquema \texttt{https://wa.me}) i per obrir els enllaços de les lectures compartides al navegador.
+
+    \item \textbf{diacritic (\^{}0.1.3):}
+    \textbf{Justificació:} Llibreria petita però crítica per a la integritat dels càlculs. S'utilitza en el servei de càlcul per eliminar accents i dièresis dels noms (normalització) abans de convertir les lletres a números, assegurant que ''Ramon'' i ''Ramón'' tinguin la mateixa vibració numèrica.
+\end{itemize}
+
+\section{Arquitectura i Estructura del Codi}
+
+El projecte s'ha dissenyat seguint principis d'arquitectura neta i modularitat, garantint que el codi sigui mantenible i escalable. L'estructura de carpetes reflecteix la separació de responsabilitats entre la interfície, la lògica de negoci i les dades.
+
+\subsection{Organització del Projecte}
+S'ha optat per una estructura de carpetes semàntica dins del directori \texttt{lib/}:
+\begin{itemize}
+    \item \textbf{pages/}: Conté les pantalles completes de l'aplicació. Es sub-divideix en \texttt{public/} (Landing, Exemples) i privades (\texttt{InputPage}, \texttt{ResultsPage}, \texttt{HistoryPage}). Cada pàgina actua com un contenidor que orquestra diversos widgets.
+    \item \textbf{ui\_widgets/}: Components visuals reutilitzables (ex: \texttt{LifePathWidget}) del disseny específic.
+    \item \textbf{widgets/}: Components funcionals transversals d'interfície (ex: \texttt{auth\_guard.dart}, \texttt{pwa\_install\_prompt.dart}).
+    \item \textbf{services/}: Lògica de negoci complexa (IA, PDF, Càlculs). Desacobla el motor matemàtic de l'estat.
+    \item \textbf{models/}: Defineix estructures de dades (\texttt{DataModel}) com a \textit{Single Source of Truth}.
+    \item \textbf{data/}: Repositoris de dades estàtiques (base de dades local per a versió gratuïta).
+\end{itemize}
+
+\subsection{Patró de Navegació i UX}
+S'ha optat per una \textbf{estratègia de navegació híbrida} que combina el millor dels dos mons segons el context:
+
+\begin{enumerate}
+    \item \textbf{Navegació per Rutes (Public/Global):} Sistema de rutes nadiu de Flutter (\texttt{/login}, \texttt{/public...}) al \texttt{main.dart}. Separa públic/privat i facilita l'historial web.
+    \item \textbf{Navegació per Pestanyes (Tabs/Part Privada):} Per a la visualització dels resultats de l'estudi (Private/Results), on l'usuari necessita consultar diferents mètriques simultàniament, s'ha implementat un sistema de pestanyes gestionat mitjançant un \texttt{IndexedStack}.
+\end{enumerate}
+
+Els avantatges són la \textbf{persistència d'estat} (evitant recàrregues) i l'ús d'\textbf{accions contextuals} a la barra de navegació.
+
+\section{Disseny d'interfície i experiència d'usuari (UI/UX)}
+L'aspecte visual i la interacció s'han prioritzat per oferir una experiència professional i intuïtiva, alineada amb els estàndards actuals d'aplicacions mòbils i web.
+
+És important assenyalar que les decisions en aquest àmbit han estat eminentment tècniques. La naturalesa del projecte exigia una visualització de les dades molt específica i predefinida per l'usuari expert (especialment en la Figura Espiritual i les Inclusions), fet que limitava considerablement el marge per a la creativitat estètica. L'objectiu principal ha estat la transposició fidel i funcional d'aquests esquemes teòrics al suport digital.
+
+\subsection{Sistema de Disseny Material 3}
+S'ha adoptat completament \textbf{Material Design 3} (l'última evolució del llenguatge de disseny de Google). Aquesta decisió aporta importants beneficis:
+Aquesta decisió aporta beneficis com la \textbf{consistència visual} immediata en tots els components i l'ús d'una \textbf{paleta de colors algorítmica} derivada d'una llavor (\texttt{Colors.deepOrange}) que garanteix contrast i harmonia sense disseny manual.
+
+\subsection{Disseny Adaptatiu (Responsive)}
+Donat l'objectiu de funcionar tant en escriptori com en dispositius mòbils, la interfície s'ha construït per ser flexible:
+La interfície s'ha construït per ser flexible mitjançant \textbf{layouts fluids} (`Column`, `Expanded`) i una interacció optimitzada tant per a \textbf{ratolí com per a pantalles tàctils}, ajustant les àrees d'interacció segons el dispositiu.
+
+\section{Justificació de Decisions Tècniques}
+
+\subsection{Per què Flutter i no una Web amb React/Vue?}
+Es va optar per \textbf{Flutter} principalment per la seva capacitat d'oferir una integració directa multiplataforma amb un únic codi base. Aquesta característica resultava molt atractiva, tant per l'interès d'aprendre aquest nou llenguatge com per l'eficiència que aportava al projecte. Aconseguir amb la mateixa feina una versió d'escriptori i una web ha estat clau; permet que l'usuari pugui utilitzar la versió web en format mòbil per fer un estudi numerològic en temps real i improvisat en qualsevol moment, sense dependre de l'ordinador.
+\begin{itemize}
+    \item \textbf{Rendiment gràfic:} El motor Skia de Flutter permet dibuixar la Figura Espiritual i manipular SVGs amb un rendiment molt superior al DOM tradicional d'HTML/CSS.
+    \item \textbf{Consistència:} L'aplicació es veu idèntica a Windows, Android i Web, reduint el temps de testeig i manteniment de la interfície.
+\end{itemize}
+
+\subsection{Per què Firebase (NoSQL)?}
+Donada la naturalesa de les dades (informes amb estructures jeràrquiques i variables), una base de dades relacional (SQL) hauria afegit una complexitat innecessària de normalització. \textbf{Firestore} permet guardar l'objecte JSON de l'informe directament, facilitant una recuperació ràpida.
+
+\begin{itemize}
+    \item \textbf{Avantatges competitius:}
+    \begin{itemize}
+        \item \textbf{Model mental directe (1 Estudi = 1 Document):} Tota la informació d'un client (dades personals + taules numerològiques + interpretacions) resideix en un únic document, permetent recuperar tot l'estat de l'aplicació amb una sola lectura de xarxa (\textit{single fetch}), optimitzant dràsticament la latència.
+        \item \textbf{Escalabilitat sense esquema:} Permet afegir nous càlculs o camps a futurs estudis sense trencar la compatibilitat amb els antics ni requerir migracions de base de dades complexes.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Repte i Solució: Filtratge Eficient per Nom}
+Un dels requisits era poder cercar ràpidament clients a l'historial. Firestore no suporta cerques de text complet (com el \texttt{LIKE \%...\%} de SQL) de forma nativa sense costos addicionals.
+\begin{itemize}
+    \item \textbf{Solució implementada (Cerca per prefix):} S'ha utilitzat la tècnica d'índexs de rang. Per cercar ``Dav'', es realitza una consulta que demana documents on \texttt{nom >= 'Dav'} i \texttt{nom <= 'Dav\textbackslash uf8ff'}.
+    \item \textbf{Benefici:} Això delega el filtratge al servidor de base de dades. El client només descarrega els registres exactes que coincideixen, estalviant dades i bateria al dispositiu de l'usuari (en contraposició a descarregar tot l'historial i filtrar en local).
+\end{itemize}
+
+\subsection{Estratègia d'Intel·ligència Artificial: Prompting vs RAG}
+Un dels aspectes més crítics del disseny ha estat determinar com alimentar el model amb el coneixement expert (el llibre base de numerologia). Es van valorar dues estratègies principals:
+
+\subsubsection{Opció Descartada: RAG (Retrieval-Augmented Generation)}
+Inicialment es va plantejar crear una base de dades vectorial (\textit{Vector DB}) amb tot el contingut del llibre de referència (prox. 300 pàgines), utilitzant tècniques de \textit{Chunking} per recuperar fragments rellevants sota demanda.
+\begin{itemize}
+    \item \textbf{Motiu del rebuig:} Aquesta opció es va descartar per viabilitat econòmica i eficiència. La incorporació de bases de dades vectorials i els costos d'\textit{embeddings} haurien disparat el pressupost. A més, gran part del llibre conté reflexions filosòfiques abstractes o informació "buida" (soroll) que no aporta valor directe per a la interpretació tècnica dels números.
+\end{itemize}
+
+\subsubsection{Opció Escollida: Enginyeria de Prompts Avançada}
+S'ha optat per una estratègia de \textbf{Prompt Engineering} iterativa i molt elaborada. En lloc de processar tot el llibre, s'han extret i sintetitzat manualment les regles teòriques essencials, incorporant-les directament al context del prompt (\textit{In-Context Learning}).
+\begin{itemize}
+    \item \textbf{Metodologia:} A base de prova i error, s'ha definit un rol molt estricte per a la IA, proporcionant-li el context exacte necessari per a cada càlcul. Això garanteix respostes satisfactòries i alineades amb el mètode, sense la latència ni el cost d'un sistema RAG.
+\end{itemize}
+
+\subsubsection{Elecció del Model: Google Gemini 2.5 Flash}
+Després d'avaluar alternatives com OpenAI (GPT-4o) i models Open Source (Llama 3 local):
+\begin{itemize}
+    \item \textbf{Open Source (Llama):} Rebutjat per la necessitat de maquinari dedicat potent (GPU), contradictori amb una aplicació lleugera.
+    \item \textbf{Google Gemini:} Escollit per la seva API accessible i, crucialment, pel seu \textit{tier gratuït} que permet una finestra de context massiva (1M tokens). Això fa viable l'estratègia de ``Prompt llarg'' descrita anteriorment sense incórrer en costos.
+\end{itemize}
+
+\subsection{Evolució del sistema de PDF (Screenshoot vs PDF natiu)}
+Un dels canvis més significatius durant el desenvolupament (descrit a l'Etapa 2) va ser l'abandonament de la generació de PDFs basada en captures de pantalla.
+\begin{itemize}
+    \item \textbf{Problema:} Les captures depenien de la resolució de pantalla de l'usuari. Un usuari amb pantalla petita generava un PDF de baixa resolució i text tallat.
+    \item \textbf{Solució:} Ús del paquet `pdf` per redibuixar l'informe programàticament en un canvas PDF vectorial. Això garanteix que el fitxer de sortida sigui perfecte (text seleccionable, gràfics nítids) independentment del dispositiu des d'on es genera.
+\end{itemize}
+
+\subsection{Estratègia de seguretat i ``Part pública''}
+L'evolució del projecte l'ha portat a diferenciar clarament entre una zona pública i una privada, derivant en la implementació d'un sistema de login i regles de seguretat estrictes.
+\begin{itemize}
+    \item \textbf{Protecció de dades (ID Enumeration):} En compartir resultats via enllaç, s'exposa un DocumentID. Per evitar que un atacant pugui accedir a altres informes modificant aquest ID, s'ha implementat una regla de Firestore (\texttt{request.auth != null}) a la col·lecció principal.
+    \item \textbf{Zona pública educativa:} S'ha creat una secció oberta (Landing Page) que fa de ``ganxo'', oferint teoria i un càlcul senzill (Camí de Vida) sense guardar dades, per atreure usuaris cap al servei professional.
+    \item \textbf{Immutabilitat i Feedback públic:} Per a la col·lecció \texttt{shared\_interpretations}, s'ha implementat un model d'accés híbrid. Tothom té permís de lectura (\texttt{allow read: if true}), però l'actualització de documents es restringeix estrictament mitjançant condicions d'immutabilitat. Les regles de seguretat verifiquen que els camps crítics com \texttt{interpretation}, \texttt{originalDocId} i \texttt{expiresAt} no hagin canviat respecte al valor original (\texttt{request.resource.data.x == resource.data.x}), permetent només la modificació del camp de \textit{feedback} dels usuaris convidats. Això prevé la manipulació de contingut sensible sense necessitat d'autenticar els convidats.
+\end{itemize}
+
+\subsection{Visualització Dinàmica SVG (El ``Ninot Espiritual'')}
+Una de les funcionalitats clau sol·licitada per l'usuari era la visualització gràfica de l'estudi a través del ``Ninot Espiritual''. Aquest requisit plantejava un repte tècnic important degut a la gran variabilitat de la representació.
+
+\subsubsection{El Problema de la Combinatòria}
+El diagrama es compon de 9 parts del cos principals, que es subdivideixen en dues meitats (esquerra i dreta), resultant en 18 zones independents a pintar. A més, el mètode de la Inclusió defineix diferents intensitats de color (fins a 3 nivells) segons el nombre de vegades que apareix un número.
+\begin{itemize}
+    \item \textbf{Impossibilitat d'actius estàtics:} Si considerem que cada una de les 18 zones pot tenir fins a 4 estats possibles (buit, 1 aparició, 2 aparicions o fins a 3 aparicions), el nombre total de combinacions ascendeix a $4^{18}$, és a dir, aproximadament \textbf{68.719 milions d'imatges diferents}. Generar una imatge `.png` per a cada combinació possible resultaria en un volum de dades inassumible, fent l'app tècnicament inviable si es basés en fitxers estàtics.
+\end{itemize}
+
+\subsubsection{Solució Implementada: Manipulació XML en temps real}
+S'ha optat per una solució ``quirúrgica'' utilitzant la naturalesa vectorial del format SVG (Scalable Vector Graphics), que al final no és més que codi XML.
+\begin{enumerate}
+    \item \textbf{SVG base intel·ligent:} S'ha dissenyat un únic fitxer SVG on cada traç i polígon té un \texttt{ID} únic (ex: \texttt{camaDreta}, \texttt{meitatPanxaEsquerre}).
+    \item \textbf{Motor de renderitzat (\texttt{SvgDynamicRenderer}):} S'ha creat un servei a Flutter que carrega l'SVG base com a text brut, el parseja com a arbre XML i cerca els nodes específics.
+    \item \textbf{Injecció de color:} En temps d'execució, l'algoritme calcula el color exacte (Hex Code) per a cada zona segons les dades del client i modifica l'atribut \texttt{fill} del node XML corresponent.
+\end{enumerate}
+Aquesta estratègia permet, amb un sol fitxer de pocs Kilobytes, generar infinites variacions del diagrama a l'instant, complint l'objectiu de personalització total amb un cost de recursos mínim.
+
+\subsubsection{Disseny vectorial amb Figma i ``Camps invisibles''}
+Perquè la injecció de color funcioni, l'SVG base ha d'estar rigorosament preparat. S'ha utilitzat l'eina de disseny \textbf{Figma}\footnote{Projecte Figma original: \url{https://www.figma.com/design/B7IWNeyv41aj20HjB8Ojol/siluetaFigura?node-id=0-1&t=lzHlgCWiclavVY8N-1}} per traçar manualment la silueta i dividir-la en les capes necessàries.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Imatges/figma_structure.png}
+    \caption{Estructura de capes a Figma: Les zones numerades (1-9) corresponen a les parts del cos.}
+    \label{fig:figma_structure}
+\end{figure}
+
+L'estratègia clau ha estat la creació de \textbf{Camps invisibles}:
+\begin{itemize}
+    \item Les zones de color (panxa, caps, cames) existeixen al disseny original però tenen una opacitat de 0\% o un color de farciment nul.
+    \item Cada zona té assignat un \texttt{id} específic a la capa de Figma (ex: \texttt{meitatBracDret}) que es preserva en exportar a format SVG.
+    \item El codi Dart cerca aquests IDs i els ``activa'' assignant-los un color visible només quan l'algoritme ho determina.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imatges/figma_layers.png}
+    \caption{Detall de les línies guia i la simetria utilitzada per dividir el cos (Esquerra/Dreta).}
+    \label{fig:figma_layers}
+\end{figure}
+
+\subsection{Híbrid estàtic/IA: Optimització de la calculadora gratuïta}
+Per tal de fer sostenible el model \textit{Freemium}, s'ha pres la decisió tècnica de no utilitzar la IA per als càlculs de la calculadora gratuïta.
+\begin{itemize}
+    \item \textbf{Cost i latència:} Fer una crida a Gemini per a cada usuari anònim que prova la calculadora (``Camí de Vida'') seria ineficient a nivell de quota d'API i introduiria una latència innecessària.
+    \item \textbf{Solució local (\texttt{NumerologyContent}):} S'ha creat un fitxer \texttt{dart} que actua com a base de dades local inmutable. Aquest fitxer conté classes estàtiques amb les descripcions pre-redactades per als números de l'1 al 9 i els Mestres (11, 22, 33).
+    \item \textbf{Resultat:} L'usuari obté una resposta instantània (0 ms de latència de xarxa) i consistent, reservant la potència de la IA generativa només per als usuaris de pagament o registrats que requereixen interpretacions complexes i personalitzades (Carta Natal completa).
+\end{itemize}
+
+\subsection{Sistema de compartició temporal (Enllaços 24h)}
+La funcionalitat de ``Compartir Resultat'' ha requerit un disseny específic per equilibrar la facilitat d'ús amb la privacitat estricta de les dades. S'ha descartat l'ús d'enllaços permanents al document original.
+
+\subsubsection{Mecanisme de ``Còpia efímera''}
+En lloc de donar accés al document de la base de dades principal (que conté dades sensibles), el sistema genera un nou document a la col·lecció \texttt{shared\_\allowbreak interpretations}.
+\begin{enumerate}
+    \item \textbf{Duplicació parcial:} Es copien només les dades necessàries per a la visualització (text de la interpretació), ometent dades personals crítiques si és necessari.
+    \item \textbf{Caducitat al client (Lazy Expiration):} A cada document compartit se li assigna un camp \texttt{expiresAt} (Timestamp de creació + 24 hores).
+    \item \textbf{Validació:} Quan un usuari extern accedeix al link, l'aplicació (implementada a \texttt{HistoryService}) comprova aquest camp contra l'hora actual del servidor. Si el termini ha expirat, es bloqueja l'accés a la lectura, tot i que la dada persisteixi fins a la seva neteja.
+\end{enumerate}
+
+\begin{itemize}
+    \item \textbf{Justificació:} Aquesta estratègia minimitza la superfície d'atac. Si un enllaç es filtra públicament, el dany és temporal i limitat. A més, evita costos de manteniment de \textit{Cloud Functions} per eliminar documents en temps real, ja que la restricció s'aplica en el moment de la lectura.
+\end{itemize}
+
+\subsection{Algorítmica i normalització de càlculs}
+Tot i que la numerologia pot semblar simple aritmètica, l'automatització dels càlculs requereix una rigorosa normalització de les dades d'entrada i un tractament específic de les excepcions. Tota aquesta lògica s'ha centralitzat al servei \texttt{Numerology\allowbreak Calculation\allowbreak Service} per garantir la consistència en tota l'app.
+
+\begin{itemize}
+    \item \textbf{Normalització de text (Sanitizing):} Els noms dels usuaris contenen accents, dièresis i caràcters especials que podrien alterar el càlcul numèric (ex: 'É' ha de comptar com 'E' = 5). S'utilitza la llibreria \texttt{diacritic} per ``netejar'' l'entrada abans de processar-la, convertint \texttt{Jové} en \texttt{JOVE} automàticament.
+    \item \textbf{Gestió de números mestres:} Un dels punts crítics era evitar la reducció automàtica dels números 11, 22 i 33 a una sola xifra (2, 4, 6) en moments incorrectes. S'ha implementat la funció recursiva \texttt{reduceToSingleDigitResult} amb una comprovació prèvia constant de \texttt{isMasterNumber}, assegurant que aquestes vibracions especials es preservin en el càlcul del Camí de Vida i l'Any Personal.
+    \item \textbf{Matrius d'Inclusió:} El càlcul de la ``Taula d'Inclusió'' implica generar múltiples matrius (Habitants, Matisos, Ponts, Evolució, Inconscient) que depenen les unes de les altres. Codificar això en un únic servei ha permès testejar unitàriament cada pas de la matriu, evitant els errors humans molt comuns quan aquests càlculs es fan manualment.
+\end{itemize}
+
+\subsubsection{Jerarquia de regles per al ``Nombre de la Lliçó'' (NL)}
+Un cas particularment complex és la determinació del valor NL, que no respon a una fórmula única sinó a una \textbf{jerarquia de prioritats} (patró \textit{Waterfall}). L'algorisme implementat a \texttt{nl()} avalua les condicions en el següent ordre estricte, retornant el primer valor no nul que troba:
+
+\begin{enumerate}
+    \item \textbf{Prioritat 1 - Lliçons kàrmiques:} Es comprova si l'usuari té números amb freqüència 0 a la seva inclusió (absències). Si n'hi ha, el NL correspon a la suma d'aquests números que falten. Es considera el dèficit més crític a resoldre.
+    \item \textbf{Prioritat 2 - Dominància clara (\textit{Sobresurt}):} Si no hi ha kàrmics, es verifica si existeix un número que apareix molt més freqüentment que la resta (amb una diferència $\ge$ 2 respecte al segon més freqüent).
+    \item \textbf{Prioritat 3 - Repeticions alta freqüència:} Si hi ha empat en les freqüències màximes (i aquestes són $\ge$ 3), es calcula el valor basant-se en els números repetits.
+    \item \textbf{Prioritat 4 - fallback:} Si cap de les anteriors es compleix (cas d'inclusió molt equilibrada), s'aplica una fórmula per defecte sumant les dues freqüències més altres.
+\end{enumerate}
+
+Aquesta estructura condicional garanteix que el sistema sempre diagnostiqui el "problema" principal de la carta numerològica, sense generar resultats contradictoris.

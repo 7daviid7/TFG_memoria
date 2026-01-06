@@ -1,0 +1,246 @@
+% !TEX root = ../main.tex
+
+\chapter{Anàlisi i disseny del sistema}
+\label{chap:analisi_disseny}
+
+Aquest capítol aprofundeix en l'anàlisi dels requeriments funcionals i defineix l'estructura lògica del sistema. Es detallen els fluxos d'interacció, el model de dades que sustenta l'aplicació i els patrons de disseny de programari aplicats per garantir la robustesa i mantenibilitat del codi.
+
+\section{Anàlisi de Requisits i Rols}
+
+El sistema s'ha dissenyat centrant-se en un únic perfil d'usuari, atès que l'aplicació està concebuda com una eina d'ús personal o professional per a consultors numerològics, sense requerir una complexa gestió de permisos.
+
+
+\subsection{Identificació d'Actors}
+\begin{itemize}
+    \item \textbf{Consultor/professional (autenticat):} Actor actiu que opera l'aplicació professionalment. S'ha d'autenticar (Login) per accedir a l'historial de dades i a les eines de càlcul avançat. Té accés a totes les funcionalitats.
+    \item \textbf{Visitant públic:} Nou perfil d'usuari que accedeix a la \textit{Landing Page}. Pot consultar informació teòrica, veure exemples i calcular el seu ''Camí de Vida'' (demo gratuïta) sense registrar-se.
+    \item \textbf{Client final (receptor):} Actor passiu en el context de l'app, però actiu en el cicle de negoci. És la persona a qui va destinat l'estudi. Interacciona amb el sistema externament (rebent el PDF o l'enllaç) i proporciona feedback (CU6). 
+    \textit{Nota: Donat que l'aplicació és oberta, un mateix individu pot actuar com a Consultor per al seu propi estudi (auto-coneixement).}
+    \item \textbf{Administrador (manteniment tècnic):} Rol implícit responsable de la supervisió tècnica (Firebase, quotes API).
+\end{itemize}
+
+\section{Casos d'Ús}
+
+A continuació es descriuen els casos d'ús principals que defineixen la funcionalitat del sistema NUMEN.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        scale=0.85, transform shape,
+        actor/.style={
+            circle, fill=black, inner sep=0pt, minimum size=0.2cm
+        },
+        usecase/.style={
+            ellipse, draw=black, fill=white, text centered, minimum height=1cm, minimum width=2.5cm, align=center
+        },
+        system/.style={
+            rectangle, draw=black, minimum width=12cm, minimum height=13cm, rounded corners
+        }
+    ]
+    
+        % Actors
+        \node[actor, label={[yshift=-1cm]below:Professional}] (consultor) at (-3, 8) {};
+        \draw[thick] (consultor) -- ++(0,-0.6) -- ++(0.3,-0.5); \draw[thick] (consultor) ++(0,-0.6) -- ++(-0.3,-0.5);
+        \draw[thick] (consultor) ++(0,-0.3) -- ++(0.4,0); \draw[thick] (consultor) ++(0,-0.3) -- ++(-0.4,0);
+
+        \node[actor, label={[yshift=-1cm]below:Visitant}] (visitant) at (12, 5) {};
+        \draw[thick] (visitant) -- ++(0,-0.6) -- ++(0.3,-0.5); \draw[thick] (visitant) ++(0,-0.6) -- ++(-0.3,-0.5);
+        \draw[thick] (visitant) ++(0,-0.3) -- ++(0.4,0); \draw[thick] (visitant) ++(0,-0.3) -- ++(-0.4,0);
+
+        \node[actor, label={[yshift=-1cm]below:Client Final}] (client) at (12, 1) {};
+        \draw[thick] (client) -- ++(0,-0.6) -- ++(0.3,-0.5); \draw[thick] (client) ++(0,-0.6) -- ++(-0.3,-0.5);
+        \draw[thick] (client) ++(0,-0.3) -- ++(0.4,0); \draw[thick] (client) ++(0,-0.3) -- ++(-0.4,0);
+        
+        % System Box
+        \node[system, label=above:Sistema NUMEN] (system) at (4.5, 6) {};
+        
+        % --- COLUMN 1 (Admin/Consultor Actions) ---
+        \node[usecase] (uc1) at (2, 11) {CU1: Login i\\Seguretat};
+        \node[usecase] (uc2) at (8, 11) {CU2: Visualitzar\\Historial};
+        
+        \node[usecase] (uc3) at (2, 9) {CU3: Introduir i\\Validar Dades};
+        \node[usecase] (uc4) at (8, 9) {CU4: Calcular\\Numerologia};
+        
+        \node[usecase] (uc5) at (2.5, 7) {CU5: Visualitzar\\Resultats};
+        
+        \node[usecase] (uc6) at (2.5, 5) {CU6: Generar\\Interpretació IA};
+        \node[usecase] (uc7) at (8, 5) {CU7: Modificar\\Resposta IA};
+        
+        \node[usecase] (uc8) at (2.5, 2) {CU8: Generar\\Informe PDF};
+        
+        \node[usecase] (uc9) at (7, 1) {CU9: Compartir i\\Rebre Feedback};
+        
+        \node[usecase] (uc10) at (8, 3) {CU10: Navegació\\Pública};
+        
+        % User Associations
+        \draw (consultor) to[bend left=10] (uc1); % Login direct
+        \draw (consultor) .. controls (-2, 13) and (5, 12.5) .. (uc2); % History (Bezier high pass)
+        \draw (consultor) to[bend left=5] (uc3); % Input
+        \draw (consultor) to[bend right=5] (uc4); % Calculation (Button Press)
+        \draw (consultor) to[bend right=5] (uc5); % Results
+        \draw (consultor) to[bend right=10] (uc6); % IA
+        \draw (consultor) to[bend right=50] (uc7); % Edit IA
+        \draw (consultor) to[bend right=20] (uc8); % PDF
+        \draw (consultor) .. controls (-3, 0) and (5, 0) .. (uc9); % Shares link (Via bottom)
+        
+        % Client Associations
+        \draw (client) -- (uc9); % Provides Feedback (Receiver)
+        
+        % Visitor Associations
+        \draw (visitant) -- (uc10); 
+
+        % ACOR INHERITANCE: Client "is a" Visitor
+        \draw[-open triangle 60, shorten >= 1.5cm] (client) -- (visitant);
+
+        % --- RELATIONSHIPS ---
+
+        % Login Dependencies (Include)
+        \draw[->, dashed] (uc2) -- node[above, font=\scriptsize] {<<include>>} (uc1);
+        \draw[->, dashed] (uc3) -- node[right, font=\scriptsize] {<<include>>} (uc1);
+
+        % Calculation Dependencies
+        \draw[->, dashed] (uc3) -- node[above, font=\scriptsize] {<<include>>} (uc4);
+        
+        % Results require Calculation
+        % Results require Calculation
+        \draw[->, dashed, color=gray!50, draw opacity=0.5] (uc5) to node[above, font=\scriptsize, sloped, color=gray!70, opacity=0.7] {<<include>>} (uc4);
+        
+        % IA/PDF require Calculation (Indirectly via data presence) or Results
+        \draw[->, dashed, color=gray!50, draw opacity=0.5] (uc6) to node[below, font=\scriptsize, sloped, color=gray!70, opacity=0.7] {<<include>>} (uc4);
+        \draw[->, dashed, color=gray!50, draw opacity=0.5] (uc8) to node[below, font=\scriptsize, sloped, color=gray!70, opacity=0.7, pos=0.75] {<<include>>} (uc4);
+
+        % IA Extensions
+        \draw[<-, dashed] (uc6) -- node[above, font=\scriptsize, sloped] {<<extend>>} (uc7);
+        \draw[<-, dashed] (uc6) -- node[above, font=\scriptsize, sloped] {<<extend>>} (uc9); % CU9 extends CU6 (sharing interpretation)
+
+    \end{tikzpicture}
+    \caption{Diagrama de Casos d'Ús actualitzat amb flux lògic i control d'accés.}
+    \label{fig:use_cases_tikz}
+\end{figure}
+
+\begin{reflectionbox}
+    \textbf{Nota sobre Herència d'Actors:} Tot i que no es representa explícitament al diagrama per evitar soroll visual, l'actor \textbf{Professional/Consultor} hereta funcionalment de \textbf{Visitant} (i per extensió de Client Final). Això implica que el Professional pot realitzar totes les accions públiques (navegar, calculadora gratuïta) i també actuar com a receptor del seu propi estudi (feedback).
+\end{reflectionbox}
+
+\begin{itemize}
+    \item \textbf{CU1 - Login i seguretat:}
+    \textit{(Requisit Previ).} L'Administrador/Consultor s'autentica mitjançant correu i contrasenya. Aquest pas és indispensable per desbloquejar l'accés a les funcionalitats d'entrada de dades i historial.
+
+    \item \textbf{CU2 - Visualització d'historial:}
+    \textit{(Precondició: Estar autenticat CU1).} Accés al llistat complet de tots els estudis realitzats, carregats des de la col·lecció \texttt{inter\allowbreak pretations}. Permet recuperar estudis antics i veure'n l'estat.
+    
+    \item \textbf{CU3 - Introducció i validació de dades:}
+    \textit{(Precondició: Estar autenticat CU1).} L'usuari introdueix el nom complet i la data de naixement per iniciar un nou estudi. El sistema valida el format abans de procedir.
+    
+    \item \textbf{CU4 - Càlcul numerològic:}
+    \textit{(Precondició: Dades vàlides a CU3).} Activitat interna (sistema) on es processen les dades d'entrada (Input -> \texttt{NumerologyService}). Es generen totes les taules i valors.
+    
+    \item \textbf{CU5 - Visualització de resultats:}
+    \textit{(Precondició: Dades calculades CU4).} Navegació per les pestanyes de resultats (Cicles, Figura Espiritual, etc.). Inclou la renderització SVG.
+    
+    \item \textbf{CU6 - Generació d'interpretació (IA):}
+    L'usuari sol·licita una interpretació textual a Gemini utilitzant les dades calculades.
+    
+    \item \textbf{CU7 - Modificar resposta IA:}
+    Edició manual del text generat per la IA per personalitzar l'informe abans de guardar-lo o imprimir-lo.
+    
+    \item \textbf{CU8 - Generació informe PDF:}
+    Exportació de l'informe complet en format PDF vectorial paginat.
+    
+    \item \textbf{CU9 - Compartir i rebre feedback:}
+    Generació d'enllaços temporals (24h) per als clients. Permet rebre valoracions (estrelles) que es guarden al sistema. El Consultor inicia la compartició i el Client Final/Visitant rep l'enllaç i emet la valoració.
+    
+    \item \textbf{CU10 - Navegació pública:}
+    El Visitant Públic (o el Client Final heretant el rol) accedeix a la Landing Page per consultar informació teòrica o provar la calculadora gratuïta (sense login).
+\end{itemize}
+
+\section{Model de Dades}
+
+El model de dades de l'aplicació és centralitzat i no relacional, dissenyat per mapar directament l'estructura conceptual d'un estudi numerològic.
+
+\subsection{Estructura de la Classe \texttt{DataModel}}
+La classe \texttt{DataModel} actua com a contenidor d'estat principal (\textit{State Holder}). Els seus atributs clau inclouen:
+
+\begin{itemize}
+    \item \textbf{Dades d'entrada:} \texttt{name} (String) i \texttt{date} (String).
+    \item \textbf{Mapes de valors:} Estructures clau-valor (\texttt{Map<String, int>}) per agrupar els diferents càlculs:
+    \begin{itemize}
+        \item \texttt{mapPersonalidad}: Inclou Alma, Expressió, Personalitat, Equilibri, etc.
+        \item \texttt{mapVida}: Inclou Camí de Vida, Cicles de Vida i Realitzacions.
+        \item \texttt{mapDesafio} i \texttt{mapHerencies}.
+    \end{itemize}
+    \item \textbf{Figura espiritual:}
+    \begin{itemize}
+        \item \texttt{habitants} (\texttt{Map<int, int>}): Representa quants "habitants" (números) hi ha a cada ''casa'' (posició corporal).
+        \item \texttt{yin} i \texttt{yang} (\texttt{double}): Valors calculats per determinar l'equilibri energètic.
+    \end{itemize}
+    \item \textbf{Interpretació:} \texttt{aiInterpretation} (String nullable) per emmagatzemar la resposta de la IA.
+\end{itemize}
+
+\subsection{Persistència (JSON/Firestore)}
+L'emmagatzematge al núvol s'estructura en dues col·leccions principals dins de Firestore, dissenyades per separar les dades privades de les compartides:
+
+\subsubsection{Col·lecció \texttt{interpretations}}
+Emmagatzema l'historial complet dels càlculs realitzats per l'usuari. Cada document conté:
+\begin{itemize}
+    \item \texttt{fullName} i \texttt{birthDate}: Identificadors de l'estudi.
+    \item \texttt{interpretation}: String de gran longitud que conté tot el text generat per la IA, incloent format Markdown (negretes, llistes) per a la seva correcta visualització posterior.
+    \item \texttt{timestamp}: Marca temporal de creació.
+\end{itemize}
+
+\subsubsection{Col·lecció \texttt{shared\_interpretations}}
+Gestiona els enllaços temporals o compartits amb tercers. Inclou camps específics per a la interacció:
+\begin{itemize}
+    \item \texttt{createdAt} i \texttt{expiresAt}: Defineixen la validesa temporal de l'enllaç.
+    \item \texttt{guestFeedback}: Un array d'objectes que emmagatzema les valoracions. S'ha enriquit el model per incloure:
+        \begin{itemize}
+            \item \texttt{rating}: Enter (1-5) que representa les estrelles atorgades.
+            \item \texttt{comment}: Text del feedback.
+            \item \texttt{timestamp}: Data de la valoració.
+        \end{itemize}
+    \item \texttt{interpretation}: Còpia de la interpretació per garantir que, encara que s'esborri l'original, la compartició manté la integritat durant la seva vigència.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imatges/firestore_console.png}
+    \caption{Vista de la col·lecció \texttt{interpretations} a la consola de Firebase Firestore, mostrant l'estructura documental JSON.}
+    \label{fig:firestore_console}
+\end{figure}
+
+Aquesta estructura documental directa (sense normalització SQL) permet una recuperació extremadament ràpida de les dades, ja que cada informe és autònom. El mètode \texttt{toJson()} serialitza l'estat complet per ser guardat directament.
+
+\section{Arquitectura del Sistema i Patrons de Disseny}
+
+Per assegurar un codi net, testejable i escalable, s'han aplicat diversos patrons de disseny estàndard en el desenvolupament de programari.
+
+\subsection{Patró Observer i Flux de Dades (Provider)}
+S'utilitza el patró \textbf{Observer} mitjançant la llibreria \texttt{Provider} per gestionar l'estat global de l'aplicació. El cicle de vida de les dades segueix un flux estructurat en tres fases, garantint que la informació estigui disponible a tota l'aplicació de manera eficient:
+
+\begin{enumerate}
+    \item \textbf{Instanciació única (Contenidor):}
+    A l'arxiu principal (\texttt{main.dart}), l'aplicació s'inicialitza dins d'un \texttt{ChangeNotifierProvider}. Aquest component crea una \textbf{única instància} del \texttt{DataModel} (Singleton implícit) en arrencar l'aplicació, mantenint-la viva en memòria i accessible des de qualsevol punt de l'arbre de widgets.
+    
+    \item \textbf{Encapsulament de la lògica (DataModel):}
+    Dins del \texttt{DataModel}, el mètode \texttt{setData()} encapsula la lògica de negoci. Quan rep les dades brutes (nom i data), executa internament tots els càlculs matemàtics (\texttt{\_calculateValues()}) i finalment invoca \texttt{notifyListeners()}. Aquest mètode és la clau del patró Observer, ja que emet un senyal a tota l'aplicació indicant que l'estat ha canviat.
+    
+    \item \textbf{Assignació i actualització (InputPage):}
+    A la pantalla d'entrada, quan l'usuari prem ''Calcular'', no es crea un objecte nou. En el seu lloc, es recupera la instància global existent mitjançant \texttt{Provider.of<DataModel>}, s'hi injecten les dades i es dispara l'actualització. Això permet que, en navegar immediatament a la pàgina de resultats, aquesta ja tingui accés instantani a tota la informació processada sense necessitat de passar paràmetres entre pantalles.
+\end{enumerate}
+
+\subsection{Separation of Concerns (SoC) amb Serveis}
+La lògica de negoci complexa s'ha extret de la interfície i s'ha encapsulat en classes de servei especialitzades, seguint el principi de responsabilitat única (SRP):
+\begin{itemize}
+    \item \textbf{\texttt{NumerologyCalculationService}:} Conté exclusivament algoritmes matemàtics i regles de negoci numerològiques. No té dependències de la UI ni de xarxa.
+    \item \textbf{\texttt{GeminiService}:} Gestiona la comunicació amb l'API externa. S'encarrega de construir les peticions HTTP, gestionar les claus d'API de forma segura i parsejar les respostes.
+    \item \textbf{\texttt{PrintService}:} Centralitza la lògica de generació de documents PDF, actuant com un adaptador entre el model de dades i la llibreria \texttt{pdf}.
+\end{itemize}
+
+\subsection{Deconstrucció Visual i Implementació de Vistes}
+A nivell d'implementació, l'aplicació s'estructura en tres grans blocs, cadascun amb una estratègia de construcció de widgets diferenciada:
+
+\begin{itemize}
+    \item \textbf{Bloc d'Entrada (\texttt{InputPage}):} Construït sobre un widget \texttt{Form} amb validació síncrona (\texttt{TextFormField} amb \texttt{validator}). Utilitza una \texttt{GlobalKey} per gestionar l'estat del formulari i dispara la navegació només si les dades són vàlides.
+    \item \textbf{Nucli de Resultats (\texttt{ResultsPage}):} Implementa un \texttt{Scaffold} estàndard amb una \texttt{BottomNavigationBar}. La part central del cos (\texttt{body}) utilitza un \texttt{IndexedStack}. Aquest widget és crucial perquè manté les instàncies dels sub-widgets (\texttt{ResultsGraphPage}, \texttt{ResultsLifePathPage}, etc.) vives en memòria encara que no siguin visibles, preservant l'estat de l'scroll i dels gràfics pintats.
+    \item \textbf{Vistes Modals i de Sortida:} Les pantalles de generació d'IA (\texttt{AIInterpretationPage}) i PDF no formen part de l'stack principal de pestanyes, sinó que es tracten com a rutes noves (\texttt{Navigator.push}). Això visualment col·loca la nova pàgina "a sobre" de l'anterior, indicant a l'usuari que està en un sub-procés que pot cancel·lar tornant enrere.
+\end{itemize}

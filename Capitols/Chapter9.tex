@@ -1,0 +1,303 @@
+% !TEX root = ../main.tex
+
+\chapter{Implementació i proves}
+\label{chap:implementacio}
+
+Aquest capítol descriu detalladament la implementació tècnica dels components crítics del sistema NUMEN. Es presenten fragments de codi reals que il·lustren com s'han resolt els reptes principals identificats en les fases prèvies, així com l'estratègia de validació seguida.
+
+
+
+\section{Desenvolupament de Mòduls Clau}
+
+\subsection{Motor de Càlcul Numerològic}
+El cor de l'aplicació és el \texttt{NumerologyCalculationService}. Aquest servei transforma cadenes de text (noms) en valors numèrics. A continuació es mostra el mètode \texttt{calculateNameValues}, que implementa la conversió lletra-número i separa vocals (Alma) de consonants (Personalitat):
+
+\begin{lstlisting}[language=Dart, caption=Càlcul dels valors del nom (Alma/Personalitat)]
+Map<String, int> calculateNameValues(String name) {
+  int alma = 0;
+  int personalitat = 0;
+  int equilibri = 0;
+
+  // Llogic de neteja d'accents i conversio
+  for (var rune in removeDiacritics(name).replaceAll(' ', '').toUpperCase().runes) {
+    var char = String.fromCharCode(rune);
+    // letterValues es un mapa constant { 'A': 1, 'B': 2 ... }
+    int val = letterValues[char] ?? 0;
+    
+    // logic de vocals vs consonants
+    if (isVowel(char)) {
+      alma += val;
+    } else {
+      personalitat += val;
+    }
+  }
+
+  return {
+    'Alma': alma,
+    'Personalidad': personalitat,
+    'Expresión': alma + personalitat // Suma total
+  };
+}
+\end{lstlisting}
+
+\subsubsection{Algorisme de Priorització ''NL''}
+Un dels punts més complexos ha estat implementar la lògica del paràmetre ``NL'' (Número de Lliçó/Lliure). Aquest càlcul no és una simple suma, sinó que segueix una jerarquia estricta de regles condicionals definides pel mètode Coquatrix: primer es comprova si hi ha Karmes, després si un número sobresurt, etc.
+
+Aquesta lògica subjectiva s'ha traduït en un algorisme determinista amb múltiples punts de sortida:
+
+\begin{lstlisting}[language=Dart, caption=Jerarquia de regles per al càlcul del NL]
+  int nl() {
+    // 1. Prioritat màxima: Nombres Kàrmics (Cases buides)
+    int karmic = nlKarmics();
+    if (karmic != 0) return karmic;
+
+    // 2. Si no hi ha Karma, mirem si un número destaca (Sobresurt)
+    // (Ex: Un número que té 2 aparicions més que el següent)
+    int sobresurt = nlSobresurt();
+    if (sobresurt != 0) return sobresurt;
+
+    // 3. Cas de Nombres Repetits
+    int repetits = nlRepetits();
+    if (repetits != 0) return repetits;
+
+    // 4. Default: Suma dels dos màxims (No Sobresurt)
+    return nlNoSobresurt();
+  }
+\end{lstlisting}
+
+\subsection{Integració amb Intel·ligència Artificial}
+La comunicació amb Google Gemini es realitza a través de \texttt{GeminiService}. El repte principal és garantir la privadesa i proporcionar context teòric al model. El següent fragment mostra com es "sanititzen" les dades (eliminant PII) i es construeix el \textit{prompt}:
+
+\begin{lstlisting}[language=Dart, caption=Construcció segura del Prompt per a Gemini]
+String _buildPrompt(Map<String, dynamic> data) {
+    // 1. CLONE & SANITIZE: Eliminem dades personals per privadesa
+    final dataSanitized = Map<String, dynamic>.from(data);
+    dataSanitized.remove('name');
+    dataSanitized.remove('date'); // L'IA només veu numeros, no persones
+    // A continuació s'injectaria el Context Teòric i es faria la crida...
+    // 2. CONTEXT TEÒRIC ABREUJAT (Veure Annex \ref{AppendixB} per complet)
+    const contextTeoric = """
+    CONTEXT TEÒRIC (Mètode Martine Coquatrix):
+    - 0 (Kàrmic): Lliçó pendent...
+    - 11 (Mestre): Missatger Diví...
+    [...Més de 200 línies de definicions estrictes...]
+    """;
+    // 3. RETORN DEL PROMPT
+    return """
+    ROL: Ets un expert consultor en Numerologia Evolutiva...
+    $contextTeoric
+    DADES DE L'USUARI (JSON):
+    ${jsonEncode(dataSanitized)}
+    """;
+}
+\end{lstlisting}
+
+Per evitar fer créixer innecessàriament aquest capítol, el codi complet del mètode \texttt{\_buildPrompt} (amb tot el context teòric) s'ha mogut a l'\textbf{Annex \ref{AppendixB}: Enginyeria de Prompts}. Allà es pot apreciar en detall com es construeix la ``psique'' de la IA.
+
+\subsection{Renderització Dinàmica d'SVG}
+Per visualitzar la "Figura Espiritual", s'ha hagut de manipular l'XML d'un fitxer SVG en temps d'execució. La classe \texttt{SvgDynamicRenderer} carrega l'arxiu \texttt{.svg} i canvia el color (\texttt{fill}) de cada part del cos segons les coincidències numerològiques.
+
+La lògica per decidir la intensitat del color vermell (basada en quantes vegades apareix un número a la data de naixement) és la següent:
+
+\begin{lstlisting}[language=Dart, caption=Lògica de coloració dinàmica segons intensitat]
+void _escollirColorVermell(int key) {
+    int conditionsMet = 0;
+    // Comprovem si el numero (key) coincideix amb dia/mes/any
+    if (key == dia0) conditionsMet++;
+    if (key == dia1) conditionsMet++;
+    // ... (altres comprovacions)
+    // Assignem color segons la intensitat (heatmap)
+    switch (conditionsMet) {
+      case 1:
+        _pintar = '#FFA07A'; // Vermell molt clar (LightSalmon)
+      case 2:
+        _pintar = '#FF4500'; // Vermell clar (OrangeRed)
+      case 3:
+        _pintar = '#B22222'; // Vermell intens
+      case 4:
+        _pintar = '#8B0000'; // Vermell molt fosc
+    }
+}
+\end{lstlisting}
+
+\subsection{Seguretat i Enrutament Condicional}
+Per garantir que la part privada de l'aplicació només sigui accessible per l'administrador, s'ha implementat un \textit{Guard} a nivell d'enrutament. El widget \texttt{AuthGuard} actua com a controlador de trànsit principal:
+
+\begin{lstlisting}[language=Dart, caption=Lògica de protecció de rutes amb AuthGuard]
+class AuthGuard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // 1. Detecció d'enllaços compartits (Accés Públic controlat)
+    if (kIsWeb) {
+      final uri = Uri.base;
+      if (uri.queryParameters.containsKey('id')) {
+        return SharedInterpretationPage(docId: uri.queryParameters['id']);
+      }
+    }
+
+    // 2. Comprovació d'Autenticació (Accés Privat)
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+           return CircularProgressIndicator();
+        }
+        // Si està loginat -> Panell de control
+        if (snapshot.hasData) return InputPage();
+        // Si no -> Portal Públic (Landing Page)
+        return const LandingPage();
+      },
+    );
+  }
+}
+\end{lstlisting}
+
+\subsection{Visualització d'Historial i Cerca Intel·ligent}
+La gestió de l'historial d'estudis s'ha optimitzat per evitar la càrrega massiva de dades (cost de lectures a Firestore). S'ha implementat un sistema de \textbf{Paginació Infinita} i una \textbf{Cerca Predictiva} (TypeAhead).
+
+\begin{lstlisting}[language=Dart, caption=Cerca eficient per prefix (Index Range) a Firestore]
+  Future<List<String>> searchNames(String query) async {
+    // Truc: \uf8ff es l'ultim caracter Unicode.
+    // Aixi creem un rang: tot el que comenca per 'query'
+    final endQuery = '$query\uf8ff';
+
+    final snapshot = await _historyCollection
+        .where('fullName', isGreaterThanOrEqualTo: query)
+        .where('fullName', isLessThan: endQuery)
+        .limit(10)
+        .get();
+
+    return snapshot.docs.map((d) => d['fullName'] as String).toList();
+  }
+\end{lstlisting}
+
+\subsubsection{Índexs Compostos a Firestore}
+Un detall tècnic rellevant en la implementació de la consulta completa de l'historial (mètode \texttt{getHistoryByName}) és la necessitat de crear un \textbf{Índex Compost}. Firestore imposa una restricció estricta en les consultes: si es filtra per un camp (\texttt{where('fullName', ...)}) i s'ordena per un altre de diferent (\texttt{orderBy('time\allowbreak stamp', ...)}), cal tenir un índex específic per a aquesta combinació.
+
+\begin{lstlisting}[language=Dart, caption=Consulta que requereix un índex compost (Filtre + Ordenació)]
+  Stream<QuerySnapshot> getHistoryByName(String fullName) {
+    return _historyCollection
+        .where('fullName', isEqualTo: fullName)      // 1. Filtre per camp A
+        .orderBy('timestamp', descending: true)      // 2. Ordenació per camp B
+        .snapshots();
+  }
+\end{lstlisting}
+
+A diferencia de les bases de dades SQL tradicionals, aquests índexs no es defineixen via codi o migracions (DDL), sinó que s'han de configurar manualment a la \textbf{Firebase Console}. Sense aquest índex, l'SDK de Flutter retorna una excepció que inclou un enllaç directe per crear-lo automàticament a la consola. Aquesta optimització és necessària per garantir que el rendiment de la consulta no es degradi a mesura que la base de dades creix.
+
+\subsection{Gestió d'Enllaços Temporals (24h)}
+Per permetre compartir informes de manera segura sense exposar dades privades indefinidament, s'ha implementat un sistema d'enllaços amb caducitat automàtica.
+
+\begin{lstlisting}[language=Dart, caption=Creació de l'enllaç amb TTL de 24 hores]
+  Future<String> createSharedLink(String interpretation) async {
+      final now = DateTime.now();
+      // Caduca en 24 hores exactes
+      final expiresAt = now.add(Duration(hours: 24));
+
+      final docRef = await _sharedCollection.add({
+        'interpretation': interpretation,
+        'createdAt': FieldValue.serverTimestamp(),
+        'expiresAt': Timestamp.fromDate(expiresAt), // TTL
+      });
+
+      return docRef.id;
+  }
+\end{lstlisting}
+En recuperar l'enllaç, el sistema comprova si `DateTime.now().isAfter(expiresAt)` i bloqueja l'accés si ha caducat.
+
+\subsection{Calculadora Pública: Arquitectura Híbrida}
+A la part pública (\texttt{PublicCalculatorPage}), per evitar costos d'IA (Gemini) i latència en usuaris no registrats, s'utilitza una arquitectura basada en contingut estàtic local.
+
+\begin{lstlisting}[language=Dart, caption=fallback a contingut estàtic (Num. Mestre o Bàsic)]
+    // 1. Calculem el camí de vida (ex: 33)
+    final lifePath = results['Camino de Vida'];
+
+    // 2. Cerquem al diccionari local (sense API call)
+    _resultItem = NumerologyContent.masterNumbers.firstWhere(
+      (item) => item.id == lifePath.toString(),
+      orElse: () => NumerologyContent.basicNumbers.firstWhere(
+        (item) => item.id == lifePath.toString(),
+      ),
+    );
+\end{lstlisting}
+
+\section{Validació i Proves}
+Donada la naturalesa "determinista" dels càlculs matemàtics i la naturalesa "subjectiva" de la IA, s'han seguit dues estratègies de validació diferenciades.
+
+\subsection{Validació dels Càlculs}
+Per assegurar que la lògica de \texttt{NumerologyCalculationService} és correcta, s'ha seguit una estratègia de verificació basada en la comparació amb resultats històrics reals.
+\begin{enumerate}
+    \item \textbf{Base de coneixement existent:} Es disposava prèviament d'un conjunt de cartes numerològiques ja realitzades manualment per l'experta (la clienta).
+    \item \textbf{Càlcul automatitzat:} S'han introduït les dades (Nom i Data) d'aquests mateixos subjectes al programa.
+    \item \textbf{Comparació exacta:} S'ha verificat que els resultats generats pel software (camins de vida, taules, números mestres) coincidissin al 100\% amb els calculats artesanalment en el seu dia.
+    \item \textbf{Casos límit:} S'ha prestat especial atenció als casos amb Números Mestres (11, 22, 33) per assegurar que el software no els reduïa incorrectament (ex: tractant un 11 com un 2), validant així la fidelitat al mètode Coquatrix.
+\end{enumerate}
+
+\subsection{Validació de la Lògica Generativa (IA)}
+Un dels punts més crítics i subjectius del projecte és la generació de text mitjançant Intel·ligència Artificial. Atesa la naturalesa probabilística dels LLMs (Models de Llenguatge Massius), existeix el risc que la IA "al·lucini" o s'inventi significats que no corresponen a la teoria numerològica estricta.
+
+Per mitigar aquesta subjectivitat i garantir la qualitat del producte final, s'han seguit regles estrictes consensuades amb la clienta i basades en el llibre de referència:
+
+\begin{itemize}
+    \item \textbf{Prompting rígid:} No es demana a la IA que "interpreti" lliurement, sinó que "redacti" basant-se en definicions clau injectades en el prompt (veure Annex \ref{AppendixB}).
+    \item \textbf{Validació humana supervisada:} Durant la fase de proves, cada resposta generada ha estat revisada per l'experta per confirmar que el to era respectuós i que les afirmacions eren coherents amb la teoria.
+    \item \textbf{Estandardització:} S'ha forçat a la IA a seguir una estructura fixa (Intro, Punts Forts, Reptes, Consell) per evitar variabilitat entre diferents informes.
+\end{itemize}
+
+\subsection{Validació de la Sortida PDF}
+S'ha verificat visualment la generació del PDF assegurant:
+\begin{itemize}
+    \item Que la paginació s'adapta al format A4 horitzontal.
+    \item Que els caràcters especials (accents, ç) es renderitzen correctament.
+    \item Que el gràfic vectorial de la figura manté els colors dinàmics en la versió impresa.
+\end{itemize}
+
+\section{Reptes i Problemes Tècnics Resolts}
+
+Durant el procés de desenvolupament, s'han hagut d'afrontar diverses dificultats tècniques que han requerit solucions especifiques:
+
+\subsection{Conflictes de Compilació a Windows (Firebase i C++)}
+Un dels obstacles principals va ser la integració de \texttt{firebase\_core} a l'entorn d'escriptori Windows. Flutter a Windows utilitza C++ natiu i CMake per a la compilació. Es van produir errors recurrents en la cadena de muntatge (\textit{build toolchain}) degut a incompatibilitats entre les versions de les llibreries de C++ de Visual Studio i els plugins de Firebase.
+
+\textbf{Solució:} El problema es va resoldre mitjançant una **reinstal·lació completa de l'entorn de desenvolupament C++** a l'equip. Concretament, va ser necessari reinstal·lar Visual Studio i actualitzar els paquets \text{MSVC v143} i les eines de compilació de Windows SDK, ja que Flutter depèn directament d'aquests binaris per a la compilació nativa a Windows. També es va procedir a regenerar els fitxers de configuració de CMake (\texttt{flutter clean}) per garantir que els enllaços a les noves llibreries fossin correctes.
+
+\subsection{Disseny Responsive sense Scroll (Overflows)}
+Un requisit de disseny era prioritzar la visualització completa de la informació "d'un cop d'ull", intentant evitar l'ús de barres de desplaçament (\textit{scroll}) en els panells principals. Això va provocar errors de \texttt{RenderFlex overflowed} quan components com taules o gràfics dibuixats manualment (\texttt{CustomPaint}), com les línies de connexió dels números o els gràfics de cicles, intentaven renderitzar-se en espais massa reduïts on el càlcul de coordenades fallava per falta de píxels verticals.
+
+\textbf{Solució:} S'ha optat per una estratègia de "Disseny Adaptatiu Contextual". En lloc de confiar només en \texttt{columnes} flexibles, es passa el \texttt{BuildContext} als widgets fills per calcular programàticament l'alçada disponible (\texttt{MediaQuery.of(context).\allowbreak size.height}) i ajustar la mida de les fonts o redistribuir els elements condicionalment segons l'espai real.
+
+\subsection{Immutabilitat i Validació a Firestore Rules}
+L'obertura de la col·lecció \texttt{shared\_interpretations} al públic (per permetre el feedback) presentava un risc de seguretat: un usuari malintencionat podria intentar modificar l'informe original.
+Per mitigar-ho sense necessitat d'un backend complex, s'han implementat regles de seguretat ("Security Rules") que actuen com a tallafocs lògic. Aquestes regles permeten actualitzacions però fan complir estrictament la \textbf{immutabilitat} dels camps sensibles, permetent només la modificació d'atributs específics com les valoracions.
+
+\begin{lstlisting}[language=C, caption=Regles de Firestore per garantir la immutabilitat]
+match /shared_interpretations/{docId} {
+  allow update: if 
+    // 1. Camps que NO poden canviar (Immutables)
+    request.resource.data.originalDocId == resource.data.originalDocId &&
+    request.resource.data.interpretation == resource.data.interpretation &&
+    request.resource.data.expiresAt == resource.data.expiresAt &&
+    
+    // 2. Només permetem implícitament canviar 'guestFeedback'
+    true;
+}
+\end{lstlisting}
+
+Addicionalment, s'ha delegat al servidor la gestió de la caducitat mitjançant índexs TTL (Time-To-Live), que esborren automàticament els documents 24 hores després del camp \texttt{expiresAt}, assegurant que no quedi "basura" a la base de dades.
+
+\subsection{Repte de Manteniment: Doble Base de Codi UI}
+La decisió de generar PDFs natius vectorials ha comportat un cost tècnic elevat: la duplicació de la lògica de presentació.
+El paquet \texttt{pdf} de Dart utilitza un sistema de Widgets propi (\texttt{pw.Column}, \texttt{pw.Container}) que, tot i semblar-se al de Flutter (\texttt{Column}, \texttt{Container}), no és compatible directament. Això ha obligat a implementar cada component visual dues vegades:
+\begin{enumerate}
+    \item \textbf{Renderitzat en Pantalla:} Utilitzant \texttt{CustomPaint} i widgets de Material per a la interactivitat.
+    \item \textbf{Renderitzat en PDF:} Traduint les mateixes coordenades i lògica de dibuix a l'API del paquet \texttt{pdf} per a la generació del document estàtic.
+\end{enumerate}
+Aquest enfocament, tot i que laboriós, és l'únic que garanteix una qualitat d'impressió professional (300 DPI) que les captures de pantalla no poden oferir.
+
+\section{Repositori i Material Complementari}
+Com a part del lliurament d'aquest projecte, s'adjunten els enllaços al codi font complet i al vídeo demostratiu de funcionament.
+
+\begin{itemize}
+    \item \textbf{Repositori GitHub:} \url{https://github.com/7daviid7/NumerologiaFlutter}
+    \item \textbf{Vídeo de demostració tècnica:} \textbf{\href{https://drive.google.com/file/d/1RYtOsJOZN_Xp_AjtZL5wRMc-qG7TPOAL/view?usp=sharing}{Visualitzar Vídeo de Demostració (Google Drive)}}
+\end{itemize}

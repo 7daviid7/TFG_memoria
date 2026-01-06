@@ -1,0 +1,46 @@
+\chapter{Treball Futur}
+\label{chap:treball_futur}
+
+Tot i que la versió actual de NUMEN (v1.0) és completament funcional i compleix amb els objectius establerts, el desenvolupament de programari és un procés viu. Durant la implementació i les proves han sorgit noves idees i oportunitats de millora que, per qüestions d'abast temporal, s'han deixat per a futures iteracions. A continuació es detallen les línies de treball futur més rellevants.
+
+\section{Versió Mòbil Nativa (App Stores)}
+Actualment, l'aplicació és una PWA (Progressive Web App) \cite{pwa_overview} que funciona bé en dispositius mòbils mitjançant el navegador. El següent pas natural, gràcies a l'arquitectura basada en Flutter, és compilar i publicar l'aplicació com a **App Nativa** a l'Apple App Store i Google Play Store.
+
+Això oferiria avantatges significatius:
+Això oferiria avantatges significatius com la \textbf{visibilitat i confiança} per la presència en mercats oficials, l'ús de \textbf{notificacions push} per recordar dates importants, i la facilitat de \textbf{compres in-app} integrades amb el compte de l'usuari.
+
+\section{Monetització i Model de Negoci}
+L'eina actual està dissenyada per a l'ús professional d'un expert. No obstant això, té potencial per obrir-se al públic general sota un model de negoci \textbf{Freemium}:
+
+\begin{itemize}
+    \item \textbf{Nivell gratuït:} Càlcul bàsic (Camí de Vida) i explicacions genèriques (ja implementat parcialment).
+    \item \textbf{Nivell Premium:} Accés a l'informe complet, mapa de l'any personal i compatibilitat de parella.
+\end{itemize}
+
+Aquest canvi requeriria integrar passarel·les de pagament com Stripe o RevenueCat.
+
+\section{Internacionalització (i18n)}
+La numerologia és una disciplina universal. L'arquitectura del codi s'ha preparat per suportar múltiples idiomes, però actualment tots els literals i \textit{prompts} de la IA estan en català/castellà.
+
+Un treball futur seria afegir una opció de configuració que permeti a l'usuari seleccionar l'idioma desitjat per a l'aplicació. Això implicaria utilitzar el paquet \texttt{flutter\_localizations} per adaptar tant la interfície gràfica com els \textit{prompts} enviats a la IA segons l'idioma configurat.
+
+\section{Sincronització al Núvol per a Usuaris}
+Actualment, només l'administrador té persistència de dades al núvol. Els usuaris públics perden les dades quan tanquen el navegador.
+
+Una evolució lògica seria permetre el registre d'usuaris finals (via Google Sign-In o Apple ID) perquè puguin guardar el seu perfil i el dels seus familiars al núvol, sincronitzant els seus estudis entre tots els seus dispositius. Això fomentaria la fidelització i l'ús recurrent de l'aplicació.
+
+\section{Model d'IA Especialitzat (Fine-Tuning)}
+A mesura que l'experta vagi corregint i validant les interpretacions generades per la IA actual, es crearà un conjunt de dades de gran valor. En el futur, aquestes dades es podrien utilitzar per entrenar (Fine-Tuning) un model més petit i especialitzat, que redueixi la dependència de models gegants generalistes, millorant la precisió en el domini específic de la numerologia i reduint costos d'inferència.
+
+\section{Pla de Millora Tècnica i Refactorització}
+Amb l'experiència adquirida durant el desenvolupament i una revisió tècnica profunda de l'estat actual del projecte, s'han identificat àrees clau per millorar l'escalabilitat i la mantenibilitat del codi. Tot i que l'aplicació és estable, l'aplicació de certs patrons de disseny milloraria la robustesa futura.
+
+\subsection{Arquitectura i Gestió d'Estat}
+Actualment, el \texttt{DataModel} actua com un \textit{singleton} monolític que barreja estat i càlculs. Es proposa el \textbf{desacoblament}, movent la lògica a un \texttt{NumerologyCalculationService} independent i l'\textbf{eliminació de variables \texttt{late}} per millorar la seguretat.
+
+\subsection{Qualitat de Codi i Modularització}
+El servei de generació de PDF (\texttt{PrintService}) ha crescut fins a convertir-se en un fitxer de grans dimensions difícil de mantenir.
+
+
+\subsection{Seguretat a Firestore}
+Tot i que les regles actuals protegeixen les dades bàsiques, es poden endurir amb una \textbf{restricció d'Admin estricta}. Caldria verificar l'UID específic o usar \textit{Custom Claims} (\texttt{request.auth.token.admin == true}) per garantir que només el propietari real tingui privilegis globals, prevenint riscos en cas d'obrir el registre públic.

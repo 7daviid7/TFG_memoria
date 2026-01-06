@@ -8,11 +8,11 @@
 L'entorn de desenvolupament s'ha configurat per maximitzar la productivitat i la integritat del codi en un context de treball individual. Les eines principals utilitzades han estat:
 
 \begin{itemize}
-    \item \textbf{Sistema Operatiu:} Desenvolupament realitzat principalment sobre Windows.
-    \item \textbf{IDE:} Visual Studio Code com a entorn de desenvolupament principal, equipat amb extensions per a Dart/Flutter i control de versions.
-    \item \textbf{Control de Versions:} Ús de Git per a la gestió local del codi i GitHub com a repositori remot, seguint un flux de treball basat en \textit{main} i branques per funcionalitat.
+    \item \textbf{Sistema operatiu:} Desenvolupament realitzat principalment sobre Windows.
+    \item \textbf{IDE:} Visual Studio Code com a entorn de desenvolupament inicial. Posteriorment i durant l'etapa de PFG, s'ha utilitzat \textbf{Antigravity} (una versió avançada de VS Code amb IA agentic integrada) per accelerar la refactorització i documentació del codi.
+    \item \textbf{Control de versions:} Ús de Git per a la gestió local del codi i GitHub com a repositori remot, seguint un flux de treball basat en \textit{main} i branques per funcionalitat.
     \item \textbf{Framework:} Flutter SDK (llenguatge Dart) per a la creació de l'aplicació multiplataforma.
-    \item \textbf{Serveis al Núvol:} Gestió centralitzada mitjançant la consola de Firebase (Firestore, Hosting).
+    \item \textbf{Serveis al núvol:} Gestió centralitzada mitjançant la consola de Firebase (Firestore, Hosting).
 \end{itemize}
 
 \section{Conceptes Previs: La Numerologia com a Domini}
@@ -59,13 +59,15 @@ R(\sum_{d \in digits(n)} d) & \text{si } n > 9
 El Camí de Vida és una de les mètriques més rellevants, calculada a partir de la data de naixement. Representa la lliçó principal que l'individu ha vingut a aprendre.
 
 L'algoritme de càlcul és el següent:
-1. Es descompon la data en Dia, Mes i Any.
-2. Es redueix cada component a un dígit (o nombre mestre).
-3. Es sumen els tres components reduïts.
-4. El resultat final es redueix novament si és necessari.
+\begin{enumerate}
+    \item Es descompon la data en Dia, Mes i Any.
+    \item Es redueix cada component a un dígit (o nombre mestre).
+    \item Es sumen els tres components reduïts.
+    \item El resultat final es redueix novament si és necessari.
+\end{enumerate}
 
 \subsection{La Inclusió (The Inclusion)}
-La Inclusió és una eina complexa d'autoconeixement que analitza la distribució de les lletres del nom complet en nou àrees o ``cases''. Tècnicament, es tracta d'un histograma de freqüències on cada ``casa'' (de l'1 al 9) comptabilitza quantes vegades apareixen les lletres amb aquell valor numèric en el nom de la persona.
+La Inclusió és una eina complexa d'autoconeixement que analitza la distribució de les lletres del nom complet en nou àrees o ``cases''. En aquest context, el terme ``Casa'' abstreu el concepte d'àrea vital (ex: Personalitat, Treball, Família), actuant com a contenidor lògic per als valors numèrics. Tècnicament, es tracta d'un histograma de freqüències on cada ``casa'' (de l'1 al 9) comptabilitza quantes vegades apareixen les lletres amb aquell valor numèric en el nom de la persona.
 
 Aquest recompte genera el mapa d'\textbf{Habitants}:
 \[ Habitants[i] = \text{count}(lletres \text{ amb valor } i) \quad \forall i \in [1,9] \]
@@ -74,11 +76,11 @@ A partir d'aquesta estructura base, es deriven altres vectors de dades mitjança
 \begin{itemize}
     \item \textbf{Matisos:} Relacionen els habitants entre si de manera recursiva.
     \item \textbf{Ponts:} Calculats com la diferència absoluta entre el valor de la casa i el seu habitant: $|Habitant[i] - (i+1)|$.
-    \item \textbf{Evolució:} Indica cap a on tendeix l'energia de la casa.
-    \item \textbf{Inconscient:} Revela patrons ocults basats en la posició de les lletres.
+    \item \textbf{Evolució:} Càlcul recursiu que segueix la cadena de referències. Si la Casa X té valor Y, el valor d'Evolució serà el contingut de la Casa Y. Això traça el vector de direcció de l'energia.
+    \item \textbf{Inconscient:} Es calcula com el complement a 9 de l'habitant ($9 - Habitant[i]$), revelant el patró de comportament subjacent o la resposta instintiva oculta.
 \end{itemize}
 
-\subsection{Algorísmica del Nucli}
+\subsection{Algorítmica del Nucli}
 El cor de l'aplicació resideix en una sèrie d'algoritmes deterministes que transformen les dades d'entrada en mètriques significatives. A continuació, es detalla la lògica de negoci implementada per als càlculs més complexos.
 
 \subsubsection{Càlculs Derivats del Nom}
@@ -100,10 +102,10 @@ La data de naixement es processa per extreure'n cicles temporals, utilitzant ope
 Un dels càlculs més complexos implementats és el del Número Llindar, el qual no segueix una fórmula aritmètica directa sinó una \textbf{lògica de prioritats condicional}. L'algoritme avalua l'histograma d'Habitants (Inclusió) en el següent ordre estricte:
 
 \begin{enumerate}
-    \item \textbf{Prioritat Kàrmica:} Si hi ha ``cases buides'' (habitants = 0), el NL és la suma d'aquestes cases buides.
-    \item \textbf{Prioritat Dominant (Sobresurt):} Si un número apareix molt més que la resta (el seu valor és superior al segon màxim + 2), aquest esdevé el NL.
-    \item \textbf{Prioritat per Repetició:} Si hi ha un empat en els valors màxims (més de 3 vegades repetit el màxim), es calcula una suma ponderada d'aquests.
-    \item \textbf{Default (No Sobresurt):} Si no es compleix cap anterior, el NL és la suma de les dues cases amb major nombre d'habitants.
+    \item \textbf{Prioritat kàrmica:} Si hi ha ``cases buides'' (habitants = 0), el NL és la suma d'aquestes cases buides.
+    \item \textbf{Prioritat dominant (Sobresurt):} Si un número apareix molt més que la resta (el seu valor és superior al segon màxim + 2), aquest esdevé el NL.
+    \item \textbf{Prioritat per repetició:} Si hi ha un empat en els valors màxims (més de 3 vegades repetit el màxim), es calcula una suma ponderada d'aquests.
+    \item \textbf{Default (No sobresurt):} Si no es compleix cap anterior, el NL és la suma de les dues cases amb major nombre d'habitants.
 \end{enumerate}
 
 \subsubsection{Càlcul d'Herències}
@@ -118,8 +120,8 @@ La figura es descompon en regions (Cap, Braços, Cames, Tronc), i cadascuna est�
 \subsubsection{Intensitat Cromàtica (Heatmap)}
 No només es pinta la zona, sinó que es determina el color i la seva intensitat basant-se en la \textbf{freqüència d'aparició} del número:
 \begin{itemize}
-    \item \textbf{Escala de Vermells (Yang):} Utilitzada quan la coincidència prové directament dels dígits de la data de naixement (Dia, Mes, Any). A major repetició del dígit, més fosc i intens és el vermell (de \textit{LightSalmon} a \textit{DarkRed}).
-    \item \textbf{Escala de Blaus (Yin):} Utilitzada quan la coincidència prové dels valors derivats de la Inclusió. Similarment, la intensitat del blau augmenta amb la freqüència (de \textit{PowderBlue} a \textit{Navy}).
+    \item \textbf{Escala de vermells (Yang):} Utilitzada quan la coincidència prové directament dels dígits de la data de naixement (Dia, mes, any). A major repetició del dígit, més fosc i intens és el vermell (de \textit{LightSalmon} a \textit{DarkRed}).
+    \item \textbf{Escala de blaus (Yin):} Utilitzada quan la coincidència prové dels valors derivats de la Inclusió. Similarment, la intensitat del blau augmenta amb la freqüència (de \textit{PowderBlue} a \textit{Navy}).
 \end{itemize}
 Aquesta tècnica permet generar una representació visual única i immediata de l'energia del subjecte, on les zones fosques indiquen punts de màxima concentració energètica.
 

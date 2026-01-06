@@ -17,7 +17,7 @@ D'acord amb la metodologia "Dos Temps" descrita anteriorment, els paquets de tre
     \centering
     \begin{tabular}{|p{0.25\textwidth}|p{0.70\textwidth}|}
         \hline
-        \rowcolor{gray!20} \textbf{Nom del paquet} & \textbf{PT1: FONAMENTS I ALGORÍSMICA} \\ \hline
+        \rowcolor{gray!20} \textbf{Nom del paquet} & \textbf{PT1: FONAMENTS I ALGORÍTMICA} \\ \hline
         \textbf{Descripció} & Estudi teòric i implementació manual del motor de càlcul (Etapa personal). \\ \hline
         \textbf{Tasques} & 
         \begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
@@ -49,7 +49,7 @@ D'acord amb la metodologia "Dos Temps" descrita anteriorment, els paquets de tre
     \caption{PT2 - Etapa 1}
 \end{table}
 
-\subsection{Etapa 2: Professionalització (TFG 2025)}
+\subsection{Etapa 2: Professionalització (PFG 2025)}
 
 \begin{table}[H]
     \centering
@@ -60,8 +60,8 @@ D'acord amb la metodologia "Dos Temps" descrita anteriorment, els paquets de tre
         \textbf{Tasques} & 
         \begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
             \item Configuració de Google Firebase Hosting.
-            \item Implementació de la base de dades Firestore.
-            \item Definició de regles de seguretat (Restricció d'origen API).
+            \item Implementació de la base de dades Firestore i \textbf{visualització de dades} (Historial).
+            \item Definició de regles de seguretat inicials.
         \end{itemize} \\ \hline
         \textbf{Lliuraments} & Web App desplegada i BD operativa. \\ \hline
          \textbf{Temps} & Setembre 2025 (2 setmanes) \\ \hline
@@ -109,18 +109,38 @@ D'acord amb la metodologia "Dos Temps" descrita anteriorment, els paquets de tre
     \centering
     \begin{tabular}{|p{0.25\textwidth}|p{0.70\textwidth}|}
         \hline
-        \rowcolor{gray!20} \textbf{Nom del paquet} & \textbf{PT6: GESTIÓ I MEMÒRIA} \\ \hline
-        \textbf{Descripció} & Documentació acadèmica i gestió del TFG. \\ \hline
+        \rowcolor{gray!20} \textbf{Nom del paquet} & \textbf{PT6: PORTAL PÚBLIC I SEGURETAT} \\ \hline
+        \textbf{Descripció} & Creació de l'entorn públic, estratègia de màrqueting i blindatge de seguretat. \\ \hline
+        \textbf{Tasques} & 
+        \begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
+            \item Desenvolupament de la \textbf{Landing Page} educativa i mur de Testimonis.
+            \item Implementació de la \textbf{Calculadora Pública} (Demo Camí de Vida).
+            \item Sistema de \textbf{Login d'Administrador} i segmentació de rutes.
+            \item Integració de contacte directe via \textbf{WhatsApp}.
+            \item Refinament de \textbf{Firestore Security Rules} per protegir dades privades.
+        \end{itemize} \\ \hline
+        \textbf{Lliuraments} & Web pública operativa i sistema d'accés segur. \\ \hline
+         \textbf{Temps} & Desembre 2025 (3 setmanes) \\ \hline
+    \end{tabular}
+    \caption{PT6 - Etapa 2}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.25\textwidth}|p{0.70\textwidth}|}
+        \hline
+        \rowcolor{gray!20} \textbf{Nom del paquet} & \textbf{PT7: GESTIÓ I MEMÒRIA} \\ \hline
+        \textbf{Descripció} & Documentació acadèmica i gestió del PFG. \\ \hline
         \textbf{Tasques} & 
         \begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
             \item Redacció de la memòria del projecte.
             \item Reunions de seguiment amb tutora.
             \item Preparació de la defensa.
         \end{itemize} \\ \hline
-        \textbf{Lliuraments} & Memòria final del TFG. \\ \hline
+        \textbf{Lliuraments} & Memòria final del PFG. \\ \hline
         \textbf{Temps} & Transversal (Etapa 2) \\ \hline
     \end{tabular}
-    \caption{PT6 - Etapa 2}
+    \caption{PT7 - Etapa 2}
 \end{table}
 
 \section{Planificació Temporal}
@@ -152,7 +172,7 @@ D'acord amb la metodologia "Dos Temps" descrita anteriorment, els paquets de tre
 
 \begin{figure}[H]
     \centering
-    \caption{Fase 2: TFG i Professionalització (2025-2026)}
+    \caption{Fase 2: PFG i Professionalització (2025-2026)}
     \label{fig:gantt_phase2}
     \makebox[\textwidth][c]{
     \begin{ganttchart}[
@@ -171,9 +191,11 @@ D'acord amb la metodologia "Dos Temps" descrita anteriorment, els paquets de tre
         \ganttbar{PT3: Cloud Infra}{2025-09-01}{2025-09-15} \\
         \ganttbar{PT4: Refactor Core}{2025-09-15}{2025-10-31} \\
         \ganttbar{PT5: Int. Artificial}{2025-11-01}{2025-11-20} \\
-        \ganttbar{PT6: Memòria}{2025-09-01}{2026-01-20} \\
+        \ganttbar{PT6: Portal i Seguretat}{2025-12-01}{2025-12-21} \\
+        \ganttbar{PT7: Memòria}{2025-09-01}{2026-01-20} \\
         \ganttlink{elem0}{elem1}
         \ganttlink{elem1}{elem2}
+        \ganttlink{elem2}{elem3}
     \end{ganttchart}
     }
 \end{figure}

@@ -1,0 +1,136 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[catalan]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{bookmark}
+
+% Margins setup to ensure content fits comfortably within 5 pages
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+% Hyperlink configuration
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+    pdftitle={Resum del PFG - NUMEN},
+    pdfauthor={David Quintanilla}
+}
+
+\title{\textbf{Resum del Projecte Fi de Grau: NUMEN} \\ \large Automatització i Digitalització d'Estudis Numerològics amb IA}
+\author{David Quintanilla}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introducció i Context}
+
+El projecte \textbf{NUMEN} consisteix en el disseny i desenvolupament d'un sistema informàtic integral per a l'automatització, gestió i generació d'estudis numerològics basats en la metodologia descrita per Martine Coquatrix en la seva obra \textit{La numerología a la luz del árbol de vida y las letras hebraicas}.
+
+L'origen del projecte rau en la necessitat d'optimitzar un procés manual altament ineficient. Realitzar una carta numerològica completa requereix aproximadament una hora i mitja de càlculs matemàtics propensos a l'error humà, a més del temps dedicat a la redacció d'informes i la interpretació. Aquesta barrera temporal convertia el servei en una tasca poc escalable.
+
+La solució proposada és una aplicació web moderna que digitalitza tot el flux de treball: des del càlcul instantani de totes les variables numerològiques fins a la visualització gràfica de resultats i la generació assistida d'interpretacions mitjançant Intel·ligència Artificial, reduint el temps de procés de hores a segons.
+
+A més, el projecte ha integrat una estratègia de visibilitat externa mitjançant una part pública. Aquesta secció no només defineix els conceptes teòrics de la numerologia, sinó que busca generar \textit{engagement} amb l'usuari: mostra un exemple real d'un estudi complet per evidenciar el valor del producte, inclou una utilitat gratuïta (un "tastet") que permet al visitant calcular immediatament el seu Camí de Vida —l'indicador base de la numerologia, que suposa una petita part del que és un estudi numerològic— i facilita el contacte directe amb un professional via WhatsApp.
+
+\section{Objectius del Projecte}
+
+Per tal de materialitzar aquest propòsit, s'han definit els següents objectius específics, que determinen l'abast funcional i tècnic del projecte:
+
+\begin{itemize}
+    \item \textbf{Documentació i implementació d'algoritmes:} Codificar els complexos algoritmes de càlcul numerològic seguint fidelment el mètode descrit per Martine Coquatrix, assegurant la precisió matemàtica.
+    \item \textbf{Interfície d'usuari adaptada al model expert:} Dissenyar una interfície intuïtiva que repliqui digitalment la plantilla manual utilitzada tradicionalment, mantenint la coherència amb el model mental de treball preexistent.
+    \item \textbf{Visualització gràfica avançada:} Implementar un sistema per representar els resultats sobre una silueta humana (Figura Espiritual), permetent una comprensió visual immediata de les dades.
+    \item \textbf{Disseny responsive i multiplataforma:} Garantir l'adaptabilitat de la interfície a qualsevol dispositiu (ordinador, tauleta o mòbil), facilitant la mobilitat.
+    \item \textbf{Integració d'Intel·ligència Artificial:} Incorporar serveis d'IA Generativa (Google Gemini) per assistir en la redacció i interpretació dels resultats.
+    \item \textbf{Gestió del coneixement i Human-in-the-Loop:} Implementar un sistema de persistència que permeti emmagatzemar, editar i refinar les respostes generades per la IA, capturant feedback de l'expert i del client final.
+    \item \textbf{Generació d'informes i consistència d'impressió:} Desenvolupar un motor de generació nativa de documents PDF vectorials d'alta fidelitat, assegurant un resultat professional independent del dispositiu.
+    \item \textbf{Estratègia comercial i portal públic:} Desenvolupar un portal d'accés públic ("Landing Page") que inclogui recursos educatius, una "demo" funcional (càlcul del Camí de Vida) i contacte via WhatsApp.
+    \item \textbf{Seguretat i control d'accés:} Implementar autenticació robusta i regles de seguretat per separar l'entorn públic de l'administració privada, protegint les dades sensibles.
+    \item \textbf{Validació amb casos reals:} Realitzar proves exhaustives comparant els resultats del programari amb estudis manuals previs per garantir-ne l'exactitud.
+\end{itemize}
+
+\section{Requisits del Sistema}
+
+L'anàlisi de requisits ha estat exhaustiva per cobrir tant la part de gestió privada com l'estratègia pública.
+
+\subsection{Funcionalitats Principals (Core)}
+El sistema permet la introducció de dades (Nom, Data) i executa automàticament tots els càlculs complexos (Gematria, Cicles, Any Personal). Destaca la detecció automàtica de Nombres Kàrmics i Nombres Mestres (11, 22, 33), així com la generació dinàmica de la "Figura Espiritual" en format SVG segons les dades del subjecte. Finalment, permet la generació i descàrrega d'informes complets en PDF natiu vectorial.
+
+\subsection{Intel·ligència Artificial i Feedback}
+L'usuari expert pot sol·licitar interpretacions a la IA, que es mostren en format estructurat. El sistema permet valorar aquestes respostes (feedback de l'expert) i emmagatzemar-les per a futurs entrenaments, creant un cicle de millora contínua (Human-in-the-Loop).
+
+\subsection{Part Pública i Màrqueting}
+S'ha desenvolupat un \textbf{Portal Públic} accessible a tothom que actua com a eina de captació. Inclou:
+\begin{itemize}
+    \item Contingut educatiu sobre numerologia.
+    \item Una **calculadora "demo" gratuïta** que permet als visitants calcular el seu "Camí de Vida" a l'instant.
+    \item Botó de contacte directe via **WhatsApp** per convertir visitants en clients.
+\end{itemize}
+
+\subsection{Seguretat, Gestió i Accessibilitat}
+El sistema protegeix l'accés a l'àrea de gestió mitjançant un sistema de **Login** segur.
+A més, permet generar **Enllaços Compartits amb caducitat (24h)** per enviar informes als clients de forma segura sense exposar dades indefinidament.
+Tot el sistema disposa de **Disseny Responsive**, adaptant-se fluïdament a pantalles de mòbil i escriptori, i permet la gestió de l'historial d'estudis amb cerca intel·ligent.
+
+\section{Procés de Desenvolupament i Tecnologies}
+
+\subsection{Entorn Tecnològic}
+S'ha optat per un stack tecnològic modern i robust:
+\begin{itemize}
+    \item \textbf{Frontend: Flutter (Dart).} Escollit per la seva capacitat de crear interfícies natives d'alt rendiment i la seva portabilitat (Web i Escriptori).
+    \item \textbf{Backend: Google Firebase.} Utilitzat en modalitat \textit{Serverless} per a allotjament (Hosting), base de dades NoSQL en temps real (Firestore) i autenticació (Auth).
+    \item \textbf{Intel·ligència Artificial: Google Gemini API.} Model Flash 2.5 per a la generació de text interpretatiu.
+\end{itemize}
+
+\subsection{Reptes i Solucions}
+Durant el desenvolupament s'han superat diversos reptes tècnics significatius:
+\begin{itemize}
+    \item \textbf{Generació de PDF Vectorials:} S'ha implementat un motor de renderitzat doble. Un per a la pantalla i un altre específic per a generar fitxers PDF vectorials que mantinguin la qualitat d'impressió independentment del dispositiu.
+    \item \textbf{Seguretat i Privadesa amb IA:} S'han dissenyat \textit{prompts} estructurats que reben dades numèriques anonimitzades, garantint que cap dada personal (PII) s'enviï als servidors de la IA. Les claus d'API estan protegides mitjançant restriccions de domini.
+    \item \textbf{Arquitectura Híbrida:} S'ha separat l'aplicació en un mòdul públic (pàgina de màrqueting/demo) i un mòdul privat (eina de gestió), optimitzant recursos i costos.
+\end{itemize}
+
+\section{Resultats Obtinguts}
+
+El resultat final és \textbf{NUMEN}, una plataforma en producció que compleix amb tots els objectius inicials.
+\begin{itemize}
+    \item Es disposa d'un portal públic que serveix d'aparador i punt de contacte.
+    \item L'eina privada permet realitzar càlculs instantanis i sense errors.
+    \item La funcionalitat d'IA redueix dràsticament el temps de redacció.
+    \item Els informes PDF generats tenen un acabat professional preparat per al lliurament al client.
+\end{itemize}
+
+\section{Conclusions}
+
+Aquest projecte ha permès transformar un procés artesanal en una solució tecnològica escalable. Més enllà de la simple automatització, NUMEN aporta valor afegit a través de la visualització de dades i la intel·ligència artificial, demostrant com l'enginyeria pot potenciar disciplines humanístiques sense desvirtuar-les. Tècnicament, ha suposat un aprenentatge profund en arquitectures \textit{cloud}, desenvolupament \textit{frontend} complex i integració responsable de models d'IA.
+
+\section{Enllaços al Projecte}
+
+A continuació s'adjunten els enllaços als recursos digitals del projecte:
+
+\begin{description}
+    \item[Vídeo de Demostració (Resultats i Funcionament):] \hfill \\
+    \url{https://drive.google.com/file/d/1gogjmkYvqlKzE48wGnDwsbhk7Ope8OZH/view?usp=sharing} \\
+    \textit{Visualització del flux complet d'ús de l'aplicació, des de la perspectiva de l'usuari.}
+
+    \item[Vídeo d'Explicació Tècnica (Codi i Arquitectura):] \hfill \\
+    \url{https://drive.google.com/file/d/1RYtOsJOZN_Xp_AjtZL5wRMc-qG7TPOAL/view?usp=sharing} \\
+    \textit{Recorregut pels aspectes tècnics clau del codi font i la implementació.}
+
+    \item[Repositori de Codi (GitHub):] \hfill \\
+    \url{https://github.com/7daviid7/NumerologiaFlutter} \\
+    \textit{Accés al codi font complet del projecte.}
+\end{description}
+
+\end{document}
