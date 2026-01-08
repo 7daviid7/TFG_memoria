@@ -9,7 +9,7 @@ L'entorn de desenvolupament s'ha configurat per maximitzar la productivitat i la
 
 \begin{itemize}
     \item \textbf{Sistema operatiu:} Desenvolupament realitzat principalment sobre Windows.
-    \item \textbf{IDE:} Visual Studio Code com a entorn de desenvolupament inicial. Posteriorment i durant l'etapa de PFG, s'ha utilitzat \textbf{Antigravity} (una versió avançada de VS Code amb IA agentic integrada) per accelerar la refactorització i documentació del codi.
+    \item \textbf{IDE:} Visual Studio Code com a entorn de desenvolupament inicial. Posteriorment i durant l'etapa de PFG, s'ha utilitzat \textbf{Antigravity} (una versió avançada de VS Code amb IA agèntica integrada) per accelerar la refactorització i documentació del codi.
     \item \textbf{Control de versions:} Ús de Git per a la gestió local del codi i GitHub com a repositori remot, seguint un flux de treball basat en \textit{main} i branques per funcionalitat.
     \item \textbf{Framework:} Flutter SDK (llenguatge Dart) per a la creació de l'aplicació multiplataforma.
     \item \textbf{Serveis al núvol:} Gestió centralitzada mitjançant la consola de Firebase (Firestore, Hosting).
@@ -96,7 +96,32 @@ La data de naixement es processa per extreure'n cicles temporals, utilitzant ope
 \begin{itemize}
     \item \textbf{Desafiaments (Challenges):} Es calculen mitjançant la \textbf{resta} (valor absolut) entre els dígits reduïts del dia, mes i any (ex: $|Dia - Mes|$). Representen obstacles a superar.
     \item \textbf{Realitzacions (Pinacles):} Es calculen mitjançant la \textbf{suma} dels mateixos components. Representen els moments àlgids o metes.
+    \item \textbf{Cicles de Vida:} Divideixen la vida en tres grans etapes, definides per la vibració dels components de la data:
+    \begin{itemize}
+        \item \textbf{Cicle Formatiu:} Correspon al \textbf{Mes} de naixement (reduït).
+        \item \textbf{Cicle Productiu:} Correspon al \textbf{Dia} de naixement (reduït).
+        \item \textbf{Cicle de Collita:} Correspon a l'\textbf{Any} de naixement (reduït).
+    \end{itemize}
 \end{itemize}
+
+\subsubsection{Implementació de la Matriu de Cicles (Codi)}
+Des d'una perspectiva tècnica, aquesta visualització no és una taula estàtica, sinó una matriu generada procedimentalment en temps d'execució. L'estructura de dades subjacent creua dues dimensions:
+\begin{itemize}
+    \item \textbf{Eix Y (Temporal):} Una llista iterativa d'Anys Personals $A_i$ calculats a partir de l'Any actual.
+    \item \textbf{Eix X (Atributs):} El vector d'Habitants $H$ resultant de l'anàlisi del nom.
+\end{itemize}
+
+L'algorisme de renderitzat recorre aquesta graella i aplica una funció de relleu condicional basada en \textbf{aritmètica modular}. Això genera un efecte de ``carrusel'' infinit: quan la diagonal arriba a la columna 9, el següent any torna a activar la columna 1, creant un cicle continu.
+\[ Index_{highlight} = (CV + Offset_{any}) \pmod 9 \]
+
+En l'exemple següent es pot observar aquest comportament cíclic:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imatges/matriu_cicles.png}
+    \caption{Captura real de la Matriu de Cicles a l'aplicació. S'observa la diagonal de ressonància (color salmó) i l'efecte cíclic de retorn.}
+    \label{fig:cicles_matrix_app}
+\end{figure}
 
 \subsubsection{Algoritme del Número Llindar (NL)}
 Un dels càlculs més complexos implementats és el del Número Llindar, el qual no segueix una fórmula aritmètica directa sinó una \textbf{lògica de prioritats condicional}. L'algoritme avalua l'histograma d'Habitants (Inclusió) en el següent ordre estricte:
@@ -115,7 +140,7 @@ Les herències es calculen analitzant patrons específics en la distribució de 
 Una de les innovacions del sistema és la generació dinàmica de la figura representativa (l'home de Vitruvi) mitjançant la manipulació directa de vectors SVG.
 
 \subsubsection{Lògica de Mapeig Vectorial}
-La figura es descompon en regions (Cap, Braços, Cames, Tronc), i cadascuna està vinculada a coordenades numerològiques specífiques. L'algoritme recorre el mapa d'Habitants i la Data de Naixement i, per a cada coincidència, ``activa'' la regió corresponent del gràfic.
+La figura es descompon en regions (Cap, Braços, Cames, Tronc), i cadascuna està vinculada a coordenades numerològiques específiques. L'algoritme recorre el mapa d'Habitants i la Data de Naixement i, per a cada coincidència, ``activa'' la regió corresponent del gràfic.
 
 \subsubsection{Intensitat Cromàtica (Heatmap)}
 No només es pinta la zona, sinó que es determina el color i la seva intensitat basant-se en la \textbf{freqüència d'aparició} del número:
