@@ -233,24 +233,23 @@ Per assegurar que la lògica de \texttt{NumerologyCalculationService} és correc
     \item \textbf{Casos límit:} S'ha prestat especial atenció als casos amb Números Mestres (11, 22, 33) per assegurar que el software no els reduïa incorrectament (ex: tractant un 11 com un 2), validant així la fidelitat al mètode Coquatrix.
 \end{enumerate}
 
+\subsection{Proves Automatitzades (Tests Unitaris)}
+Complementant la validació manual, s'ha establert una base de proves automatitzades al directori \texttt{test/} del projecte. L'arxiu \texttt{numerology\_service\_test.dart} conté bateries de tests unitaris dissenyats per verificar funcions crítiques de forma aïllada. 
+Aquesta pràctica de \textit{Regression Testing} assegura que qualsevol refactorització o optimització futura del codi no trenqui la lògica matemàtica fonamental que sustenta els estudis.
+
 \subsection{Validació de la Lògica Generativa (IA)}
 Un dels punts més crítics i subjectius del projecte és la generació de text mitjançant Intel·ligència Artificial. Atesa la naturalesa probabilística dels LLMs (Models de Llenguatge Massius), existeix el risc que la IA "al·lucini" o s'inventi significats que no corresponen a la teoria numerològica estricta.
 
 Per mitigar aquesta subjectivitat i garantir la qualitat del producte final, s'han seguit regles estrictes consensuades amb la clienta i basades en el llibre de referència:
 
 \begin{itemize}
-    \item \textbf{Prompting rígid:} No es demana a la IA que "interpreti" lliurement, sinó que "redacti" basant-se en definicions clau injectades en el prompt (veure Annex \ref{AppendixB}).
+    \item \textbf{Prompting rígid:} No es demana a la IA que ''interpreti'' lliurement, sinó que ''redacti'' basant-se en definicions clau injectades en el prompt (veure Annex \ref{AppendixB}).
     \item \textbf{Validació humana supervisada:} Durant la fase de proves, cada resposta generada ha estat revisada per l'experta per confirmar que el to era respectuós i que les afirmacions eren coherents amb la teoria.
     \item \textbf{Estandardització:} S'ha forçat a la IA a seguir una estructura fixa (Intro, Punts Forts, Reptes, Consell) per evitar variabilitat entre diferents informes.
 \end{itemize}
 
 \subsection{Validació de la Sortida PDF}
-S'ha verificat visualment la generació del PDF assegurant:
-\begin{itemize}
-    \item Que la paginació s'adapta al format A4 horitzontal.
-    \item Que els caràcters especials (accents, ç) es renderitzen correctament.
-    \item Que el gràfic vectorial de la figura manté els colors dinàmics en la versió impresa.
-\end{itemize}
+S'ha verificat visualment la generació del PDF assegurant que la paginació s'adapta al format A4 horitzontal, que els caràcters especials (accents, ç) es renderitzen correctament i que el gràfic vectorial manté els colors dinàmics en la versió impresa.
 
 \section{Reptes i Problemes Tècnics Resolts}
 

@@ -101,6 +101,13 @@ S'ha optat per una estructura de carpetes semàntica dins del directori \texttt{
     \item \textbf{data/}: Repositoris de dades estàtiques (base de dades local per a versió gratuïta).
 \end{itemize}
 
+Addicionalment, a l'arrel del projecte es troben carpetes clau per al cicle de desenvolupament:
+\begin{itemize}
+    \item \textbf{assets/}: Emmagatzema els recursos estàtics com les imatges, captures de pantalla per a la web i els fitxers \textbf{.svg} base per al ``Ninot Espiritual'' (\texttt{siluetaT.svg}, \texttt{siluetaCreu.svg}, etc.).
+    \item \textbf{tools/}: Conté scripts d'utilitat en format \texttt{.bat} per automatitzar tasques repetitives, com \texttt{kill\_dart.bat} (per tancar processos Dart persistents) o \texttt{deploy\_prod.bat} per facilitar el desplegament a producció.
+    \item \textbf{test/}: Directori dedicat a les proves automatitzades, incloent tests unitaris (\texttt{numerology\_service\_test.dart}) per validar la integritat dels algoritmes de càlcul.
+\end{itemize}
+
 \subsection{Patró de Navegació i UX}
 S'ha optat per una \textbf{estratègia de navegació híbrida} que combina el millor dels dos mons segons el context:
 
@@ -189,7 +196,7 @@ L'evolució del projecte l'ha portat a diferenciar clarament entre una zona púb
 \end{itemize}
 
 \subsection{Visualització Dinàmica SVG (El ``Ninot Espiritual'')}
-Una de les funcionalitats clau sol·licitada per l'usuari era la visualització gràfica de l'estudi a través del ``Ninot Espiritual''. Aquest requisit plantejava un repte tècnic important degut a la gran variabilitat de la representació.
+Una de les funcionalitats clau sol·licitada per l'usuari era la visualització gràfica de l'estudi a través del ``Ninot Espiritual''. Aquest requisit plantejava un repte tècnic important degut a la gran variabilitat de la representació. Cal destacar que, metodològicament, aquesta figura correspon a la \textbf{1a Etapa} del motor numerològic, servint com a síntesi visual inicial abans d'aprofundir en els càlculs posteriors.
 
 \subsubsection{El Problema de la Combinatòria}
 El diagrama es compon de 9 parts del cos principals, que es subdivideixen en dues meitats (esquerra i dreta), resultant en 18 zones independents a pintar. A més, el mètode de la Inclusió defineix diferents intensitats de color (fins a 3 nivells) segons el nombre de vegades que apareix un número.
@@ -209,13 +216,6 @@ Aquesta estratègia permet, amb un sol fitxer de pocs Kilobytes, generar infinit
 \subsubsection{Disseny vectorial amb Figma i ``Camps invisibles''}
 Perquè la injecció de color funcioni, l'SVG base ha d'estar rigorosament preparat. S'ha utilitzat l'eina de disseny \textbf{Figma}\footnote{Projecte Figma original: \url{https://www.figma.com/design/B7IWNeyv41aj20HjB8Ojol/siluetaFigura?node-id=0-1&t=lzHlgCWiclavVY8N-1}} per traçar manualment la silueta i dividir-la en les capes necessàries.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{Imatges/figma_structure.png}
-    \caption{Estructura de capes a Figma: Les zones numerades (1-9) corresponen a les parts del cos.}
-    \label{fig:figma_structure}
-\end{figure}
-
 L'estratègia clau ha estat la creació de \textbf{Camps invisibles}:
 \begin{itemize}
     \item Les zones de color (panxa, caps, cames) existeixen al disseny original però tenen una opacitat de 0\% o un color de farciment nul.
@@ -225,9 +225,18 @@ L'estratègia clau ha estat la creació de \textbf{Camps invisibles}:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{Imatges/figma_layers.png}
-    \caption{Detall de les línies guia i la simetria utilitzada per dividir el cos (Esquerra/Dreta).}
-    \label{fig:figma_layers}
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Imatges/figma_structure.png}
+        \caption{Estructura de capes (1-9 parts). limitant}
+        \label{fig:figma_structure}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Imatges/figma_layers.png}
+        \caption{Detall de línies guia i simetria.}
+        \label{fig:figma_layers}
+    \end{minipage}
 \end{figure}
 
 \subsection{Híbrid estàtic/IA: Optimització de la calculadora gratuïta}
@@ -239,7 +248,7 @@ Per tal de fer sostenible el model \textit{Freemium}, s'ha pres la decisió tèc
 \end{itemize}
 
 \subsection{Sistema de compartició temporal (Enllaços 24h)}
-La funcionalitat de ``Compartir Resultat'' ha requerit un disseny específic per equilibrar la facilitat d'ús amb la privacitat estricta de les dades. S'ha descartat l'ús d'enllaços permanents al document original.
+La funcionalitat de ``Compartir Resultat'' ha requerit un disseny específic per potenciar l'experiència d'usuari (UX). L'objectiu principal és facilitar l'obtenció de feedback immediat del client final, eliminant barreres d'entrada: es permet l'accés directe a l'informe sense necessitat que l'usuari es registri o creï un compte. S'ha optat per enllaços temporals per mantenir un equilibri entre aquesta accessibilitat oberta i una política de dades neta, evitant l'acumulació indefinida d'informació pública.
 
 \subsubsection{Mecanisme de ``Còpia efímera''}
 En lloc de donar accés al document de la base de dades principal (que conté dades sensibles), el sistema genera un nou document a la col·lecció \texttt{shared\_\allowbreak interpretations}.

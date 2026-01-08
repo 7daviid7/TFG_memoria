@@ -86,13 +86,11 @@
                                         % Link to study program               \studyproglink
 
 \supervisorA{Marta Fort i Masdevall}       % Name of supervisor 1,               \supnameA
-\supervisorAmail{marta.fort@udg.edu}         % Email address of supervisor 1,      \supmailA
-\supervisorAweb{https://en.wikipedia.org/wiki/Albert\_Einstein}  %            \supwebA
+\supervisorAmail{marta.fort@udg.edu}         % Email address of supervisor 1,      \supmailA %            \supwebA
 \supervisorAinfo{                       % Formatted info about supervisor 1:  \supinfoA
     \supnameA\\
     Universitat de Girona\\
     Email: \href{mailto:\supmailA}{\supmailA}\\
-    Web: \href{\supwebA}{Link}
 }
 
 % Keep empty if there is no supervisor 2: \supervisorB{}
@@ -202,6 +200,12 @@
 \include{Capitols/Chapter12}
 
 %----------------------------------------------------------------------------------------
+% BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+\nocite{responsive_framework_pub, flutter_adaptive_responsive, flutter_responsive_video, flexbox_froggy, firebase_database_docs}
+\printbibliography[heading=bibintoc]
+
+%----------------------------------------------------------------------------------------
 % THESIS CONTENT - APPENDICES
 %----------------------------------------------------------------------------------------
 \appendix % Cue to tell LaTeX that the following "chapters" are Appendices
@@ -214,9 +218,7 @@
 %\include{Appendices/AppendixC}
 
 %----------------------------------------------------------------------------------------
-% BIBLIOGRAPHY
-%----------------------------------------------------------------------------------------
-\printbibliography[heading=bibintoc]
+
 
 %----------------------------------------------------------------------------------------
 

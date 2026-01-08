@@ -84,3 +84,66 @@ Tal com s'ha descrit al Capítol \ref{chapter:implantacio_resultats}, el despleg
 \end{lstlisting}
 
 Aquest procés netejarà l'entorn, compilarà l'aplicació en mode \emph{release} (injectant la clau des del \texttt{.env}) i la pujarà a Firebase Hosting.
+
+
+\section{Guia d'Instal·lació i Codi PWA}
+\label{sec:pwa_guide}
+
+L'aplicació NUMEN és una \textit{Progressive Web App} (PWA), el que permet instal·lar-la com si fos una aplicació nativa sense passar per les botigues d'aplicacions (App Store / Play Store). El comportament d'instal·lació varia segons el dispositiu.
+
+\subsection{Escriptori (Windows / macOS)}
+En navegadors basats en Chromium (Google Chrome, Microsoft Edge, Brave), el navegador detecta automàticament que el lloc web és una PWA.
+L'usuari veurà una icona d'instal·lació a la part dreta de la barra de direccions (veure Figura \ref{fig:pwa_desktop}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth, frame]{Imatges/pwa_desktop_install.png}
+    \caption{Icona d'instal·lació PWA a la barra de direccions (Google Chrome).}
+    \label{fig:pwa_desktop}
+\end{figure}
+
+També és possible instal·lar l'aplicació des del menú d'opcions del navegador (els tres punts verticals $\vdots$) seleccionant ``Instal·lar NUMEN'' o ``Afegir a la pantalla d'inici''.
+
+\subsection{Dispositius iOS (iPhone / iPad)}
+A diferència d'Android o Windows, l'ecosistema d'Apple (iOS) no mostra cap avís automàtic per instal·lar aplicacions web. Això representa una barrera d'entrada per a l'usuari final.
+
+Per solucionar-ho, s'ha implementat un component visual personalitzat (\texttt{pwa\_install\_prompt.dart}) que detecta si l'usuari navega des d'un iPhone (mitjançant \textit{User Agent}) i si l'app no està encara en mode pantalla completa (\textit{standalone}).
+Si es compleixen aquestes condicions, es mostra un quadre de diàleg explicatiu amb els passos manuals a seguir:
+
+\begin{enumerate}
+    \item Prémer el botó \textbf{Compartir} de Safari (icona quadrada amb fletxa cap amunt).
+    \item Seleccionar l'opció \textbf{``Afegir a l'inici''} (\textit{Add to Home Screen}).
+\end{enumerate}
+
+\subsection{Codi Font: Detecció i Prompt iOS}
+A continuació es mostra el codi Dart encarregat de la detecció del navegador i la renderització del prompt d'ajuda per a usuaris d'iOS.
+
+\begin{lstlisting}[language=Dart, caption={Lògica de detecció i prompt PWA per a iOS (pwa\_install\_prompt.dart)}, label={lst:pwa_code}]
+// 1. Check if running on Web
+if (!kIsWeb) return;
+
+// 2. Check if platform is iOS (User Agent check)
+// (Inclou comprovacio per iPadOS que demana desktop site per defecte)
+final userAgent = js.context['navigator']['userAgent'].toString().toLowerCase();
+final isIos = userAgent.contains('iphone') || 
+              userAgent.contains('ipad') || 
+              userAgent.contains('ipod');
+
+// ... (logica addicional per iPadOS) ...
+
+// 3. Check if ALREADY in Standalone mode (Installed)
+bool isStandalone = false;
+try {
+  final mediaQuery = js.context.callMethod('matchMedia', ['(display-mode: standalone)']);
+  if (mediaQuery != null && mediaQuery['matches'] == true) {
+    isStandalone = true;
+  }
+} catch (_) {}
+
+if (isStandalone) return;
+
+// Mostra el prompt visual
+setState(() {
+  _isVisible = true;
+});
+\end{lstlisting}

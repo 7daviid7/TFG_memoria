@@ -13,19 +13,24 @@ L'anàlisi econòmica de NUMEN es caracteritza per un model de costos inicials e
 El desenvolupament d'aquest projecte, en el context d'un Treball Final de Grau, parteix d'una premissa de \textbf{cost zero} en termes de recursos d'infraestructura immediata, ja que no es compta amb cap inversor extern que aporti recursos inicials per a la seva posada en marxa. 
 \begin{itemize}
     \item \textbf{Infraestructura (híbrida):} El projecte s'ha desplegat en una arquitectura dual (Web i Escriptori). Per a la versió web, s'utilitza \textbf{Google Firebase Hosting}, aprofitant la seva capa gratuïta que inclou certificat SSL, CDN global i domini propi sense cost.
-    \item \textbf{Base de dades:} S'ha integrat \textbf{Google Cloud Firestore}, una base de dades NoSQL al núvol. El seu pla gratuït (\textit{Spark Plan}) permet fins a 50.000 lectures i 20.000 escriptures diàries, eliminant la necessitat de mantenir servidors de base de dades propis. Tot i que funcionalitats noves com el \textbf{Login} i l'\textbf{Historial} incrementen el volum de lectures, l'impacte és mínim i es manté àmpliament dins dels marges gratuïts. A més, s'ha integrat un botó de contacte via \textbf{WhatsApp} a la zona pública, facilitant la conversió directa de visitants en clients de pagament sense intermediaris.
+    \item \textbf{Base de dades:} S'ha integrat \textbf{Google Cloud Firestore}, una base de dades NoSQL al núvol. El seu pla gratuït (\textit{Spark Plan}) permet fins a 50.000 lectures i 20.000 escriptures diàries, eliminant la necessitat de mantenir servidors de base de dades propis. Tot i que funcionalitats noves com el \textbf{Login} i l'\textbf{Historial} incrementen el volum de lectures, l'impacte és mínim i es manté àmpliament dins dels marges gratuïts. A més, s'ha integrat un botó de contacte via \textbf{WhatsApp} a la zona pública, facilitant la conversió directa de visitants en clients de pagament sense intermediaris, aconseguint incrementar la rentabilitat del projecte.
     \item \textbf{Autenticació:} S'utilitza \textbf{Firebase Authentication} per a la gestió d'usuaris (Login). Aquest servei és gratuït per a fins a 50.000 usuaris actius mensuals (MAUs), una xifra molt superior a la necessària. Actualment, el sistema contempla un únic usuari administrador i, donat que el model de negoci requereix una supervisió experta manual, no es preveu una expansió massiva de la plantilla que pugui comprometre aquest límit gratuït, fins i tot en un escenari de creixement futur.
     \item \textbf{Llicències i API:} S'utilitza l'API de \textbf{Google Gemini} (model Flash 2.5) en la seva modalitat gratuïta, optimitzant costos operatius.
 \end{itemize}
 
-Tot i que el cost monetari directe és nul, cal considerar el \textbf{cost teòric de desenvolupament}, calculat en base a les hores d'enginyeria dedicades. Si s'estimés un preu de mercat per hora de desenvolupament júnior (aprox. 8-12 €/h) i una dedicació de 400 hores (crèdits ECTS + treball autònom), la inversió teòrica rondaria els 3.200€- 4.800€. Aquest cost, però, és assumit com a inversió acadèmica i personal.
+Tot i que el cost monetari directe és nul, cal considerar el \textbf{cost teòric de desenvolupament}, calculat en base a les hores d'enginyeria dedicades. S'ha realitzat una estimació desglossada diferenciant perfils:
+\begin{itemize}
+    \item \textbf{Perfil Júnior (Implementació i Test):} 300 hores a 12 €/h = 3.600 €.
+    \item \textbf{Perfil Arquitecte/Analista (Disseny, Decisions i Documentació):} 100 hores a 18 €/h = 1.800 €.
+\end{itemize}
+Així doncs, la inversió teòrica total rondaria els \textbf{5.400 €}. Aquest cost, però, és assumit com a inversió acadèmica i personal.
 
 \subsection{Anàlisi d'Alternatives per a la IA i Costos}
 L'elecció del proveïdor d'IA ha estat una decisió estratègica clau on s'han avaluat tres escenaris:
 
 \begin{itemize}
     \item \textbf{Opció A - Allotjament local (Open Source):} Ús de models com Llama o Mistral executats en contenidors Docker. Aquesta opció oferia control absolut de les dades, però es va descartar per la inviabilitat econòmica i tècnica de mantenir una màquina dedicada amb GPU funcionant 24/7 només per a la inferència del model, la qual cosa generaria costos de llum i manteniment de hardware inassumibles.
-    \item \textbf{Opció B - API Enterprise (privada):} L'ús de versions de pagament (Google Vertex AI) garanteix la privacitat de les dades (no training). Tot i ser viable, afegeix un cost recurrent.
+    \item \textbf{Opció B - API de Pagament (Pay-as-you-go / Vertex AI):} L'activació de la facturació en l'API estàndard o l'ús de Google Vertex AI garanteix contractualment la privacitat de les dades (no s'utilitzen per entrenar models). Aquesta és l'opció natural de creixement: sense canviar de codi, només activant el pagament, s'obtenen garanties empresarials a un cost molt baix per unitat.
     \item \textbf{Opció C - API gratuïta (Google Gemini Free Tier):} S'ha optat finalment per aquesta via. El cost és zero, però té la contrapartida que Google pot utilitzar les dades per a entrenament. Per mitigar totalment aquest risc, s'ha aplicat una estratègia d'anonimització al \textit{prompt} (veure secció \ref{sec:privacitat_ia}).
 \end{itemize}
 

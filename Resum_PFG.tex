@@ -6,6 +6,10 @@
 \usepackage{hyperref}
 \usepackage{parskip}
 \usepackage{bookmark}
+\usepackage{tikz}
+\usepackage[export]{adjustbox}
+\usepackage{float}
+\usetikzlibrary{positioning, shadows, shapes.symbols, arrows}
 
 % Margins setup to ensure content fits comfortably within 5 pages
 \geometry{
@@ -25,13 +29,67 @@
     pdfauthor={David Quintanilla}
 }
 
-\title{\textbf{Resum del Projecte Fi de Grau: NUMEN} \\ \large Automatització i Digitalització d'Estudis Numerològics amb IA}
-\author{David Quintanilla}
-\date{\today}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 
 \begin{document}
 
-\maketitle
+\newgeometry{margin=1in}
+\begin{titlepage}
+
+% Make the title page mostly inert to the parskip-setting.
+\setlength{\parskip}{0pt}
+
+\begin{center}
+\includegraphics[width=0.65\textwidth]{Figures/EPS_centrat.png}
+
+\vspace{2cm}
+
+{\Large Grau en Enginyeria Informàtica\par}                      % Estudi
+\vspace{0.2cm}
+\vspace{3.5cm}                            
+\textsc{\Large Projecte Final de Grau}                                 % Thesis type
+\vspace{0.2cm}
+
+\HRule 
+\vspace{0.4cm}
+{\huge \bfseries NUMEN: Assistent per a estudis numerològics.\par}                          % Thesis title
+\vspace{0.4cm}  
+\HRule
+\vspace{1cm}
+ 
+\begin{minipage}[t]{0.4\textwidth}
+\begin{flushleft} 
+    \large
+    \emph{Autor:}\\
+    David Quintanilla Jimenez
+\end{flushleft}
+\end{minipage}
+\begin{minipage}[t]{0.4\textwidth}
+\begin{flushright} 
+    \large
+    \emph{Tutors:} \\
+    Marta Fort i Masdevall \\
+    Maria Jimenez Molina
+\end{flushright}
+\end{minipage}
+
+\vspace{2.5cm}
+ \textsc{\Large Resum de la Memòria}                                 % Thesis type
+\vspace{0.2cm}
+
+\vfill
+
+{\large
+Convocatòria:\\                                %Convodatòria
+Setembre 2025\\
+\vspace{1.5cm}
+Departament :\\
+IMAE\\                                    %Departament
+}
+\vfill
+\end{center}
+\end{titlepage}
+\restoregeometry
 
 \section{Introducció i Context}
 
@@ -39,9 +97,9 @@ El projecte \textbf{NUMEN} consisteix en el disseny i desenvolupament d'un siste
 
 L'origen del projecte rau en la necessitat d'optimitzar un procés manual altament ineficient. Realitzar una carta numerològica completa requereix aproximadament una hora i mitja de càlculs matemàtics propensos a l'error humà, a més del temps dedicat a la redacció d'informes i la interpretació. Aquesta barrera temporal convertia el servei en una tasca poc escalable.
 
-La solució proposada és una aplicació web moderna que digitalitza tot el flux de treball: des del càlcul instantani de totes les variables numerològiques fins a la visualització gràfica de resultats i la generació assistida d'interpretacions mitjançant Intel·ligència Artificial, reduint el temps de procés de hores a segons.
+La solució proposada és una aplicació web moderna que digitalitza tot el flux de treball: des del càlcul instantani de totes les variables numerològiques fins a la visualització gràfica de resultats i la generació assistida d'interpretacions mitjançant Intel·ligència Artificial. A més, incorpora una gestió integral d'informes connectada a una base de dades que permet emmagatzemar, visualitzar i filtrar l'historial d'estudis, reduint el temps de procés d'hores a segons.
 
-A més, el projecte ha integrat una estratègia de visibilitat externa mitjançant una part pública. Aquesta secció no només defineix els conceptes teòrics de la numerologia, sinó que busca generar \textit{engagement} amb l'usuari: mostra un exemple real d'un estudi complet per evidenciar el valor del producte, inclou una utilitat gratuïta (un "tastet") que permet al visitant calcular immediatament el seu Camí de Vida —l'indicador base de la numerologia, que suposa una petita part del que és un estudi numerològic— i facilita el contacte directe amb un professional via WhatsApp.
+Complementàriament, el projecte ha integrat una estratègia de visibilitat externa mitjançant una part pública. Aquesta secció no només defineix els conceptes teòrics de la numerologia, sinó que busca generar \textit{engagement} amb l'usuari: mostra un exemple real d'un estudi complet per evidenciar el valor del producte, inclou una utilitat gratuïta (un ``tastet'') que permet al visitant calcular immediatament el seu Camí de Vida —l'indicador base de la numerologia, que suposa una petita part del que és un estudi numerològic— i facilita el contacte directe amb un professional via WhatsApp.
 
 \section{Objectius del Projecte}
 
@@ -55,7 +113,7 @@ Per tal de materialitzar aquest propòsit, s'han definit els següents objectius
     \item \textbf{Integració d'Intel·ligència Artificial:} Incorporar serveis d'IA Generativa (Google Gemini) per assistir en la redacció i interpretació dels resultats.
     \item \textbf{Gestió del coneixement i Human-in-the-Loop:} Implementar un sistema de persistència que permeti emmagatzemar, editar i refinar les respostes generades per la IA, capturant feedback de l'expert i del client final.
     \item \textbf{Generació d'informes i consistència d'impressió:} Desenvolupar un motor de generació nativa de documents PDF vectorials d'alta fidelitat, assegurant un resultat professional independent del dispositiu.
-    \item \textbf{Estratègia comercial i portal públic:} Desenvolupar un portal d'accés públic ("Landing Page") que inclogui recursos educatius, una "demo" funcional (càlcul del Camí de Vida) i contacte via WhatsApp.
+    \item \textbf{Estratègia comercial i portal públic:} Desenvolupar un portal d'accés públic (``Landing Page'') que inclogui recursos educatius, una ``demo'' funcional (càlcul del Camí de Vida) i contacte via WhatsApp.
     \item \textbf{Seguretat i control d'accés:} Implementar autenticació robusta i regles de seguretat per separar l'entorn públic de l'administració privada, protegint les dades sensibles.
     \item \textbf{Validació amb casos reals:} Realitzar proves exhaustives comparant els resultats del programari amb estudis manuals previs per garantir-ne l'exactitud.
 \end{itemize}
@@ -65,30 +123,189 @@ Per tal de materialitzar aquest propòsit, s'han definit els següents objectius
 L'anàlisi de requisits ha estat exhaustiva per cobrir tant la part de gestió privada com l'estratègia pública.
 
 \subsection{Funcionalitats Principals (Core)}
-El sistema permet la introducció de dades (Nom, Data) i executa automàticament tots els càlculs complexos (Gematria, Cicles, Any Personal). Destaca la detecció automàtica de Nombres Kàrmics i Nombres Mestres (11, 22, 33), així com la generació dinàmica de la "Figura Espiritual" en format SVG segons les dades del subjecte. Finalment, permet la generació i descàrrega d'informes complets en PDF natiu vectorial.
+El sistema permet la introducció de dades (Nom, Data) i executa automàticament tots els càlculs complexos (Gematria, Cicles, Any Personal). Destaca la detecció automàtica de Nombres Kàrmics (valor = 0, buit) i Nombres Mestres (11, 22, 33), així com la generació dinàmica de la ``Figura Espiritual'' en format SVG segons les dades del subjecte. Finalment, permet la generació, descàrrega i impressió d'informes complets en PDF natiu vectorial.
 
 \subsection{Intel·ligència Artificial i Feedback}
-L'usuari expert pot sol·licitar interpretacions a la IA, que es mostren en format estructurat. El sistema permet valorar aquestes respostes (feedback de l'expert) i emmagatzemar-les per a futurs entrenaments, creant un cicle de millora contínua (Human-in-the-Loop).
+L'usuari expert pot sol·licitar interpretacions a la IA, que es mostren en format estructurat. El sistema permet valorar aquestes respostes (feedback de l'expert) i emmagatzemar-les per a futurs entrenaments, creant un cicle de millora contínua (Human-in-the-Loop). A més, un cop tenim la resposta, aquesta es pot ampliar per a visualitzar-la millor, i hi ha l'opció d'editar-la, copiar-la o compartir-la mitjançant la creació d'un enllaç temporal de 24 hores, on el client final pot donar feedback de l'experiència general i de l'informe amb un sistema de puntuació.
 
 \subsection{Part Pública i Màrqueting}
-S'ha desenvolupat un \textbf{Portal Públic} accessible a tothom que actua com a eina de captació. Inclou:
-\begin{itemize}
-    \item Contingut educatiu sobre numerologia.
-    \item Una **calculadora "demo" gratuïta** que permet als visitants calcular el seu "Camí de Vida" a l'instant.
-    \item Botó de contacte directe via **WhatsApp** per convertir visitants en clients.
-\end{itemize}
+S'ha desenvolupat un \textbf{Portal Públic} accessible a tothom que actua com a eina de captació. Aquest espai ofereix contingut educatiu sobre numerologia i una \textbf{``calculadora demo'' gratuïta} que permet als visitants calcular el seu ``Camí de Vida'' a l'instant. A més, incorpora una secció de \textbf{Testimonis i Feedback} amb valoracions d'altres usuaris i facilita el contacte directe via \textbf{WhatsApp} per convertir visitants en clients. Finalment, integra l'accés al \textbf{Login} per l'administrador de manera discreta per no distreure la resta d'usuaris.
 
 \subsection{Seguretat, Gestió i Accessibilitat}
-El sistema protegeix l'accés a l'àrea de gestió mitjançant un sistema de **Login** segur.
-A més, permet generar **Enllaços Compartits amb caducitat (24h)** per enviar informes als clients de forma segura sense exposar dades indefinidament.
-Tot el sistema disposa de **Disseny Responsive**, adaptant-se fluïdament a pantalles de mòbil i escriptori, i permet la gestió de l'historial d'estudis amb cerca intel·ligent.
+El sistema protegeix l'accés a l'àrea de gestió mitjançant un sistema de \textbf{Login} segur. Addicionalment, s'han implementat regles de seguretat estrictes a la base de dades (\textit{Firestore Rules}) que actuen com a tallafocs lògic, garantint que només l'administrador pugui accedir a les dades sensibles i assegurant la immutabilitat dels registres compartits.
+A més, s'implementa una estratègia d'experiència d'usuari (UX) basada en \textbf{Enllaços Compartits Temporals (24h)}, que faciliten al client final l'accés immediat a la seva interpretació sense barreres d'entrada (registre o login), tot mantenint la privacitat del sistema global.
+Tot el sistema disposa de \textbf{Disseny Responsive}, adaptant-se fluïdament a pantalles de mòbil i escriptori, i constituint una \textbf{PWA (Progressive Web Application)}, permetent ser instal·lada i utilitzada com una app nativa, a més de facilitar la gestió de l'historial d'estudis amb cerca intel·ligent.
+
+\begin{figure}[h]
+    \centering
+    \resizebox{1.0\textwidth}{!}{%
+    \begin{tikzpicture}[
+        node distance=0.5cm and 0.4cm,
+        every node/.style={draw, rounded corners, align=center, font=\scriptsize, fill=white, drop shadow},
+        root/.style={fill=gray!30, font=\large\bfseries, minimum width=3cm, minimum height=0.8cm},
+        pt/.style={fill=blue!15, font=\bfseries, minimum width=2.4cm, minimum height=0.7cm},
+        req/.style={fill=green!10, font=\small, minimum width=2.2cm, minimum height=0.45cm},
+        link/.style={-latex, thin}
+    ]
+
+    % Root
+    \node[root] (root) {PROJECTE NUMEN};
+
+    % Level 2: PTs (Centered flat structure)
+    % Center split: PT3 and PT4 are in the middle
+    \node[pt, below=1cm of root, xshift=-1.4cm] (pt3) {PT3\\Infra};
+    \node[pt, right=0.15cm of pt3] (pt4) {PT4\\Bus/Refact};
+    
+    % Left wing
+    \node[pt, left=0.15cm of pt3] (pt2) {PT2\\Prototip};
+    \node[pt, left=0.15cm of pt2] (pt1) {PT1\\Fonaments};
+
+    % Right wing
+    \node[pt, right=0.15cm of pt4] (pt5) {PT5\\IA};
+    \node[pt, right=0.15cm of pt5] (pt6) {PT6\\Public/Sec};
+    \node[pt, right=0.15cm of pt6] (pt7) {PT7\\Memòria};
+
+    % Links Root -> PTs
+    \draw[link] (root) -- (pt1.north);
+    \draw[link] (root) -- (pt2.north);
+    \draw[link] (root) -- (pt3.north);
+    \draw[link] (root) -- (pt4.north);
+    \draw[link] (root) -- (pt5.north);
+    \draw[link] (root) -- (pt6.north);
+    \draw[link] (root) -- (pt7.north);
+
+    % Level 3: Requirements (Vertical Stacks)
+    
+    % PT1 (Fonaments) -> RF2, RD1
+    \node[req, below=0.3cm of pt1] (rf2) {RF2 Càlcul};
+    \node[req, below=0.15cm of rf2] (rd1) {RD1 Mètode};
+    \draw[link] (pt1) -- (rf2);
+    \draw[link] (rf2) -- (rd1);
+
+    % PT2 (Prototip) -> RF1, RF3
+    \node[req, below=0.3cm of pt2] (rf1) {RF1 Input};
+    \node[req, below=0.15cm of rf1] (rf3) {RF3 Visió};
+    \draw[link] (pt2) -- (rf1);
+    \draw[link] (rf1) -- (rf3);
+
+    % PT3 (Infra) -> RF9(DB), RF17(History), RF11(Admin)
+    \node[req, below=0.3cm of pt3] (rf9) {RF9 Persist.};
+    \node[req, below=0.15cm of rf9] (rf17) {RF17 Hist.};
+    \node[req, below=0.15cm of rf17] (rf11) {RF11 Admin};
+    \draw[link] (pt3) -- (rf9);
+    \draw[link] (rf9) -- (rf17);
+    \draw[link] (rf17) -- (rf11);
+
+    % PT4 (Refactor) -> RF14, RF10, RF13, RF4, RF5, RD4, RD5
+    \node[req, below=0.3cm of pt4] (rf14) {RF14 Resp.};
+    \node[req, below=0.15cm of rf14] (rf10) {RF10 PDF};
+    \node[req, below=0.15cm of rf10] (rf13) {RF13 Share};
+    \node[req, below=0.15cm of rf13] (rf4) {RF4 SVG};
+    \node[req, below=0.15cm of rf4] (rf5) {RF5 Karma};
+    \node[req, below=0.15cm of rf5] (rd4) {RD4 Mestres};
+    \node[req, below=0.15cm of rd4] (rd5) {RD5 Geom.};
+    \draw[link] (pt4) -- (rf14);
+    \draw[link] (rf14) -- (rf10);
+    \draw[link] (rf10) -- (rf13);
+    \draw[link] (rf13) -- (rf4);
+    \draw[link] (rf4) -- (rf5);
+    \draw[link] (rf5) -- (rd4);
+    \draw[link] (rd4) -- (rd5);
+
+    % PT5 (IA) -> RF6, RF7, RF8, RD2, RD3, RF12
+    \node[req, below=0.3cm of pt5] (rf6) {RF6 Prompt};
+    \node[req, below=0.15cm of rf6] (rf7) {RF7 Interp.};
+    \node[req, below=0.15cm of rf7] (rf8) {RF8 Fdbk};
+    \node[req, below=0.15cm of rf8] (rd2) {RD2 To IA};
+    \node[req, below=0.15cm of rd2] (rd3) {RD3 Privacy};
+    \node[req, below=0.15cm of rd3] (rf12) {RF12 Config};
+    \draw[link] (pt5) -- (rf6);
+    \draw[link] (rf6) -- (rf7);
+    \draw[link] (rf7) -- (rf8);
+    \draw[link] (rf8) -- (rd2);
+    \draw[link] (rd2) -- (rd3);
+    \draw[link] (rd3) -- (rf12);
+
+    % PT6 (Public/Sec) -> RF15, RF16, RNF4
+    \node[req, below=0.3cm of pt6] (rf15) {RF15 Login};
+    \node[req, below=0.15cm of rf15] (rf16) {RF16 Public};
+    \node[req, below=0.15cm of rf16] (rnf4) {RNF4 Sec};
+    \draw[link] (pt6) -- (rf15);
+    \draw[link] (rf15) -- (rf16);
+    \draw[link] (rf16) -- (rnf4);
+    
+    % PT7 (Memòria/Validació) -> RNF1, RNF2, RNF3, RNF5
+    \node[req, below=0.3cm of pt7] (rnf1) {RNF1 Usable};
+    \node[req, below=0.15cm of rnf1] (rnf3) {RNF3 Compat.};
+    \node[req, below=0.15cm of rnf3] (rnf2) {RNF2 Temps};
+    \node[req, below=0.15cm of rnf2] (rnf5) {RNF5 Print};
+    \draw[link] (pt7) -- (rnf1);
+    \draw[link] (rnf1) -- (rnf3);
+    \draw[link] (rnf3) -- (rnf2);
+    \draw[link] (rnf2) -- (rnf5);
+
+    \end{tikzpicture}%
+    }
+    \caption{Traçabilitat i Planificació: Paquets de Treball vs Requisits.}
+    \label{fig:mapa_requisits_resum}
+\end{figure}
 
 \section{Procés de Desenvolupament i Tecnologies}
 
-\subsection{Entorn Tecnològic}
-S'ha optat per un stack tecnològic modern i robust:
+\subsection{Entorn Tecnològic i Arquitectura}
+L'arquitectura del sistema es fonamenta en la interacció fluida entre els diferents actors i components, tal com s'il·lustra en el següent diagrama d'alt nivell. Per materialitzar-la, s'ha optat per un stack tecnològic modern i robust:
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[node distance=2.5cm, auto,
+        actor/.style={circle, draw, minimum size=1cm, inner sep=0pt, fill=gray!10},
+        block/.style={rectangle, draw, rounded corners, minimum width=2.5cm, minimum height=1.5cm, fill=blue!10, align=center},
+        cloudNode/.style={cloud, draw, cloud puffs=10, cloud puff arc=120, aspect=2, minimum width=3cm, fill=green!10, align=center},
+        line/.style={draw, -latex', thick},
+        scale=0.75, transform shape]
+
+        % Nodes
+        \node [actor] (client) {Client};
+        \node [actor, above of=client, node distance=2cm] (visitant) {Visitant};
+        
+        \node [block, right of=visitant, node distance=5cm, yshift=-1.25cm] (app_public) {App Pública\\(Web + Demo)};
+        \node [block, below of=app_public, node distance=5cm] (app_private) {App Privada\\(Gestió + Càlcul)};
+        
+        \node [actor, left of=app_private, node distance=7cm] (admin) {Usuari};
+        
+        \node [cloudNode, right of=app_private, node distance=5cm] (db) {Base de Dades\\(FireBase)};
+        \node [block, above of=db, node distance=5cm] (ai) {Servei IA\\(API)};
+
+        % Edges Public to/from Actors
+        \path [line] (visitant) -- node[above, sloped] {Visita/Demo} (app_public);
+        \path [line] (client) -- node[above, sloped] {Feedback} (app_public);
+        
+        % Cross-Apps diagonals (Left side)
+        % Public -> Admin (WhatsApp)
+        \path [line] (app_public) -- node[pos=0.7, above, sloped] {WhatsApp} (admin); 
+        % Private -> Client (Link)
+        \path [line] (app_private) -- node[pos=0.2, above, sloped] {Genera Link} (client);
+
+        % Edges Private
+        \path [line] (admin) -- node[above] {Login/Full Access} (app_private);
+        \path [line] (app_private) -- node[above] {CRUD} (db);
+        
+        % Cross-Apps diagonals (Right side)
+        % Private -> AI (Prompt)
+        \path [line] (app_private) -- node[pos=0.3, below, sloped] {Prompt} (ai);
+        % Public -> DB (Read)
+        \path [line] (app_public) -- node[pos=0.3, above, sloped] {Testimonis} (db);
+        
+        % AI Back
+        \path [line] (ai) -- node[pos=0.2, below, sloped] {Interpretació} (app_private);
+
+    \end{tikzpicture}
+    \caption{Arquitectura d'Alt Nivell del sistema NUMEN.}
+    \label{fig:high_level_arch}
+\end{figure}
+
 \begin{itemize}
-    \item \textbf{Frontend: Flutter (Dart).} Escollit per la seva capacitat de crear interfícies natives d'alt rendiment i la seva portabilitat (Web i Escriptori).
+    \item \textbf{Frontend: Flutter (Dart).} Escollit per la seva capacitat de crear interfícies natives d'alt rendiment i la seva portabilitat multiplataforma (En aquest cas Web i Escriptori).
     \item \textbf{Backend: Google Firebase.} Utilitzat en modalitat \textit{Serverless} per a allotjament (Hosting), base de dades NoSQL en temps real (Firestore) i autenticació (Auth).
     \item \textbf{Intel·ligència Artificial: Google Gemini API.} Model Flash 2.5 per a la generació de text interpretatiu.
 \end{itemize}
@@ -96,10 +313,19 @@ S'ha optat per un stack tecnològic modern i robust:
 \subsection{Reptes i Solucions}
 Durant el desenvolupament s'han superat diversos reptes tècnics significatius:
 \begin{itemize}
-    \item \textbf{Generació de PDF Vectorials:} S'ha implementat un motor de renderitzat doble. Un per a la pantalla i un altre específic per a generar fitxers PDF vectorials que mantinguin la qualitat d'impressió independentment del dispositiu.
-    \item \textbf{Seguretat i Privadesa amb IA:} S'han dissenyat \textit{prompts} estructurats que reben dades numèriques anonimitzades, garantint que cap dada personal (PII) s'enviï als servidors de la IA. Les claus d'API estan protegides mitjançant restriccions de domini.
-    \item \textbf{Arquitectura Híbrida:} S'ha separat l'aplicació en un mòdul públic (pàgina de màrqueting/demo) i un mòdul privat (eina de gestió), optimitzant recursos i costos.
+    \item \textbf{Generació de PDF Dinàmica i Duplicació de UI:} Un dels reptes més grans ha estat mantenir una consistència visual perfecta entre la pantalla i el document imprès. Com que les llibreries de generació de PDF a Flutter no converteixen directament els \textit{widgets} de pantalla a vectors d'impressió, ha estat necessari ``duplicar'' pràcticament tota la interfície d'usuari: implementant-la una vegada amb widgets de Flutter per a la web, i reescrivint-la de nou utilitzant el llenguatge específic del paquet PDF.
+    \item \textbf{Construcció i Renderitzat de SVG:} La ``Figura Espiritual'' no és una imatge estàtica, sinó una composició dinàmica amb infinitat de possibilitats. S'ha hagut de programar un motor de renderitzat que, en funció dels càlculs numèrics, acoloreix i modifica les rutes (\textit{paths}) del fitxer SVG en temps d'execució, requerint una manipulació complexa de l'XML.
+    \item \textbf{Disseny Responsive ``Sense Scroll'':} A diferència de les webs convencionals on el contingut s'allarga verticalment, un requisit clau era permetre a l'expert visualitzar tota la informació rellevant "d'un cop d'ull". La dificultat radica en què no s'han utilitzat components estàndard amb gestió automàtica de l'espai (com \textit{Flexible} o \textit{Expanded}), sinó que es tracta de components personalitzats dibuixats des de zero (\textit{Custom Paint}) mitjançant coordenades. Aconseguir que aquests elements s'adaptessin responsivement ha requerit implementar una lògica complexa per calcular la mida màxima disponible i aplicar criteris condicionals per ajustar dinàmicament mides de font i geometries. Tot i així, en dispositius mòbils s'ha hagut d'habilitar l'scroll degut a les limitacions físiques.
+    \item \textbf{Optimització de Base de Dades:} Per permetre el filtratge i cerca instantània per nom dins l'historial d'estudis, ha estat necessari configurar índexs compostos específics a Firestore, optimitzant les consultes per evitar costos de lectura innecessaris i penalitzacions de rendiment.
+    \item \textbf{Enginyeria de Prompts:} Construir les instruccions correctes per a la IA ha estat fonamental per garantir respostes útils. S'ha iterat profundament en el disseny dels \textit{prompts} per assegurar que el model actuï amb el to adequat i segueixi estrictament les regles de la numerologia sense ``al·lucinar'' informació incorrecta.
 \end{itemize}
+
+\section{Viabilitat i Pressupost}
+
+A nivell operatiu, la viabilitat tècnica està garantida per l'arquitectura \textit{Serverless}, que elimina els costos de manteniment de servidors físics. El projecte s'empara en les capes gratuïtes (\textit{Free Tier}) de Google Cloud i Firebase, aconseguint un \textbf{cost d'explotació inicial nul (0 €/mes)}, fet que permet llançar el producte sense arriscar capital.
+
+Des del punt de vista econòmic, s'ha quantificat la inversió teòrica del desenvolupament en \textbf{5.400 €}. Aquesta valoració sorgeix de desglossar l'esforç en 300 hores de perfil tècnic júnior (12 €/h) i 100 hores de perfil d'arquitecte/analista (18 €/h).
+Aquesta inversió es justifica pel retorn (ROI) immediat que aporta l'automatització: el sistema transforma un procés artesanal que consumia hores de dedicació per client en una tasca de segons, dotant al negoci de l'experta d'una capacitat d'escalabilitat il·limitada sense incrementar els costos fixos.
 
 \section{Resultats Obtinguts}
 
@@ -111,26 +337,50 @@ El resultat final és \textbf{NUMEN}, una plataforma en producció que compleix 
     \item Els informes PDF generats tenen un acabat professional preparat per al lliurament al client.
 \end{itemize}
 
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, frame]{Imatges/screenshot_results.png}
+        \caption{Tauler de resultats principals.}
+        \label{fig:resum_results}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, frame]{Imatges/screenshot_figure.png}
+        \caption{Visualització del ``Ninot Espiritual''.}
+        \label{fig:resum_figure}
+    \end{minipage}
+\end{figure}
+
 \section{Conclusions}
 
-Aquest projecte ha permès transformar un procés artesanal en una solució tecnològica escalable. Més enllà de la simple automatització, NUMEN aporta valor afegit a través de la visualització de dades i la intel·ligència artificial, demostrant com l'enginyeria pot potenciar disciplines humanístiques sense desvirtuar-les. Tècnicament, ha suposat un aprenentatge profund en arquitectures \textit{cloud}, desenvolupament \textit{frontend} complex i integració responsable de models d'IA.
+Aquest projecte ha permès transformar un procés artesanal en una solució tecnològica escalable, demostrant com l'enginyeria pot potenciar disciplines humanístiques sense desvirtuar-les.
+
+Però més enllà del producte, la realització d'aquest treball ha suposat un creixement personal i tècnic únic. A diferència de l'experiència habitual en entorns corporatius, on sovint es treballa sobre projectes ja existents, aquest PFG ha plantejat el repte del "full en blanc". Assumir la responsabilitat total de les decisions arquitectòniques —des de l'elecció de Flutter Web fins a l'estratègia \textit{serverless} amb Firebase— ha estat la lliçó més valuosa.
+
+Tècnicament, m'ha dotat d'un nou arsenal d'eines: el domini de la reactivitat complexa per a gràfics dinàmics i la capacitat de desplegar infraestructures al núvol (\textit{Google Cloud}) amb confiança professional. En definitiva, NUMEN ha estat el pont perfecte entre la teoria acadèmica i la realitat de lliurar un producte final complet, útil i en producció.
 
 \section{Enllaços al Projecte}
 
 A continuació s'adjunten els enllaços als recursos digitals del projecte:
 
 \begin{description}
-    \item[Vídeo de Demostració (Resultats i Funcionament):] \hfill \\
-    \url{https://drive.google.com/file/d/1gogjmkYvqlKzE48wGnDwsbhk7Ope8OZH/view?usp=sharing} \\
-    \textit{Visualització del flux complet d'ús de l'aplicació, des de la perspectiva de l'usuari.}
-
     \item[Vídeo d'Explicació Tècnica (Codi i Arquitectura):] \hfill \\
     \url{https://drive.google.com/file/d/1RYtOsJOZN_Xp_AjtZL5wRMc-qG7TPOAL/view?usp=sharing} \\
     \textit{Recorregut pels aspectes tècnics clau del codi font i la implementació.}
 
+    \item[Vídeo de Demostració (Resultats i Funcionament):] \hfill \\
+    \url{https://drive.google.com/file/d/1gogjmkYvqlKzE48wGnDwsbhk7Ope8OZH/view?usp=sharing} \\
+    \textit{Visualització del flux complet d'ús de l'aplicació, des de la perspectiva de l'usuari.}
+
     \item[Repositori de Codi (GitHub):] \hfill \\
     \url{https://github.com/7daviid7/NumerologiaFlutter} \\
     \textit{Accés al codi font complet del projecte.}
+
+    \item[Accés Web Públic (App):] \hfill \\
+    \url{https://charged-sum-419213.web.app/} \\
+    \textit{Enllaç directe a la PWA en producció per provar l'aplicació.}
 \end{description}
 
 \end{document}
